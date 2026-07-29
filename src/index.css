@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://static.figma.com/font/BarlowCondensed-Bold_2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://static.figma.com/font/Inter_1') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://static.figma.com/font/Inter_1') format('woff2');
+}
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Barlow Condensed', sans-serif;
+
+  --color-feazto-yellow: #FFC50A;
+  --color-feazto-cream: #FFF8E7;
+  --color-feazto-black: #000000;
+  --color-feazto-red: #FF3B30;
+  --color-feazto-green: #22C55E;
+  --color-feazto-white: #FFFFFF;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}

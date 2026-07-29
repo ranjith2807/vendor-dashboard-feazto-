@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+rn-output/node_modules/
+
+# Expo / React Native
+.expo/
+rn-output/.expo/
+dist/
+rn-output/dist/
+build/
+rn-output/build/
+*.jks
+*.p8
+*.sentry-mappings
+
+# IDE / Editor configuration
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.agents/
+.gemini/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
