@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import {
   View, Text, ScrollView,
-  TextInput, StyleSheet, Image, Alert,
+  TextInput, StyleSheet, Image, Alert, TouchableOpacity,
 } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
 import * as ImagePicker from 'expo-image-picker'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
@@ -293,7 +292,7 @@ const s = StyleSheet.create({
   card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 16 },
   fieldLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.5, marginBottom: 5 },
   fieldHint: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.35, marginBottom: 10 },
-  photoContainer: { height: 160, borderRadius: 14, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', marginBottom: 12, overflow: 'hidden' },
+  photoContainer: { height: 160, borderRadius: 14, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', marginBottom: 12, overflow: 'hidden', borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000' },
   photoPreview: { width: '100%', height: '100%' },
   photoPlaceholder: { alignItems: 'center', gap: 4 },
   photoPlaceholderText: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.35 },
@@ -314,12 +313,12 @@ const s = StyleSheet.create({
   stepBtnText: { fontFamily: F.barlow, fontSize: 24, color: C.black, lineHeight: 26 },
   stepVal: { fontFamily: F.barlow, fontSize: 30, color: C.black, minWidth: 44, textAlign: 'center' },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip: { backgroundColor: C.cream, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7 },
+  chip: { backgroundColor: C.cream, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   chipActive: { backgroundColor: C.black },
   chipText: { fontFamily: F.interBold, fontSize: 12, color: C.black },
   chipTextActive: { color: C.yellow },
   typeRow: { flexDirection: 'row', gap: 10 },
-  typeBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: C.cream, borderRadius: 12, padding: 12 },
+  typeBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: C.cream, borderRadius: 12, padding: 12, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   typeBtnActive: { backgroundColor: '#DCFCE7' },
   typeBtnActiveRed: { backgroundColor: '#FEE2E2' },
   typeBtnIcon: { fontSize: 16 },
@@ -337,7 +336,7 @@ const s = StyleSheet.create({
   successTitle: { fontFamily: F.barlow, fontSize: 30, color: C.black, marginBottom: 8 },
   successSub: { fontFamily: F.inter, fontSize: 14, color: C.black, opacity: 0.5, textAlign: 'center', marginBottom: 28 },
   successBtns: { flexDirection: 'row', gap: 12, width: '100%' },
-  outlineBtn: { flex: 1, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.2)', borderRadius: 12, padding: 13, alignItems: 'center' },
+  outlineBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, padding: 13, alignItems: 'center', borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000' },
   outlineBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
   primaryBtn: { flex: 1, backgroundColor: C.yellow, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3) },
   primaryBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },

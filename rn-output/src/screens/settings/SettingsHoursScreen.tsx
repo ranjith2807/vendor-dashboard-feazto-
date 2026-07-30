@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 import { operatingHours, type DayHours } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -102,12 +101,12 @@ const s = StyleSheet.create({
   saveBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
   body: { padding: 20, paddingBottom: 32 },
   sLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 8 },
-  presetChip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 12, paddingVertical: 6, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)' },
+  presetChip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 12, paddingVertical: 6, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   presetChipText: { fontFamily: F.interBold, fontSize: 11, color: C.black },
-  dayCard: { backgroundColor: C.white,  borderRadius: 14, ...shadow(4, 4), padding: 13, marginBottom: 8 },
+  dayCard: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: '#E0E0E0', ...shadow(4, 4), padding: 13, marginBottom: 8 },
   dayCardClosed: { backgroundColor: '#f8f4ec', borderColor: '#ccc', shadowOpacity: 0 },
   dayRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  dayBadge: { width: 46, height: 28, borderRadius: 6, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
+  dayBadge: { width: 46, height: 28, borderRadius: 6, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
   dayBadgeClosed: { backgroundColor: '#ddd' },
   dayBadgeText: { fontFamily: F.barlow, fontSize: 11, color: C.black },
   dayName: { fontFamily: F.interBold, fontSize: 14, color: C.black, flex: 1 },
@@ -117,6 +116,6 @@ const s = StyleSheet.create({
   toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
   timesRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 },
   timeLabel: { fontFamily: F.interBold, fontSize: 10, letterSpacing: 1, color: C.black, opacity: 0.4, marginBottom: 4 },
-  timeInput: { fontFamily: F.interBold, fontSize: 15, backgroundColor: C.cream,  borderRadius: 8, padding: 8, paddingHorizontal: 10, color: C.black },
+  timeInput: { fontFamily: F.interBold, fontSize: 15, backgroundColor: C.cream, borderRadius: 8, padding: 8, paddingHorizontal: 10, color: C.black, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   arrow: { fontFamily: F.inter, fontSize: 16, color: C.black, opacity: 0.3, paddingTop: 16 },
 })

@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 
 export default function AppApprovedScreen({ setScreen }: { setScreen: SetScreen }) {

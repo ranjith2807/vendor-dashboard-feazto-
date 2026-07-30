@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, Modal, Image } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, StyleSheet, ScrollView, Modal, Image, TouchableOpacity } from 'react-native'
 import type { SetScreen, NavParams } from '../../types'
 import { C, F, shadow } from '../../theme'
 import { DEFAULT_ORDERS, type VendorOrder, type OrderStatus } from '../../data/menuStore'
@@ -253,14 +252,14 @@ const s = StyleSheet.create({
   avatarText: { fontFamily: F.barlow, fontSize: 16, color: C.black },
   customerName: { fontFamily: F.interBold, fontSize: 14, color: C.black },
   customerPhone: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.5 },
-  callBtn: { width: 38, height: 38, borderRadius: 10, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center' },
-  addressRow: { flexDirection: 'row', gap: 6, alignItems: 'flex-start', backgroundColor: C.cream, borderRadius: 8, padding: 10 },
+  callBtn: { width: 38, height: 38, borderRadius: 10, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
+  addressRow: { flexDirection: 'row', gap: 6, alignItems: 'flex-start', backgroundColor: C.cream, borderRadius: 8, padding: 10, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   addressText: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.65, flex: 1 },
   itemRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 8 },
   itemRowBorder: { borderBottomWidth: 1.5, borderBottomColor: 'rgba(0,0,0,0.08)' },
-  qtyBadge: { width: 26, height: 26, borderRadius: 6, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', marginRight: 8 },
+  qtyBadge: { width: 26, height: 26, borderRadius: 6, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', marginRight: 8, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
   qtyText: { fontFamily: F.barlow, fontSize: 12, color: C.black },
-  itemRowImage: { width: 32, height: 32, borderRadius: 8, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', marginRight: 8, overflow: 'hidden' },
+  itemRowImage: { width: 32, height: 32, borderRadius: 8, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', marginRight: 8, overflow: 'hidden', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   itemImage: { width: '100%', height: '100%' },
   itemEmoji: { fontSize: 16 },
   itemName: { fontFamily: F.inter, fontSize: 13, color: C.black, flex: 1 },
@@ -281,9 +280,9 @@ const s = StyleSheet.create({
   advanceBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3) },
   advanceBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 32 },
+  modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 32, borderTopWidth: 2, borderTopColor: '#000' },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 14 },
-  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 14, marginBottom: 8 },
+  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 14, marginBottom: 8, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   reasonBtnActive: { backgroundColor: C.yellow, borderColor: C.black, ...shadow(3, 3) },
   reasonBtnText: { fontFamily: F.inter, fontSize: 13, color: C.black },
   reasonBtnTextActive: { fontFamily: F.interBold },

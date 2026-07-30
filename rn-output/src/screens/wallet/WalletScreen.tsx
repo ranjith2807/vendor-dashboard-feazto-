@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 import { transactions } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -104,28 +103,28 @@ const s = StyleSheet.create({
   heroBalance: { fontFamily: F.barlow, fontSize: 42, color: C.yellow, lineHeight: 46, marginBottom: 4 },
   heroSub: { fontFamily: F.inter, fontSize: 12, color: C.cream, opacity: 0.5, marginBottom: 16 },
   heroStats: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  heroStat: { flex: 1, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: 10 },
+  heroStat: { flex: 1, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 10, padding: 10, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: C.yellow, borderRightColor: C.yellow },
   heroStatLabel: { fontFamily: F.interBold, fontSize: 10, color: C.cream, opacity: 0.5, letterSpacing: 1, marginBottom: 2 },
   heroStatVal: { fontFamily: F.barlow, fontSize: 20 },
   heroBtns: { flexDirection: 'row', gap: 8 },
-  withdrawBtn: { flex: 1, backgroundColor: C.yellow,  borderColor: C.cream, borderRadius: 10, padding: 11, alignItems: 'center' },
+  withdrawBtn: { flex: 1, backgroundColor: C.yellow, borderRadius: 10, padding: 11, alignItems: 'center', borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: C.cream, borderRightColor: C.cream },
   withdrawBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  invoiceBtn: { flex: 1,  borderColor: 'rgba(255,255,255,0.4)', borderRadius: 10, padding: 11, alignItems: 'center' },
+  invoiceBtn: { flex: 1, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 10, padding: 11, alignItems: 'center', borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: C.cream, borderRightColor: C.cream },
   invoiceBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.cream },
   bankCard: { backgroundColor: C.white, borderRadius: 12, ...shadow(4, 4), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 10 },
-  bankIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.blue, alignItems: 'center', justifyContent: 'center' },
+  bankIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.blue, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   bankName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   bankDetails: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.5 },
-  editBtn: { borderRadius: 6, paddingHorizontal: 9, paddingVertical: 3, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)' },
+  editBtn: { borderRadius: 6, paddingHorizontal: 9, paddingVertical: 3, backgroundColor: C.white, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   editBtnText: { fontFamily: F.interBold, fontSize: 11, color: C.black },
   filtersRow: { flexDirection: 'row', gap: 7, alignItems: 'center' },
-  filterBtn: { flex: 1, minWidth: 60, backgroundColor: C.white, borderRadius: 20, paddingVertical: 7, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)' },
+  filterBtn: { flex: 1, minWidth: 60, backgroundColor: C.white, borderRadius: 20, paddingVertical: 7, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   filterBtnActive: { backgroundColor: C.black, borderColor: C.black },
   filterBtnText: { fontFamily: F.barlow, fontSize: 12, color: C.black, includeFontPadding: false, textAlign: 'center' },
   filterBtnTextActive: { color: C.yellow },
   sectionTitle: { fontFamily: F.barlow, fontSize: 18, color: C.black },
   txnCard: { backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 },
-  txnIcon: { width: 38, height: 38, borderRadius: 10, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  txnIcon: { width: 38, height: 38, borderRadius: 10, alignItems: 'center', justifyContent: 'center', flexShrink: 0, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   txnArrow: { fontFamily: F.barlow, fontSize: 20, color: C.black },
   txnDesc: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   txnDate: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },

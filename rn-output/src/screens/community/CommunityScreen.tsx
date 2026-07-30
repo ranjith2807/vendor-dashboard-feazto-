@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, Modal } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, TextInput, StyleSheet, Modal, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 import { communityPosts, leaderboard, communityGroups, tagMeta } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -223,7 +222,7 @@ const s = StyleSheet.create({
   // Tabs
   tabsScroll: { flexGrow: 0 },
   tabsContent: { paddingHorizontal: 20, gap: 6, paddingVertical: 10, alignItems: 'center' },
-  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   tabActive: { backgroundColor: C.black, borderColor: C.black },
   tabText: { fontFamily: F.barlow, fontSize: 13, color: C.black, includeFontPadding: false, textAlign: 'center' },
   tabTextActive: { color: C.yellow },
@@ -246,7 +245,7 @@ const s = StyleSheet.create({
   avatarText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
   authorName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   authorMeta: { fontFamily: F.inter, fontSize: 10, color: C.black, opacity: 0.45 },
-  tagBadge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2 },
+  tagBadge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
   tagText: { fontFamily: F.barlow, fontSize: 10, letterSpacing: 1 },
   content: { fontFamily: F.inter, fontSize: 13, color: C.black, lineHeight: 20, marginBottom: 12 },
   actions: { flexDirection: 'row', gap: 6, paddingTop: 10, borderTopWidth: 1.5, borderTopColor: 'rgba(0,0,0,0.08)' },
@@ -263,7 +262,7 @@ const s = StyleSheet.create({
   grpIcon: { width: 44, height: 44, borderRadius: 10, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   grpName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   grpMembers: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
-  joinBtn: { backgroundColor: C.yellow, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 6, flexShrink: 0 },
+  joinBtn: { backgroundColor: C.yellow, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 6, flexShrink: 0, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   joinBtnActive: { backgroundColor: C.black },
   joinBtnText: { fontFamily: F.barlow, fontSize: 13, color: C.black },
   joinBtnTextActive: { color: C.cream },
@@ -280,12 +279,12 @@ const s = StyleSheet.create({
 
   // Modal
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalSheet: { backgroundColor: C.white, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 32 },
+  modalSheet: { backgroundColor: C.white, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 32, borderTopWidth: 2, borderTopColor: '#000' },
   modalHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black },
   postInput: { fontFamily: F.inter, fontSize: 14, backgroundColor: C.cream, borderRadius: 12, padding: 12, height: 100, ...shadow(3, 3) },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10 },
-  tagChip: { borderRadius: 6, paddingHorizontal: 10, paddingVertical: 3 },
+  tagChip: { borderRadius: 6, paddingHorizontal: 10, paddingVertical: 3, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
   tagChipText: { fontFamily: F.barlow, fontSize: 11 },
   cancelBtn: { flex: 1, backgroundColor: C.white, borderWidth: 2, borderColor: C.black, borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(3, 3) },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 17, color: C.black },

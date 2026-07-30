@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 import { subscriptionInfo } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -105,7 +104,7 @@ const s = StyleSheet.create({
   planPrice: { fontFamily: F.barlow, fontSize: 28, color: C.yellow, marginBottom: 4 },
   planPriceSub: { fontSize: 14, fontFamily: 'Inter_400Regular', opacity: 0.7 },
   planRenews: { fontFamily: F.inter, fontSize: 12, color: C.cream, opacity: 0.55 },
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 14 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: '#E0E0E0', ...shadow(4, 4), padding: 14 },
   cardTitle: { fontFamily: F.barlow, fontSize: 18, color: C.black, marginBottom: 12 },
   featureRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingBottom: 10, marginBottom: 10 },
   featureRowBorder: { borderBottomWidth: 1.5, borderBottomColor: 'rgba(0,0,0,0.06)' },

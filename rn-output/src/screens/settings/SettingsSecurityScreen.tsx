@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, Modal, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, TextInput, Modal, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
 
@@ -128,7 +127,7 @@ function PwdField({ label, value, onChange, show, onToggle }: { label: string; v
           value={value}
           onChangeText={onChange}
           secureTextEntry={!show}
-          style={{ fontFamily: 'Inter_400Regular', fontSize: 15, backgroundColor: '#FFF8E7',  borderRadius: 10, padding: 11, paddingHorizontal: 13, paddingRight: 44, color: '#000' }}
+          style={{ fontFamily: 'Inter_400Regular', fontSize: 15, backgroundColor: '#FFFFFF', borderRadius: 10, padding: 11, paddingHorizontal: 13, paddingRight: 44, color: '#000', borderWidth: 1, borderColor: '#E0E0E0' }}
         />
         <TouchableOpacity
           onPress={onToggle}
@@ -148,15 +147,15 @@ const s = StyleSheet.create({
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black },
   body: { padding: 20, paddingBottom: 32 },
   sLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 8, marginTop: 4 },
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 16, marginBottom: 16 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: '#E0E0E0', ...shadow(4, 4), padding: 16, marginBottom: 16 },
   strengthBar: { flex: 1, height: 4, borderRadius: 2 },
   strengthLabel: { fontFamily: F.interBold, fontSize: 11 },
   saveBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), marginTop: 4 },
   saveBtnText: { fontFamily: F.barlow, fontSize: 16, color: C.black },
-  toggleCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), overflow: 'hidden', marginBottom: 16 },
+  toggleCard: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: '#E0E0E0', ...shadow(4, 4), overflow: 'hidden', marginBottom: 16 },
   toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 13, paddingHorizontal: 14 },
   toggleRowBorder: { borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.06)' },
-  toggleIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center' },
+  toggleIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#E0E0E0' },
   toggleLabel: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   toggleSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.4 },
   toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },

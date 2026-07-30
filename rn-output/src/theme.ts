@@ -1,6 +1,6 @@
 export const C = {
   yellow: '#FFC50A',
-  cream: '#FFF8E7',
+  cream: '#FFFFFF',
   black: '#000000',
   white: '#FFFFFF',
   red: '#FF3B30',
@@ -17,32 +17,42 @@ export const F = {
   interBold: 'Inter_700Bold',
 }
 
-// 3D Bottom-Right Dark Border & Solid Shadow — for cards, banners, containers, and buttons
-export function shadow(offsetX = 3, offsetY = 3, color = '#000000', elevation = 4) {
+// Bottom-right 3D border helper (no top or left borders)
+export function offsetBorder(width = 3, color = '#000000') {
   return {
-    borderBottomWidth: 2.5,
-    borderRightWidth: 2.5,
+    borderBottomWidth: width,
+    borderRightWidth: width,
     borderBottomColor: color,
     borderRightColor: color,
+  }
+}
+
+// Hard-offset shadow & 3D bottom-right border — for cards, containers, buttons
+export function shadow(offsetX = 4, offsetY = 4, color = '#000000', elevation = 5) {
+  return {
     shadowColor: color,
     shadowOffset: { width: offsetX, height: offsetY },
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation,
+    borderBottomWidth: offsetX,
+    borderRightWidth: offsetY,
+    borderBottomColor: color,
+    borderRightColor: color,
   }
 }
 
-// Soft 3D Bottom-Right Border — for small buttons, badges, nav items
+// Soft shadow — for small badges / nav items
 export function softShadow(elevation = 2) {
   return {
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation,
     borderBottomWidth: 2,
     borderRightWidth: 2,
     borderBottomColor: '#000000',
     borderRightColor: '#000000',
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation,
   }
 }

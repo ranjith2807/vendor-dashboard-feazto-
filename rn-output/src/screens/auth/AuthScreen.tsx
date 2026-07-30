@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import type { Screen } from '../../types'
 
 export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => void }) {
@@ -93,30 +92,33 @@ export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => vo
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', alignItems: 'center', paddingHorizontal: 24, paddingTop: 28 },
-  mascot: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FFC50A', alignItems: 'center', justifyContent: 'center', marginBottom: 16, marginTop: 10 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', alignItems: 'center', paddingHorizontal: 24, paddingTop: 28 },
+  mascot: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FFC50A', alignItems: 'center', justifyContent: 'center', marginBottom: 16, marginTop: 10, borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000' },
   mascotIcon: { fontSize: 40 },
   brand: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 38, letterSpacing: 1.5, marginBottom: 2 },
   sub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.45, marginBottom: 28 },
   card: {
     width: '100%', backgroundColor: '#fff', borderRadius: 16, padding: 20,
-    shadowColor: '#000', shadowOffset: { width: 6, height: 6 }, shadowOpacity: 1, shadowRadius: 0, elevation: 6,
+    shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 6,
+    borderBottomWidth: 4, borderRightWidth: 4, borderBottomColor: '#000', borderRightColor: '#000',
   },
   cardTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 22, marginBottom: 4 },
   cardSub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 18 },
   label: { fontFamily: 'Inter_700Bold', fontSize: 12, letterSpacing: 1, marginBottom: 6 },
   phoneRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
-  countryCode: { backgroundColor: '#FFF8E7', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center' },
+  countryCode: { backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   countryCodeText: { fontFamily: 'Inter_700Bold', fontSize: 15 },
   input: {
     flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15,
-    backgroundColor: '#FFF8E7', 
+    backgroundColor: '#FFFFFF',
     borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12,
+    borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000',
   },
   otpRow: { flexDirection: 'row', gap: 8, justifyContent: 'center', marginBottom: 20 },
   otpBox: {
     width: 42, height: 50, fontFamily: 'BarlowCondensed_700Bold', fontSize: 24, textAlign: 'center',
-    backgroundColor: '#FFF8E7',  borderRadius: 10,
+    backgroundColor: '#FFFFFF', borderRadius: 10,
+    borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000',
   },
   otpBoxFilled: {
     backgroundColor: '#FFC50A', borderColor: '#000',
@@ -127,7 +129,8 @@ const styles = StyleSheet.create({
   },
   btnActive: {
     backgroundColor: '#FFC50A',
-    shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
+    borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000',
+    shadowColor: '#000', shadowOffset: { width: 2, height: 2 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
   },
   btnText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 17, letterSpacing: 1 },
   btnText2: { alignItems: 'center', paddingVertical: 8, marginTop: 10 },

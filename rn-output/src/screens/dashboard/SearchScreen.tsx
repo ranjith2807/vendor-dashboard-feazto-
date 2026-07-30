@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 import { searchCategories, recentSearches, mockMenu } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -112,7 +111,7 @@ const s = StyleSheet.create({
   clearBtn: { fontSize: 16, color: C.black, opacity: 0.4 },
   body: { paddingHorizontal: 20, paddingBottom: 20 },
   sectionLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 10 },
-  recentRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 10, paddingHorizontal: 14, backgroundColor: C.white,  borderColor: '#e5e5e5', borderRadius: 10, marginBottom: 6 },
+  recentRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 10, paddingHorizontal: 14, backgroundColor: C.white, borderRadius: 10, marginBottom: 6, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   recentIcon: { fontSize: 14, opacity: 0.35 },
   recentQuery: { fontFamily: F.inter, fontSize: 13, color: C.black, flex: 1 },
   recentArrow: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.25 },

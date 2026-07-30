@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen, NavParams } from '../../types'
 import { C, F, shadow } from '../../theme'
 import { DEFAULT_ORDERS } from '../../data/menuStore'
@@ -125,12 +124,12 @@ const s = StyleSheet.create({
   dot: { width: 10, height: 10, borderRadius: 5 },
   timerText: { fontFamily: F.interBold, fontSize: 12 },
   riderCard: { marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, ...shadow(3,3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14 },
-  riderIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  riderIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center', flexShrink: 0, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   riderName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   riderSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
-  callBtn: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center' },
+  callBtn: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   actions: { flexDirection: 'row', gap: 10, marginHorizontal: 20 },
-  refreshBtn: { flex: 1, backgroundColor: C.white, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)', borderRadius: 10, padding: 12, alignItems: 'center' },
+  refreshBtn: { flex: 1, backgroundColor: C.white, borderRadius: 10, padding: 12, alignItems: 'center', borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000' },
   refreshBtnText: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   confirmBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3,3) },
   confirmBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },

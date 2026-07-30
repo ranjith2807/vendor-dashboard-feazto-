@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen, NavParams } from '../../types'
 import { mockReviews, type Review } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -120,7 +119,7 @@ const s = StyleSheet.create({
   distCount: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45, width: 14 },
   filtersScroll: { flexGrow: 0 },
   filtersContent: { paddingHorizontal: 20, gap: 7, paddingBottom: 12, alignItems: 'center' },
-  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 7, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   chipActive: { backgroundColor: C.black, borderColor: C.black },
   chipText: { fontFamily: F.barlow, fontSize: 13, color: C.black, includeFontPadding: false, textAlign: 'center' },
   chipTextActive: { color: C.yellow },

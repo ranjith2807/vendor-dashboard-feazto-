@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
 
@@ -39,37 +38,47 @@ export default function SettingsProfileScreen({ setScreen }: { setScreen: SetScr
         </View>
 
         <SLabel>RESTAURANT INFO</SLabel>
-        <FField label="Restaurant Name" value={form.restaurantName} onChange={v => set('restaurantName', v)} />
-        <FField label="Tagline" value={form.tagline} onChange={v => set('tagline', v)} placeholder="Short description…" />
-        <FField label="Owner Name" value={form.ownerName} onChange={v => set('ownerName', v)} />
+        <View style={s.sectionCard}>
+          <FField label="Restaurant Name" value={form.restaurantName} onChange={v => set('restaurantName', v)} />
+          <FField label="Tagline" value={form.tagline} onChange={v => set('tagline', v)} placeholder="Short description…" />
+          <FField label="Owner Name" value={form.ownerName} onChange={v => set('ownerName', v)} />
+        </View>
 
         <SLabel>CONTACT DETAILS</SLabel>
-        <FField label="Phone Number" value={form.phone} onChange={v => set('phone', v)} keyboardType="phone-pad" />
-        <FField label="Email Address" value={form.email} onChange={v => set('email', v)} keyboardType="email-address" />
+        <View style={s.sectionCard}>
+          <FField label="Phone Number" value={form.phone} onChange={v => set('phone', v)} keyboardType="phone-pad" />
+          <FField label="Email Address" value={form.email} onChange={v => set('email', v)} keyboardType="email-address" />
+        </View>
 
         <SLabel>LOCATION</SLabel>
-        <FField label="Street Address" value={form.address} onChange={v => set('address', v)} />
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          <View style={{ flex: 1 }}><FField label="City" value={form.city} onChange={v => set('city', v)} /></View>
-          <View style={{ width: 110 }}><FField label="Pincode" value={form.pincode} onChange={v => set('pincode', v)} keyboardType="numeric" /></View>
+        <View style={s.sectionCard}>
+          <FField label="Street Address" value={form.address} onChange={v => set('address', v)} />
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <View style={{ flex: 1 }}><FField label="City" value={form.city} onChange={v => set('city', v)} /></View>
+            <View style={{ width: 110 }}><FField label="Pincode" value={form.pincode} onChange={v => set('pincode', v)} keyboardType="numeric" /></View>
+          </View>
         </View>
 
         <SLabel>BUSINESS SETTINGS</SLabel>
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          <View style={{ flex: 1 }}><FField label="Min. Order (₹)" value={form.minOrder} onChange={v => set('minOrder', v)} keyboardType="numeric" /></View>
-          <View style={{ flex: 1 }}><FField label="Radius (km)" value={form.deliveryRadius} onChange={v => set('deliveryRadius', v)} keyboardType="numeric" /></View>
+        <View style={s.sectionCard}>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <View style={{ flex: 1 }}><FField label="Min. Order (₹)" value={form.minOrder} onChange={v => set('minOrder', v)} keyboardType="numeric" /></View>
+            <View style={{ flex: 1 }}><FField label="Radius (km)" value={form.deliveryRadius} onChange={v => set('deliveryRadius', v)} keyboardType="numeric" /></View>
+          </View>
         </View>
 
         <SLabel>CUISINE TYPES</SLabel>
-        <View style={s.chips}>
-          {CUISINES.map(c => {
-            const active = form.cuisines.includes(c)
-            return (
-              <TouchableOpacity key={c} onPress={() => toggleCuisine(c)} style={[s.chip, active && s.chipActive]}>
-                <Text style={[s.chipText, active && s.chipTextActive]}>{c}</Text>
-              </TouchableOpacity>
-            )
-          })}
+        <View style={s.sectionCard}>
+          <View style={s.chips}>
+            {CUISINES.map(c => {
+              const active = form.cuisines.includes(c)
+              return (
+                <TouchableOpacity key={c} onPress={() => toggleCuisine(c)} style={[s.chip, active && s.chipActive]}>
+                  <Text style={[s.chipText, active && s.chipTextActive]}>{c}</Text>
+                </TouchableOpacity>
+              )
+            })}
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -85,7 +94,7 @@ function FField({ label, value, onChange, keyboardType, placeholder }: { label: 
     <View style={{ marginBottom: 12 }}>
       <Text style={{ fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.5, marginBottom: 5 }}>{label.toUpperCase()}</Text>
       <TextInput value={value} onChangeText={onChange} keyboardType={keyboardType} placeholder={placeholder}
-        style={{ fontFamily: F.inter, fontSize: 14, backgroundColor: C.white,  borderRadius: 10, padding: 11, paddingHorizontal: 13 }} />
+        style={{ fontFamily: F.inter, fontSize: 14, backgroundColor: C.white, borderRadius: 10, padding: 11, paddingHorizontal: 13, borderWidth: 1, borderColor: '#E0E0E0' }} />
     </View>
   )
 }
@@ -99,11 +108,12 @@ const s = StyleSheet.create({
   saveBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
   body: { padding: 20, paddingBottom: 32 },
   avatarWrap: { alignItems: 'center', marginBottom: 20, position: 'relative' },
-  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.yellow, ...shadow(4, 4), alignItems: 'center', justifyContent: 'center' },
+  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.yellow, ...shadow(4, 4), alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#E0E0E0' },
   avatarText: { fontFamily: F.barlow, fontSize: 30, color: C.black },
-  avatarEdit: { position: 'absolute', bottom: -4, right: '50%', marginRight: -44, width: 28, height: 28, borderRadius: 14, backgroundColor: C.black,  borderColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 },
-  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0 },
+  avatarEdit: { position: 'absolute', bottom: -4, right: '50%', marginRight: -44, width: 28, height: 28, borderRadius: 14, backgroundColor: C.black, borderColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
+  sectionCard: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: '#E0E0E0', padding: 14, marginBottom: 16, ...shadow(3, 3) },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderWidth: 1, borderColor: '#E0E0E0', flexShrink: 0 },
   chipActive: { backgroundColor: C.black, borderColor: C.black },
   chipText: { fontFamily: F.interBold, fontSize: 12, color: C.black, includeFontPadding: false },
   chipTextActive: { color: C.yellow },

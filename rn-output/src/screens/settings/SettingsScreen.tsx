@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import type { SetScreen, Screen } from '../../types'
 import { settingsSections } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -126,9 +125,9 @@ const s = StyleSheet.create({
   kitchenName: { fontFamily: F.interBold, fontSize: 16, color: C.black },
   kitchenSub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.5 },
   badges: { flexDirection: 'row', gap: 5, marginTop: 5 },
-  badge: { borderRadius: 5, paddingHorizontal: 8, paddingVertical: 1 },
+  badge: { borderRadius: 5, paddingHorizontal: 8, paddingVertical: 1, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
   badgeText: { fontFamily: F.barlow, fontSize: 10, color: C.white },
-  editBtn: { borderRadius: 9, paddingHorizontal: 12, paddingVertical: 7, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)' },
+  editBtn: { borderRadius: 9, paddingHorizontal: 12, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', backgroundColor: C.white },
   editBtnText: { fontFamily: F.interBold, fontSize: 12, color: C.black },
   quickRow: { flexDirection: 'row', gap: 8 },
   quickBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), paddingVertical: 12, alignItems: 'center', gap: 4 },
@@ -140,7 +139,7 @@ const s = StyleSheet.create({
   sectionCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), overflow: 'hidden' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 13, paddingHorizontal: 14 },
   rowBorder: { borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.06)' },
-  rowIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center' },
+  rowIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   rowLabel: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   rowSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },

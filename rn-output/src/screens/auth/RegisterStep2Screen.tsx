@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import type { SetScreen } from '../../types'
 
 export default function RegisterStep2Screen({ setScreen }: { setScreen: SetScreen }) {
@@ -46,7 +45,7 @@ export default function RegisterStep2Screen({ setScreen }: { setScreen: SetScree
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7' },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF' },
   content: { padding: 20 },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 },
   back: { fontSize: 22 },
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
   label: { fontFamily: 'Inter_700Bold', fontSize: 11, letterSpacing: 1.5, opacity: 0.5, marginBottom: 5 },
   input: {
     fontFamily: 'Inter_400Regular', fontSize: 14,
-    backgroundColor: '#FFF8E7',  borderRadius: 10,
+    backgroundColor: '#FFFFFF',  borderRadius: 10,
     paddingHorizontal: 13, paddingVertical: 11,
   },
   btn: {

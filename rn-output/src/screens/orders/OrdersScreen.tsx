@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from 'react'
 import {
   View, Text, StyleSheet,
-  FlatList, Modal, ScrollView, Image,
+  FlatList, Modal, ScrollView, Image, TouchableOpacity,
 } from 'react-native'
-import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import {
   ORDER_STATUS_META,
@@ -265,11 +264,11 @@ function OrderCard({
       {flow && (
         <View style={oc.actions}>
           {order.status === 'NEW' && (
-            <TouchableOpacity style={oc.rejectBtn} onPress={e => { e.stopPropagation?.(); onReject() }}>
+            <TouchableOpacity style={oc.rejectBtn} onPress={(e: any) => { e.stopPropagation?.(); onReject() }}>
               <Text style={oc.rejectBtnText}>Reject</Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={oc.actionBtn} onPress={e => { e.stopPropagation?.(); onAdvance() }}>
+          <TouchableOpacity style={oc.actionBtn} onPress={(e: any) => { e.stopPropagation?.(); onAdvance() }}>
             <Text style={oc.actionBtnText}>{flow.action} →</Text>
           </TouchableOpacity>
         </View>
@@ -318,7 +317,7 @@ const s = StyleSheet.create({
   summaryLabel: { fontFamily: F.interBold, fontSize: 11 },
   filterScroll: { flexGrow: 0 },
   filterContent: { paddingHorizontal: 20, gap: 6, paddingBottom: 12, alignItems: 'center' },
-  filterTab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  filterTab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   filterTabActive: { backgroundColor: C.black, borderColor: C.black },
   filterTabText: { fontFamily: F.barlow, fontSize: 12, color: C.black, includeFontPadding: false, textAlign: 'center' },
   filterTabTextActive: { color: C.yellow },
@@ -327,15 +326,15 @@ const s = StyleSheet.create({
   emptyTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 6 },
   emptySub: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.4, textAlign: 'center' },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24, paddingBottom: 36 },
+  modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24, paddingBottom: 36, borderTopWidth: 2, borderTopColor: '#000' },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 6 },
   modalBody: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.5, marginBottom: 14 },
-  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 16, marginBottom: 8, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.08)' },
+  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 16, marginBottom: 8, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
   reasonBtnActive: { backgroundColor: C.yellow, borderColor: C.yellow, ...shadow(2, 2) },
   reasonBtnText: { fontFamily: F.inter, fontSize: 13, color: C.black },
   reasonBtnTextActive: { fontFamily: F.interBold },
   modalBtns: { flexDirection: 'row', gap: 10, marginTop: 8 },
-  cancelBtn: { flex: 1, backgroundColor: C.white, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)', borderRadius: 12, padding: 13, alignItems: 'center' },
+  cancelBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, padding: 13, alignItems: 'center', borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000' },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
   rejectConfirmBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3) },
   rejectConfirmBtnDisabled: { backgroundColor: '#ddd', shadowOpacity: 0 },
