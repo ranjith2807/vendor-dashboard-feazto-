@@ -71,7 +71,7 @@ export default function RegisterStep1Screen({ setScreen }: { setScreen: SetScree
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7' },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF' },
   content: { padding: 20 },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 },
   back: { fontSize: 22, marginRight: 4 },
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   label: { fontFamily: 'Inter_700Bold', fontSize: 11, letterSpacing: 1.5, opacity: 0.5, marginBottom: 5 },
   input: {
     fontFamily: 'Inter_400Regular', fontSize: 14,
-    backgroundColor: '#FFF8E7',  borderRadius: 10,
+    backgroundColor: '#F8F9FA', borderRadius: 10,
     paddingHorizontal: 13, paddingVertical: 11,
   },
   inputError: { borderColor: '#FF3B30', backgroundColor: '#FEF3F2' },

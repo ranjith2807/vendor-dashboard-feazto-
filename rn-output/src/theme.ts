@@ -1,6 +1,8 @@
 export const C = {
   yellow: '#FFC50A',
-  cream: '#FFF8E7',
+  cream: '#FFFFFF',
+  innerCream: '#F8F9FA',
+  cardBorder: '#E0E0E0',
   black: '#000000',
   white: '#FFFFFF',
   red: '#FF3B30',
@@ -39,11 +41,14 @@ export function softShadow(elevation = 2) {
   }
 }
 
-// 3D bottom-right dark offset border effect
+// 3D bottom-right dark offset border effect with subtle #E0E0E0 top/left border for white background contrast
 export const border3D = {
-  borderColor: '#000000',
+  borderTopWidth: 1,
+  borderLeftWidth: 1,
   borderBottomWidth: 2.5,
   borderRightWidth: 2.5,
-  borderTopWidth: 0,
-  borderLeftWidth: 0,
+  borderTopColor: '#E0E0E0',
+  borderLeftColor: '#E0E0E0',
+  borderBottomColor: '#000000',
+  borderRightColor: '#000000',
 }

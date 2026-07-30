@@ -46,7 +46,7 @@ export default function RegisterStep3Screen({ setScreen }: { setScreen: SetScree
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7' },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF' },
   content: { padding: 20 },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 },
   back: { fontSize: 22 },
@@ -60,12 +60,12 @@ const styles = StyleSheet.create({
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
   },
   docRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 },
-  docIcon: { width: 44, height: 44, borderRadius: 10, backgroundColor: '#FFF8E7', alignItems: 'center', justifyContent: 'center' },
+  docIcon: { width: 44, height: 44, borderRadius: 10, backgroundColor: '#F8F9FA', alignItems: 'center', justifyContent: 'center' },
   docIconText: { fontSize: 22 },
   docLabel: { fontFamily: 'Inter_700Bold', fontSize: 13 },
   docRequired: { fontFamily: 'Inter_400Regular', fontSize: 11, color: '#FF3B30', marginTop: 1 },
   uploadBtn: {
-    backgroundColor: '#FFF8E7',  borderRadius: 8,
+    backgroundColor: '#F8F9FA', borderRadius: 8,
     paddingHorizontal: 12, paddingVertical: 6,
     shadowColor: '#000', shadowOffset: { width: 2, height: 2 }, shadowOpacity: 1, shadowRadius: 0, elevation: 2,
   },

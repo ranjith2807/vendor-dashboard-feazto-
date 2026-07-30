@@ -68,7 +68,7 @@ export default function AppShell({ screen, setScreen, showNav, children }: AppSh
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFF8E7' },
+  container: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFFFFF' },
   content: { flex: 1, width: '100%', height: '100%' },
   nav: {
     flexDirection: 'row',
@@ -76,22 +76,25 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     paddingHorizontal: 8,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.08)',
+    borderTopWidth: 1.5,
+    borderTopColor: '#E0E0E0',
   },
   navTab: { flex: 1, alignItems: 'center', gap: 3 },
   navIconWrap: {
     width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
-     borderColor: 'transparent',
+    borderColor: 'transparent',
   },
   navIconActive: {
-    backgroundColor: '#FFF8E7',
-    borderColor: '#000000',
+    backgroundColor: '#FFC50A',
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
     borderBottomWidth: 2.5,
     borderRightWidth: 2.5,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
+    borderTopColor: '#E0E0E0',
+    borderLeftColor: '#E0E0E0',
+    borderBottomColor: '#000000',
+    borderRightColor: '#000000',
   },
   navIcon: { fontSize: 18 },
   navLabel: { fontFamily: 'Inter_400Regular', fontSize: 10, color: '#888' },
