@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
-import { C, F, shadow, border3D } from '../../theme'
+import { C, F, shadow } from '../../theme'
 import { DEFAULT_ORDERS } from '../../data/menuStore'
 
 export default function OrderQRScreen({ setScreen, navParams }: { setScreen: SetScreen; navParams: NavParams }) {
@@ -111,9 +111,9 @@ const s = StyleSheet.create({
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 24, color: C.black },
   sub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },
-  qrCard: { marginHorizontal: 20, backgroundColor: C.white, borderRadius: 16, ...shadow(6,6), ...border3D, padding: 20, alignItems: 'center', marginBottom: 14 },
+  qrCard: { marginHorizontal: 20, backgroundColor: C.white, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(6,6), padding: 20, alignItems: 'center', marginBottom: 14 },
   qrLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.45, marginBottom: 16 },
-  qrBox: { width: 160, height: 160, backgroundColor: C.white, borderRadius: 12, ...shadow(4,4), ...border3D, alignItems: 'center', justifyContent: 'center', marginBottom: 16, padding: 10 },
+  qrBox: { width: 160, height: 160, backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(4,4), alignItems: 'center', justifyContent: 'center', marginBottom: 16, padding: 10 },
   qrGrid: { flexDirection: 'row', flexWrap: 'wrap', width: 126, height: 126 },
   qrCell: { width: 18, height: 18, backgroundColor: 'transparent' },
   qrCellFilled: { backgroundColor: C.black },
@@ -124,20 +124,20 @@ const s = StyleSheet.create({
   timerRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   dot: { width: 10, height: 10, borderRadius: 5 },
   timerText: { fontFamily: F.interBold, fontSize: 12 },
-  riderCard: { marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, ...shadow(3,3), ...border3D, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14 },
-  riderIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center', flexShrink: 0, ...border3D },
+  riderCard: { marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(3,3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14 },
+  riderIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   riderName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   riderSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
-  callBtn: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center', ...border3D },
+  callBtn: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center' },
   actions: { flexDirection: 'row', gap: 10, marginHorizontal: 20 },
-  refreshBtn: { flex: 1, backgroundColor: C.white, borderRadius: 10, padding: 12, alignItems: 'center', ...border3D },
+  refreshBtn: { flex: 1, backgroundColor: C.white, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)', borderRadius: 10, padding: 12, alignItems: 'center' },
   refreshBtnText: { fontFamily: F.interBold, fontSize: 13, color: C.black },
-  confirmBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3,3), ...border3D },
+  confirmBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3,3) },
   confirmBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
   verified: { flex: 1, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center', padding: 32 },
-  verifiedIcon: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.white, ...shadow(4,4,'rgba(0,0,0,0.3)'), alignItems: 'center', justifyContent: 'center', marginBottom: 20, ...border3D },
+  verifiedIcon: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.white, ...shadow(4,4,'rgba(0,0,0,0.3)'), alignItems: 'center', justifyContent: 'center', marginBottom: 20 },
   verifiedTitle: { fontFamily: F.barlow, fontSize: 32, color: C.white, marginBottom: 8 },
   verifiedSub: { fontFamily: F.inter, fontSize: 13, color: C.white, opacity: 0.85, textAlign: 'center', marginBottom: 28 },
-  trackBtn: { width: '100%', backgroundColor: C.yellow, borderRadius: 12, padding: 14, alignItems: 'center', ...shadow(4,4,'rgba(0,0,0,0.3)'), ...border3D },
+  trackBtn: { width: '100%', backgroundColor: C.yellow, borderRadius: 12, padding: 14, alignItems: 'center', ...shadow(4,4,'rgba(0,0,0,0.3)') },
   trackBtnText: { fontFamily: F.barlow, fontSize: 17, color: C.black },
 })

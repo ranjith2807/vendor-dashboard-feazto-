@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import TouchableOpacity from './TouchableOpacity'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -36,7 +36,16 @@ const NAV_TABS = [
 ]
 
 export default function AppShell({ screen, setScreen, showNav, children }: AppShellProps) {
-  const activeNav = ACTIVE_SCREENS[screen] ?? 'nav_dashboard'
+  const [pendingNav, setPendingNav] = useState<string | null>(null)
+  const activeNav = pendingNav || ACTIVE_SCREENS[screen] || 'nav_dashboard'
+
+  const handleNavPress = (tabId: string, targetScreen: Screen) => {
+    setPendingNav(tabId)
+    setTimeout(() => {
+      setScreen(targetScreen)
+      setPendingNav(null)
+    }, 100)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,11 +57,11 @@ export default function AppShell({ screen, setScreen, showNav, children }: AppSh
             return (
               <TouchableOpacity
                 key={tab.id}
-                onPress={() => setScreen(tab.screen)}
-                style={styles.navTab}
+                onPress={() => handleNavPress(tab.id, tab.screen)}
+                style={[styles.navTab, isActive && styles.navTabActive]}
                 activeOpacity={0.7}
               >
-                <View style={[styles.navIconWrap, isActive && styles.navIconActive]}>
+                <View style={styles.navIconWrap}>
                   <Text style={styles.navIcon}>{tab.icon}</Text>
                 </View>
                 <Text style={[styles.navLabel, isActive && styles.navLabelActive]}>
@@ -76,25 +85,27 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     paddingHorizontal: 8,
-    borderTopWidth: 1.5,
-    borderTopColor: '#E0E0E0',
+    borderWidth: 2,
+    borderColor: '#000000',
   },
-  navTab: { flex: 1, alignItems: 'center', gap: 3 },
+  navTab: {
+    flex: 1, alignItems: 'center', gap: 3, paddingVertical: 4, borderRadius: 12,
+    borderTopWidth: 1, borderLeftWidth: 1, borderTopColor: 'rgba(0,0,0,0.12)', borderLeftColor: 'rgba(0,0,0,0.12)',
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderBottomColor: '#000000', borderRightColor: '#000000',
+  },
+  navTabActive: {
+    backgroundColor: '#f9be08',
+    borderWidth: 2,
+    borderColor: '#000000',
+    shadowColor: '#000000',
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+  },
   navIconWrap: {
-    width: 36, height: 36, borderRadius: 10,
+    width: 36, height: 28, borderRadius: 8,
     alignItems: 'center', justifyContent: 'center',
-    borderColor: 'transparent',
-  },
-  navIconActive: {
-    backgroundColor: '#FFC50A',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderBottomWidth: 2.5,
-    borderRightWidth: 2.5,
-    borderTopColor: '#E0E0E0',
-    borderLeftColor: '#E0E0E0',
-    borderBottomColor: '#000000',
-    borderRightColor: '#000000',
   },
   navIcon: { fontSize: 18 },
   navLabel: { fontFamily: 'Inter_400Regular', fontSize: 10, color: '#888' },

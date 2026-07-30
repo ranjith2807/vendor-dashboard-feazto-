@@ -12,7 +12,8 @@ import {
   type VendorOrder,
   type OrderStatus,
 } from '../../data/menuStore'
-import { C, F, shadow, border3D } from '../../theme'
+import { C, F, shadow } from '../../theme'
+import { getActiveState, setActiveState } from '../../data/activeStateStore'
 
 const FILTER_TABS: { id: OrderStatus | 'ALL'; label: string }[] = [
   { id: 'ALL',             label: 'All' },
@@ -43,6 +44,7 @@ export default function OrdersScreen({
   const orders = vendorOrders
   const setOrders = setVendorOrders
   const [activeFilter, setActiveFilter] = useState<OrderStatus | 'ALL'>('ALL')
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
   const [rejectTarget, setRejectTarget] = useState<VendorOrder | null>(null)
   const [rejectReason, setRejectReason] = useState('')
   const [toast, setToast] = useState('')
@@ -142,7 +144,14 @@ export default function OrdersScreen({
           renderItem={({ item: order }) => (
             <OrderCard
               order={order}
-              onPress={() => setScreen('order_detail', { id: order.id })}
+              isSelected={selectedOrderId === order.id}
+              onPress={() => {
+                setSelectedOrderId(order.id)
+                setTimeout(() => {
+                  setScreen('order_detail', { id: order.id })
+                  setSelectedOrderId(null)
+                }, 150)
+              }}
               onAdvance={() => {
                 if (ORDER_STATUS_FLOW[order.status]?.next === 'READY_FOR_PICKUP') {
                   advanceOrder(order.id)
@@ -200,9 +209,10 @@ export default function OrdersScreen({
 // ─── OrderCard ────────────────────────────────────────────────────────────────
 
 function OrderCard({
-  order, onPress, onAdvance, onReject,
+  order, isSelected, onPress, onAdvance, onReject,
 }: {
   order: VendorOrder
+  isSelected?: boolean
   onPress: () => void
   onAdvance: () => void
   onReject: () => void
@@ -211,7 +221,7 @@ function OrderCard({
   const flow = ORDER_STATUS_FLOW[order.status]
 
   return (
-    <TouchableOpacity style={oc.card} onPress={onPress} activeOpacity={0.85}>
+    <TouchableOpacity style={[oc.card, isSelected && oc.cardActive]} onPress={onPress} activeOpacity={0.85}>
       {/* Card header */}
       <View style={oc.cardHeader}>
         <View style={oc.orderNumRow}>
@@ -279,7 +289,8 @@ function OrderCard({
 }
 
 const oc = StyleSheet.create({
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, overflow: 'hidden' },
+  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000', ...shadow(4, 4), overflow: 'hidden' },
+  cardActive: { backgroundColor: '#f9be08', borderWidth: 2, borderColor: '#000000', ...shadow(4, 4) },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 14, paddingBottom: 10 },
   orderNumRow: { gap: 4 },
   orderId: { fontFamily: F.barlow, fontSize: 18, color: C.black },
@@ -289,7 +300,7 @@ const oc = StyleSheet.create({
   divider: { height: 1.5, backgroundColor: 'rgba(0,0,0,0.06)', marginHorizontal: 14 },
   itemsBlock: { paddingHorizontal: 14, paddingVertical: 10, gap: 6 },
   itemRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  itemImageBox: { width: 24, height: 24, borderRadius: 6, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+  itemImageBox: { width: 24, height: 24, borderRadius: 6, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
   itemImage: { width: '100%', height: '100%' },
   itemEmoji: { fontSize: 13 },
   itemName: { fontFamily: F.inter, fontSize: 13, color: C.black, flex: 1 },
@@ -300,9 +311,9 @@ const oc = StyleSheet.create({
   footerMeta: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   total: { fontFamily: F.barlow, fontSize: 22, color: C.black },
   actions: { flexDirection: 'row', gap: 8, padding: 12, paddingTop: 0 },
-  rejectBtn: { flex: 1, backgroundColor: '#FEE2E2', borderRadius: 10, padding: 11, alignItems: 'center', ...border3D },
+  rejectBtn: { flex: 1, backgroundColor: '#FEE2E2', borderRadius: 10, padding: 11, alignItems: 'center' },
   rejectBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.red },
-  actionBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 11, alignItems: 'center', ...shadow(3, 3), ...border3D },
+  actionBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 11, alignItems: 'center', ...shadow(3, 3) },
   actionBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
 })
 
@@ -313,15 +324,15 @@ const s = StyleSheet.create({
   subtitle: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },
   summaryScroll: { flexGrow: 0 },
   summaryContent: { paddingHorizontal: 20, gap: 10, paddingBottom: 12 },
-  summaryCard: { borderRadius: 12, paddingHorizontal: 18, paddingVertical: 12, alignItems: 'center', minWidth: 80, ...shadow(3, 3), ...border3D, backgroundColor: C.white },
+  summaryCard: { borderRadius: 12, paddingHorizontal: 18, paddingVertical: 12, alignItems: 'center', minWidth: 80, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(3, 3) },
   summaryNum: { fontFamily: F.barlow, fontSize: 28, lineHeight: 30 },
   summaryLabel: { fontFamily: F.interBold, fontSize: 11 },
   filterScroll: { flexGrow: 0 },
   filterContent: { paddingHorizontal: 20, gap: 6, paddingBottom: 12, alignItems: 'center' },
-  filterTab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start', ...border3D },
-  filterTabActive: { backgroundColor: C.black, borderColor: C.black },
+  filterTab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  filterTabActive: { backgroundColor: '#f9be08', borderWidth: 2, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4 },
   filterTabText: { fontFamily: F.barlow, fontSize: 12, color: C.black, includeFontPadding: false, textAlign: 'center' },
-  filterTabTextActive: { color: C.yellow },
+  filterTabTextActive: { color: '#000000' },
   list: { paddingHorizontal: 20, paddingBottom: 28, gap: 12 },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 40 },
   emptyTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 6 },
@@ -330,14 +341,14 @@ const s = StyleSheet.create({
   modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24, paddingBottom: 36 },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 6 },
   modalBody: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.5, marginBottom: 14 },
-  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 16, marginBottom: 8, ...border3D },
+  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 16, marginBottom: 8, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.08)' },
   reasonBtnActive: { backgroundColor: C.yellow, borderColor: C.yellow, ...shadow(2, 2) },
   reasonBtnText: { fontFamily: F.inter, fontSize: 13, color: C.black },
   reasonBtnTextActive: { fontFamily: F.interBold },
   modalBtns: { flexDirection: 'row', gap: 10, marginTop: 8 },
-  cancelBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, padding: 13, alignItems: 'center', ...border3D },
+  cancelBtn: { flex: 1, backgroundColor: C.white, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)', borderRadius: 12, padding: 13, alignItems: 'center' },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  rejectConfirmBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3), ...border3D },
+  rejectConfirmBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3) },
   rejectConfirmBtnDisabled: { backgroundColor: '#ddd', shadowOpacity: 0 },
   rejectConfirmBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.white },
   toast: { position: 'absolute', bottom: 20, left: 20, right: 20, backgroundColor: C.black, borderRadius: 12, padding: 14, alignItems: 'center', ...shadow(3, 3, C.yellow) },

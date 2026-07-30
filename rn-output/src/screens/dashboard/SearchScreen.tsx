@@ -11,6 +11,7 @@ const TYPE_COLOR: Record<string, string> = {
 
 export default function SearchScreen({ setScreen }: { setScreen: SetScreen }) {
   const [query, setQuery] = useState('')
+  const [isFocused, setIsFocused] = useState(true)
 
   const results = query.length > 1
     ? mockMenu.filter(item =>
@@ -24,12 +25,14 @@ export default function SearchScreen({ setScreen }: { setScreen: SetScreen }) {
       {/* Search bar */}
       <View style={s.header}>
         <TouchableOpacity onPress={() => setScreen('dashboard')}><Text style={s.back}>←</Text></TouchableOpacity>
-        <View style={s.inputWrap}>
+        <View style={[s.inputWrap, isFocused && s.inputWrapFocused]}>
           <Text style={s.searchIcon}>🔍</Text>
           <TextInput
             autoFocus
             value={query}
             onChangeText={setQuery}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             placeholder="Search orders, menu, customers…"
             style={s.input}
             returnKeyType="search"
@@ -107,6 +110,7 @@ const s = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 20, paddingBottom: 14 },
   back: { fontSize: 22, color: C.black },
   inputWrap: { flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: C.white,  borderRadius: 12, paddingHorizontal: 12, ...shadow(3, 3) },
+  inputWrapFocused: { backgroundColor: '#f9be08', borderWidth: 2, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4 },
   searchIcon: { fontSize: 16, opacity: 0.4, marginRight: 6 },
   input: { flex: 1, fontFamily: F.inter, fontSize: 14, color: C.black, paddingVertical: 11 },
   clearBtn: { fontSize: 16, color: C.black, opacity: 0.4 },

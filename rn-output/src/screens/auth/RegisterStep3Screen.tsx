@@ -57,15 +57,16 @@ const styles = StyleSheet.create({
   stepActive: { width: 22, opacity: 1 },
   card: {
     backgroundColor: '#fff', borderRadius: 16, padding: 18, gap: 12,
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
   },
   docRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 },
-  docIcon: { width: 44, height: 44, borderRadius: 10, backgroundColor: '#F8F9FA', alignItems: 'center', justifyContent: 'center' },
+  docIcon: { width: 44, height: 44, borderRadius: 10, backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', alignItems: 'center', justifyContent: 'center' },
   docIconText: { fontSize: 22 },
   docLabel: { fontFamily: 'Inter_700Bold', fontSize: 13 },
   docRequired: { fontFamily: 'Inter_400Regular', fontSize: 11, color: '#FF3B30', marginTop: 1 },
   uploadBtn: {
-    backgroundColor: '#F8F9FA', borderRadius: 8,
+    backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', borderRadius: 8,
     paddingHorizontal: 12, paddingVertical: 6,
     shadowColor: '#000', shadowOffset: { width: 2, height: 2 }, shadowOpacity: 1, shadowRadius: 0, elevation: 2,
   },

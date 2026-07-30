@@ -1,13 +1,66 @@
-import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { View, Text, TextInput, StyleSheet, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { Screen } from '../../types'
-import { border3D } from '../../theme'
 
 export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => void }) {
   const [phone, setPhone] = useState('')
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [step, setStep] = useState<'phone' | 'otp'>('phone')
+  const [error, setError] = useState('')
+  const [resendMsg, setResendMsg] = useState('')
+  const inputRefs = useRef<(TextInput | null)[]>([])
+
+  const verifyOtp = (code: string) => {
+    if (code.length < 6) {
+      setError('Please enter a valid 6-digit OTP.')
+      return
+    }
+    if (code === '000000') {
+      setError('Incorrect OTP. Please try again.')
+      return
+    }
+    setError('')
+    setScreen('dashboard')
+  }
+
+  const handleOtpChange = (idx: number, val: string) => {
+    setError('')
+    setResendMsg('')
+    const clean = val.replace(/[^0-9]/g, '')
+    const next = [...otp]
+    next[idx] = clean
+    setOtp(next)
+
+    if (clean && idx < 5) {
+      inputRefs.current[idx + 1]?.focus()
+    }
+
+    if (clean && idx === 5) {
+      const code = next.join('')
+      if (code.length === 6) {
+        setTimeout(() => verifyOtp(code), 200)
+      }
+    }
+  }
+
+  const handleOtpKeyPress = (idx: number, e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+    if (e.nativeEvent.key === 'Backspace' && !otp[idx] && idx > 0) {
+      inputRefs.current[idx - 1]?.focus()
+    }
+  }
+
+  const handleVerifyPress = () => {
+    const code = otp.join('')
+    verifyOtp(code)
+  }
+
+  const handleResend = () => {
+    setResendMsg(`New OTP sent to +91 ${phone}`)
+    setOtp(['', '', '', '', '', ''])
+    setError('')
+    inputRefs.current[0]?.focus()
+  }
 
   return (
     <View style={styles.container}>
@@ -51,25 +104,26 @@ export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => vo
               {otp.map((val, idx) => (
                 <TextInput
                   key={idx}
+                  ref={el => { inputRefs.current[idx] = el }}
                   value={val}
-                  onChangeText={v => {
-                    if (!/^\d?$/.test(v)) return
-                    const next = [...otp]
-                    next[idx] = v
-                    setOtp(next)
-                    if (v && idx < 5) return
-                    if (next.every(d => d) && idx === 5) setTimeout(() => setScreen('dashboard'), 400)
-                  }}
+                  onChangeText={v => handleOtpChange(idx, v)}
+                  onKeyPress={e => handleOtpKeyPress(idx, e)}
                   keyboardType="number-pad"
                   maxLength={1}
+                  selectTextOnFocus
                   style={[styles.otpBox, val && styles.otpBoxFilled]}
                 />
               ))}
             </View>
-            <TouchableOpacity style={[styles.btn, styles.btnActive]} onPress={() => setScreen('dashboard')}>
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            {resendMsg ? <Text style={styles.resendSuccessText}>{resendMsg}</Text> : null}
+            <TouchableOpacity style={[styles.btn, styles.btnActive]} onPress={handleVerifyPress}>
               <Text style={styles.btnText}>Verify & Login →</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnText2} onPress={() => setStep('phone')}>
+            <TouchableOpacity style={styles.btnText2} onPress={handleResend}>
+              <Text style={styles.btnText2Text}>Resend OTP</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btnText2} onPress={() => { setStep('phone'); setError(''); setResendMsg(''); setOtp(['', '', '', '', '', '']) }}>
               <Text style={styles.btnText2Text}>← Change number</Text>
             </TouchableOpacity>
           </>
@@ -95,43 +149,43 @@ export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => vo
 
 const styles = StyleSheet.create({
   container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', alignItems: 'center', paddingHorizontal: 24, paddingTop: 28 },
-  mascot: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FFC50A', alignItems: 'center', justifyContent: 'center', marginBottom: 16, marginTop: 10, ...border3D },
+  mascot: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FFC50A', alignItems: 'center', justifyContent: 'center', marginBottom: 16, marginTop: 10 },
   mascotIcon: { fontSize: 40 },
   brand: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 38, letterSpacing: 1.5, marginBottom: 2 },
   sub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.45, marginBottom: 28 },
   card: {
     width: '100%', backgroundColor: '#fff', borderRadius: 16, padding: 20,
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     shadowColor: '#000', shadowOffset: { width: 6, height: 6 }, shadowOpacity: 1, shadowRadius: 0, elevation: 6,
-    ...border3D,
   },
   cardTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 22, marginBottom: 4 },
   cardSub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 18 },
   label: { fontFamily: 'Inter_700Bold', fontSize: 12, letterSpacing: 1, marginBottom: 6 },
   phoneRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
-  countryCode: { backgroundColor: '#F8F9FA', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center', ...border3D },
+  countryCode: { backgroundColor: '#F9FAFB', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)' },
   countryCodeText: { fontFamily: 'Inter_700Bold', fontSize: 15 },
   input: {
     flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15,
-    backgroundColor: '#F8F9FA', 
+    backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12,
-    ...border3D,
   },
   otpRow: { flexDirection: 'row', gap: 8, justifyContent: 'center', marginBottom: 20 },
   otpBox: {
     width: 42, height: 50, fontFamily: 'BarlowCondensed_700Bold', fontSize: 24, textAlign: 'center',
-    backgroundColor: '#F8F9FA', borderRadius: 10, ...border3D,
+    backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', borderRadius: 10,
   },
   otpBoxFilled: {
-    backgroundColor: '#FFC50A', borderColor: '#000',
+    backgroundColor: '#FFC50A', borderColor: '#000', borderWidth: 2,
     shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3,
   },
+  errorText: { fontFamily: 'Inter_700Bold', fontSize: 12, color: '#FF3B30', textAlign: 'center', marginBottom: 12 },
+  resendSuccessText: { fontFamily: 'Inter_700Bold', fontSize: 12, color: '#22C55E', textAlign: 'center', marginBottom: 12 },
   btn: {
     backgroundColor: '#ddd', borderRadius: 12, padding: 13, alignItems: 'center',
   },
   btnActive: {
     backgroundColor: '#FFC50A',
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
-    ...border3D,
   },
   btnText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 17, letterSpacing: 1 },
   btnText2: { alignItems: 'center', paddingVertical: 8, marginTop: 10 },

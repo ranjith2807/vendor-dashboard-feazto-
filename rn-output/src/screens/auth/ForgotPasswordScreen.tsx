@@ -59,15 +59,16 @@ const styles = StyleSheet.create({
   sub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 28 },
   card: {
     backgroundColor: '#fff', borderRadius: 16, padding: 20,
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
   },
   label: { fontFamily: 'Inter_700Bold', fontSize: 11, letterSpacing: 1.5, opacity: 0.5, marginBottom: 6 },
   phoneRow: { flexDirection: 'row', gap: 8, marginBottom: 18 },
-  cc: { backgroundColor: '#F8F9FA', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center' },
+  cc: { backgroundColor: '#F9FAFB', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)' },
   ccText: { fontFamily: 'Inter_700Bold', fontSize: 15 },
   input: {
     flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15,
-    backgroundColor: '#F8F9FA', borderRadius: 10,
+    backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', borderRadius: 10,
     paddingHorizontal: 14, paddingVertical: 12,
   },
   btn: { backgroundColor: '#ddd', borderRadius: 12, padding: 13, alignItems: 'center' },

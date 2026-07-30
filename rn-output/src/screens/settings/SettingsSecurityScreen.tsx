@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, TextInput, Modal, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
-import { C, F, shadow, border3D } from '../../theme'
+import { C, F, shadow } from '../../theme'
 
 export default function SettingsSecurityScreen({ setScreen }: { setScreen: SetScreen }) {
   const [currentPwd, setCurrentPwd] = useState('')
@@ -128,7 +128,7 @@ function PwdField({ label, value, onChange, show, onToggle }: { label: string; v
           value={value}
           onChangeText={onChange}
           secureTextEntry={!show}
-          style={{ fontFamily: 'Inter_400Regular', fontSize: 15, backgroundColor: C.innerCream, borderRadius: 10, padding: 11, paddingHorizontal: 13, paddingRight: 44, color: '#000', ...border3D }}
+          style={{ fontFamily: 'Inter_400Regular', fontSize: 15, backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.06)', borderRadius: 10, padding: 11, paddingHorizontal: 13, paddingRight: 44, color: '#000' }}
         />
         <TouchableOpacity
           onPress={onToggle}
@@ -148,33 +148,33 @@ const s = StyleSheet.create({
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black },
   body: { padding: 20, paddingBottom: 32 },
   sLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 8, marginTop: 4 },
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, padding: 16, marginBottom: 16 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(4, 4), padding: 16, marginBottom: 16 },
   strengthBar: { flex: 1, height: 4, borderRadius: 2 },
   strengthLabel: { fontFamily: F.interBold, fontSize: 11 },
-  saveBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D, marginTop: 4 },
+  saveBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), marginTop: 4 },
   saveBtnText: { fontFamily: F.barlow, fontSize: 16, color: C.black },
-  toggleCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, overflow: 'hidden', marginBottom: 16 },
+  toggleCard: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(4, 4), overflow: 'hidden', marginBottom: 16 },
   toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 13, paddingHorizontal: 14 },
   toggleRowBorder: { borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.06)' },
-  toggleIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', ...border3D },
+  toggleIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center' },
   toggleLabel: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   toggleSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.4 },
   toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },
   toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
-  dangerCard: { backgroundColor: '#FEE2E2', borderRadius: 14, ...shadow(4, 4, C.red), ...border3D, padding: 14, marginBottom: 24 },
+  dangerCard: { backgroundColor: '#FEE2E2',  borderColor: C.red, borderRadius: 14, ...shadow(4, 4, C.red), padding: 14, marginBottom: 24 },
   dangerTitle: { fontFamily: F.interBold, fontSize: 13, color: C.black, marginBottom: 4 },
   dangerSub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.6, marginBottom: 12 },
-  deactivateBtn: { backgroundColor: C.red, borderRadius: 9, paddingHorizontal: 18, paddingVertical: 9, alignSelf: 'flex-start', ...shadow(3, 3), ...border3D },
+  deactivateBtn: { backgroundColor: C.red, borderRadius: 9, paddingHorizontal: 18, paddingVertical: 9, alignSelf: 'flex-start', ...shadow(3, 3) },
   deactivateBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.white },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center', padding: 20 },
-  modalBox: { backgroundColor: C.white, borderRadius: 16, ...shadow(6, 6), ...border3D, padding: 20, width: '100%' },
+  modalBox: { backgroundColor: C.white, borderRadius: 16, ...shadow(6, 6), padding: 20, width: '100%' },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 10 },
   modalBody: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.65, lineHeight: 20, marginBottom: 20 },
   modalBtns: { flexDirection: 'row', gap: 10 },
-  modalCancel: { flex: 1, backgroundColor: C.cream, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(2, 2), ...border3D },
+  modalCancel: { flex: 1,  borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(2, 2) },
   modalCancelText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  modalConfirm: { flex: 1, backgroundColor: C.red, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D },
+  modalConfirm: { flex: 1, backgroundColor: C.red,  borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3) },
   modalConfirmText: { fontFamily: F.barlow, fontSize: 15, color: C.white },
-  toast: { position: 'absolute', bottom: 40, left: 20, right: 20, backgroundColor: C.black, borderRadius: 12, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D },
+  toast: { position: 'absolute', bottom: 40, left: 20, right: 20, backgroundColor: C.black,  borderColor: C.yellow, borderRadius: 12, padding: 12, alignItems: 'center', ...shadow(3, 3) },
   toastText: { fontFamily: F.interBold, fontSize: 13, color: C.yellow },
 })

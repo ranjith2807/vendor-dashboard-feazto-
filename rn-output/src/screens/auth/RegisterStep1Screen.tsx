@@ -82,13 +82,14 @@ const styles = StyleSheet.create({
   stepActive: { width: 22, opacity: 1 },
   card: {
     backgroundColor: '#fff', borderRadius: 16, padding: 18, gap: 14,
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
   },
   fieldWrap: {},
   label: { fontFamily: 'Inter_700Bold', fontSize: 11, letterSpacing: 1.5, opacity: 0.5, marginBottom: 5 },
   input: {
     fontFamily: 'Inter_400Regular', fontSize: 14,
-    backgroundColor: '#F8F9FA', borderRadius: 10,
+    backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', borderRadius: 10,
     paddingHorizontal: 13, paddingVertical: 11,
   },
   inputError: { borderColor: '#FF3B30', backgroundColor: '#FEF3F2' },

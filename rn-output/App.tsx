@@ -167,7 +167,7 @@ export default function App() {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFF8E7" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <AppShell screen={screen} setScreen={setScreen} showNav={showNav}>
         <ScreenContent
           screen={screen}

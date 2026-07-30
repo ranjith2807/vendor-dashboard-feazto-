@@ -1,15 +1,63 @@
-import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { View, Text, TextInput, StyleSheet, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 
 export default function ResetOtpScreen({ setScreen }: { setScreen: SetScreen }) {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [error, setError] = useState('')
+  const [resendMsg, setResendMsg] = useState('')
+  const inputRefs = useRef<(TextInput | null)[]>([])
+
+  const verifyOtp = (code: string) => {
+    if (code.length < 6) {
+      setError('Please enter a valid 6-digit OTP.')
+      return
+    }
+    if (code === '000000') {
+      setError('Incorrect OTP. Please try again.')
+      return
+    }
+    setError('')
+    setScreen('new_password')
+  }
 
   const handleChange = (idx: number, val: string) => {
-    if (!/^\d?$/.test(val)) return
-    const next = [...otp]; next[idx] = val; setOtp(next)
-    if (next.every(d => d) && idx === 5) setTimeout(() => setScreen('new_password'), 400)
+    setError('')
+    setResendMsg('')
+    const clean = val.replace(/[^0-9]/g, '')
+    const next = [...otp]
+    next[idx] = clean
+    setOtp(next)
+
+    if (clean && idx < 5) {
+      inputRefs.current[idx + 1]?.focus()
+    }
+
+    if (clean && idx === 5) {
+      const code = next.join('')
+      if (code.length === 6) {
+        setTimeout(() => verifyOtp(code), 200)
+      }
+    }
+  }
+
+  const handleKeyPress = (idx: number, e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+    if (e.nativeEvent.key === 'Backspace' && !otp[idx] && idx > 0) {
+      inputRefs.current[idx - 1]?.focus()
+    }
+  }
+
+  const handleVerifyPress = () => {
+    const code = otp.join('')
+    verifyOtp(code)
+  }
+
+  const handleResend = () => {
+    setResendMsg('New OTP sent successfully!')
+    setOtp(['', '', '', '', '', ''])
+    setError('')
+    inputRefs.current[0]?.focus()
   }
 
   return (
@@ -23,17 +71,24 @@ export default function ResetOtpScreen({ setScreen }: { setScreen: SetScreen }) 
         <View style={styles.otpRow}>
           {otp.map((val, idx) => (
             <TextInput
-              key={idx} value={val}
+              key={idx}
+              ref={el => { inputRefs.current[idx] = el }}
+              value={val}
               onChangeText={v => handleChange(idx, v)}
-              keyboardType="number-pad" maxLength={1}
+              onKeyPress={e => handleKeyPress(idx, e)}
+              keyboardType="number-pad"
+              maxLength={1}
+              selectTextOnFocus
               style={[styles.otpBox, val && styles.otpBoxFilled]}
             />
           ))}
         </View>
-        <TouchableOpacity style={styles.btn} onPress={() => setScreen('new_password')}>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {resendMsg ? <Text style={styles.resendSuccessText}>{resendMsg}</Text> : null}
+        <TouchableOpacity style={styles.btn} onPress={handleVerifyPress}>
           <Text style={styles.btnText}>Verify →</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.resend}>
+        <TouchableOpacity style={styles.resend} onPress={handleResend}>
           <Text style={styles.resendText}>Resend OTP</Text>
         </TouchableOpacity>
       </View>
@@ -49,18 +104,21 @@ const styles = StyleSheet.create({
   sub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 28 },
   card: {
     backgroundColor: '#fff', borderRadius: 16, padding: 24,
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
   },
   otpRow: { flexDirection: 'row', gap: 8, justifyContent: 'center', marginBottom: 22 },
   otpBox: {
     width: 42, height: 50, textAlign: 'center',
     fontFamily: 'BarlowCondensed_700Bold', fontSize: 24,
-    backgroundColor: '#F8F9FA', borderRadius: 10,
+    backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', borderRadius: 10,
   },
   otpBoxFilled: {
-    backgroundColor: '#FFC50A', borderColor: '#000',
+    backgroundColor: '#FFC50A', borderColor: '#000', borderWidth: 2,
     shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3,
   },
+  errorText: { fontFamily: 'Inter_700Bold', fontSize: 12, color: '#FF3B30', textAlign: 'center', marginBottom: 12 },
+  resendSuccessText: { fontFamily: 'Inter_700Bold', fontSize: 12, color: '#22C55E', textAlign: 'center', marginBottom: 12 },
   btn: {
     backgroundColor: '#FFC50A', borderRadius: 12, padding: 13, alignItems: 'center', marginBottom: 10,
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,

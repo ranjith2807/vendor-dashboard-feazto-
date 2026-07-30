@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
-import { C, F, shadow, border3D } from '../../theme'
+import { C, F, shadow } from '../../theme'
 import { DEFAULT_MENU_ITEMS, type MenuItem } from '../../data/menuStore'
 
 const FILTER_TABS = [
@@ -275,9 +275,9 @@ function MenuItemCard({
 }
 
 const mc = StyleSheet.create({
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, flexDirection: 'row', alignItems: 'center', padding: 12, gap: 10 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(4, 4), flexDirection: 'row', alignItems: 'center', padding: 12, gap: 10 },
   cardDim: { opacity: 0.6 },
-  imageBox: { width: 72, height: 72, borderRadius: 12, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' },
+  imageBox: { width: 72, height: 72, borderRadius: 12, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' },
   imageEmoji: { fontSize: 36 },
   image: { width: '100%', height: '100%', borderRadius: 12 },
   info: { flex: 1, minWidth: 0 },
@@ -292,9 +292,9 @@ const mc = StyleSheet.create({
   toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative' },
   toggleThumb: { position: 'absolute', top: 2, width: 22, height: 22, borderRadius: 11, backgroundColor: C.white, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.15, shadowRadius: 2, elevation: 2 },
   actionRow: { flexDirection: 'row', gap: 6 },
-  editBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: C.cream, ...border3D, alignItems: 'center', justifyContent: 'center' },
+  editBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center' },
   editText: { fontSize: 14 },
-  delBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: '#FEE2E2', ...border3D, alignItems: 'center', justifyContent: 'center' },
+  delBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: '#FEE2E2', alignItems: 'center', justifyContent: 'center' },
   delText: { fontSize: 14 },
 })
 
@@ -307,19 +307,19 @@ const s = StyleSheet.create({
   back: { fontSize: 24, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 28, color: C.black },
   subtitle: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },
-  addBtn: { backgroundColor: C.yellow, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 9, ...shadow(3, 3), ...border3D, alignSelf: 'flex-start' },
+  addBtn: { backgroundColor: C.yellow, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 9, ...shadow(3, 3), alignSelf: 'flex-start' },
   addBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
-  summaryRow: { flexDirection: 'row', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), ...border3D, padding: 12, marginBottom: 12 },
+  summaryRow: { flexDirection: 'row', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(3, 3), padding: 12, marginBottom: 12 },
   summaryCard: { flex: 1, alignItems: 'center' },
   summaryNum: { fontFamily: F.barlow, fontSize: 26, color: C.black, lineHeight: 28 },
   summaryLabel: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   summaryDivider: { width: 1, backgroundColor: 'rgba(0,0,0,0.08)', marginVertical: 4 },
-  searchWrap: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, paddingHorizontal: 12, marginBottom: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2, ...border3D },
+  searchWrap: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, paddingHorizontal: 12, marginBottom: 4, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 },
   searchIcon: { fontSize: 15, opacity: 0.4, marginRight: 6 },
   searchInput: { flex: 1, fontFamily: F.inter, fontSize: 14, color: C.black, paddingVertical: 11 },
   tabsScroll: { flexGrow: 0 },
   tabsContent: { paddingHorizontal: 20, gap: 6, paddingVertical: 10, alignItems: 'center' },
-  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start', ...border3D },
+  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   tabActive: { backgroundColor: C.black, borderColor: C.black },
   tabText: { fontFamily: F.barlow, fontSize: 12, color: C.black, includeFontPadding: false, textAlign: 'center' },
   tabTextActive: { color: C.yellow },
@@ -333,9 +333,9 @@ const s = StyleSheet.create({
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 8 },
   modalBody: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.55, marginBottom: 20, lineHeight: 20 },
   modalBtns: { flexDirection: 'row', gap: 10 },
-  cancelBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, padding: 13, alignItems: 'center', ...border3D },
+  cancelBtn: { flex: 1, backgroundColor: C.white, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)', borderRadius: 12, padding: 13, alignItems: 'center' },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  deleteBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3), ...border3D },
+  deleteBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3) },
   deleteBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.white },
   toast: { position: 'absolute', bottom: 20, left: 20, right: 20, backgroundColor: C.black, borderRadius: 12, padding: 14, alignItems: 'center', ...shadow(3, 3, C.yellow) },
   toastText: { fontFamily: F.interBold, fontSize: 13, color: C.yellow },

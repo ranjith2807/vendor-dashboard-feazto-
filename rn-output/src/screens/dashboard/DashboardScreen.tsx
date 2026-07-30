@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { mockOrders, analyticsStats } from '../../data/mockData'
-import { border3D } from '../../theme'
+import { getActiveState, setActiveState } from '../../data/activeStateStore'
 
 const STATUS_COLOR: Record<string, string> = {
   new: '#FFC50A', accepted: '#3B82F6', preparing: '#F59E0B', ready: '#22C55E',
@@ -16,7 +16,27 @@ const STATUS_LABEL: Record<string, string> = {
 
 export default function DashboardScreen({ setScreen }: { setScreen: SetScreen }) {
   const [isOpen, setIsOpen] = useState(true)
+  const [activeBtn, setActiveBtn] = useState<string | null>(null)
   const liveOrders = mockOrders.filter(o => !['delivered', 'cancelled'].includes(o.status))
+
+  const handlePress = (btnId: string, action: () => void) => {
+    setActiveBtn(btnId)
+    setTimeout(() => {
+      action()
+      setActiveBtn(null)
+    }, 150)
+  }
+
+  const activeStyle = {
+    backgroundColor: '#f9be08',
+    borderWidth: 2,
+    borderColor: '#000000',
+    shadowColor: '#000000',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 5,
+  }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -26,23 +46,30 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
           <Text style={styles.greeting}>Good morning 👋</Text>
           <Text style={styles.kitchenName}>Priya's Kitchen</Text>
         </View>
-        <TouchableOpacity style={styles.notifBtn} onPress={() => setScreen('notifications')}>
+        <TouchableOpacity
+          style={[styles.notifBtn, activeBtn === 'notif' && activeStyle]}
+          onPress={() => handlePress('notif', () => setScreen('notifications'))}
+        >
           <Text style={styles.notifIcon}>🔔</Text>
           <View style={styles.badge}><Text style={styles.badgeText}>2</Text></View>
         </TouchableOpacity>
       </View>
 
       {/* Search */}
-      <TouchableOpacity style={styles.searchBar} onPress={() => setScreen('search')}>
+      <TouchableOpacity
+        style={[styles.searchBar, activeBtn === 'search' && activeStyle]}
+        onPress={() => handlePress('search', () => setScreen('search'))}
+      >
         <Text style={styles.searchIcon}>🔍</Text>
         <Text style={styles.searchPlaceholder}>Search menu, orders…</Text>
       </TouchableOpacity>
 
       {/* Kitchen Status Toggle Card */}
-      <TouchableOpacity
-        activeOpacity={0.85}
-        style={[styles.statusCard, { borderColor: isOpen ? '#22C55E' : '#FF3B30' }]}
-        onPress={() => setIsOpen(v => !v)}
+      <View
+        style={[
+          styles.statusCard,
+          { borderColor: isOpen ? '#22C55E' : '#FF3B30' },
+        ]}
       >
         {/* Animated dot */}
         <View style={[styles.statusDot, { backgroundColor: isOpen ? '#22C55E' : '#FF3B30' }]} />
@@ -53,15 +80,19 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
             Kitchen is {isOpen ? 'OPEN' : 'CLOSED'}
           </Text>
           <Text style={styles.statusSub}>
-            {isOpen ? 'Accepting orders · Tap to close' : 'Not accepting orders · Tap to open'}
+            {isOpen ? 'Accepting orders · Tap toggle to close' : 'Not accepting orders · Tap toggle to open'}
           </Text>
         </View>
 
-        {/* Toggle switch */}
-        <View style={[styles.toggleTrack, { backgroundColor: isOpen ? '#22C55E' : '#ddd' }]}>
+        {/* Toggle switch button */}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setIsOpen(v => !v)}
+          style={[styles.toggleTrack, { backgroundColor: isOpen ? '#22C55E' : '#ddd' }]}
+        >
           <View style={[styles.toggleThumb, { left: isOpen ? 22 : 2 }]} />
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
 
       {/* Stats */}
       <View style={styles.statsGrid}>
@@ -78,7 +109,10 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
       {/* Live orders */}
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Live Orders</Text>
-        <TouchableOpacity style={styles.seeAllBtn} onPress={() => setScreen('orders')}>
+        <TouchableOpacity
+          style={[styles.seeAllBtn, activeBtn === 'seeAll' && activeStyle]}
+          onPress={() => handlePress('seeAll', () => setScreen('orders'))}
+        >
           <Text style={styles.seeAllText}>See All</Text>
         </TouchableOpacity>
       </View>
@@ -88,36 +122,43 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
           <Text style={{ fontSize: 32, marginBottom: 6 }}>✅</Text>
           <Text style={styles.emptyOrdersText}>No live orders right now</Text>
         </View>
-      ) : liveOrders.map(order => (
-        <TouchableOpacity
-          key={order.id}
-          style={styles.orderCard}
-          onPress={() => setScreen('order_detail', { id: order.id })}
-        >
-          <View style={styles.orderCardTop}>
-            <Text style={styles.orderId}>#{order.id}</Text>
-            <View style={[styles.statusBadge, { backgroundColor: STATUS_COLOR[order.status] }]}>
-              <Text style={[styles.statusBadgeText, { color: order.status === 'new' ? '#000' : '#fff' }]}>
-                {STATUS_LABEL[order.status]}
-              </Text>
+      ) : liveOrders.map(order => {
+        const isCardActive = activeBtn === `order_${order.id}`
+        return (
+          <TouchableOpacity
+            key={order.id}
+            style={[styles.orderCard, isCardActive && activeStyle]}
+            onPress={() => handlePress(`order_${order.id}`, () => setScreen('order_detail', { id: order.id }))}
+          >
+            <View style={styles.orderCardTop}>
+              <Text style={styles.orderId}>#{order.id}</Text>
+              <View style={[styles.statusBadge, { backgroundColor: STATUS_COLOR[order.status] }]}>
+                <Text style={[styles.statusBadgeText, { color: order.status === 'new' ? '#000' : '#fff' }]}>
+                  {STATUS_LABEL[order.status]}
+                </Text>
+              </View>
             </View>
-          </View>
-          <Text style={styles.orderCustomer}>{order.customerName} · ₹{order.total}</Text>
-          <Text style={styles.orderMeta}>{order.items.length} items · {order.placedAt}</Text>
-        </TouchableOpacity>
-      ))}
+            <Text style={styles.orderCustomer}>{order.customerName} · ₹{order.total}</Text>
+            <Text style={styles.orderMeta}>{order.items.length} items · {order.placedAt}</Text>
+          </TouchableOpacity>
+        )
+      })}
 
-      {/* FEZU banner */}
-      <View style={styles.fezuBanner}>
+      {/* FEZU banner / status card */}
+      <TouchableOpacity
+        activeOpacity={0.9}
+        style={[styles.fezuBanner, activeBtn === 'fezuBanner' && activeStyle]}
+        onPress={() => handlePress('fezuBanner', () => setScreen('fezu'))}
+      >
         <View style={{ flex: 1 }}>
           <Text style={styles.fezuTitle}>FEZU Riders Ready</Text>
           <Text style={styles.fezuSub}>3 riders available nearby. Assign instantly!</Text>
-          <TouchableOpacity style={styles.fezuBtn} onPress={() => setScreen('fezu')}>
+          <View style={[styles.fezuBtn, activeBtn === 'openFezu' && activeStyle]}>
             <Text style={styles.fezuBtnText}>OPEN FEZU</Text>
-          </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.fezuMascot}><Text style={{ fontSize: 44 }}>🚴</Text></View>
-      </View>
+      </TouchableOpacity>
     </ScrollView>
   )
 }
@@ -125,6 +166,16 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
 const styles = StyleSheet.create({
   container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF' },
   content: { padding: 20, paddingBottom: 32, gap: 12 },
+  activeHighlight: {
+    backgroundColor: '#f9be08',
+    borderWidth: 2,
+    borderColor: '#000000',
+    shadowColor: '#000000',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+  },
 
   // Header
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
@@ -133,8 +184,8 @@ const styles = StyleSheet.create({
   notifBtn: {
     width: 40, height: 40, borderRadius: 12, backgroundColor: '#fff',
     alignItems: 'center', justifyContent: 'center',
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000',
     shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.10, shadowRadius: 3, elevation: 2,
-    ...border3D,
   },
   notifIcon: { fontSize: 18 },
   badge: {
@@ -148,8 +199,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 10,
     backgroundColor: '#fff', borderRadius: 12,
     padding: 10, paddingHorizontal: 14,
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000',
     shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 4, elevation: 2,
-    ...border3D,
   },
   searchIcon: { fontSize: 16, opacity: 0.4 },
   searchPlaceholder: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.4 },
@@ -158,8 +209,8 @@ const styles = StyleSheet.create({
   statusCard: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
     backgroundColor: '#fff', borderRadius: 14, padding: 14,
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000',
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
-    ...border3D,
   },
   statusDot: { width: 10, height: 10, borderRadius: 5 },
   statusTitle: { fontFamily: 'Inter_700Bold', fontSize: 14, color: '#000' },
@@ -181,8 +232,8 @@ const styles = StyleSheet.create({
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   statCard: {
     width: '47%' as any, backgroundColor: '#fff', borderRadius: 12, padding: 12,
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
-    ...border3D,
   },
   statIcon: { fontSize: 20, marginBottom: 2 },
   statValue: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 22 },
@@ -194,19 +245,19 @@ const styles = StyleSheet.create({
   sectionTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 20 },
   seeAllBtn: {
     borderRadius: 6, paddingHorizontal: 10, paddingVertical: 3,
-    ...border3D, backgroundColor: '#fff',
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000',
   },
   seeAllText: { fontFamily: 'Inter_700Bold', fontSize: 12 },
   emptyOrders: {
     backgroundColor: '#fff', borderRadius: 12, padding: 20, alignItems: 'center',
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
     shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3,
-    ...border3D,
   },
   emptyOrdersText: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.45 },
   orderCard: {
     backgroundColor: '#fff', borderRadius: 12, padding: 12,
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000',
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
-    ...border3D,
   },
   orderCardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   orderId: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 17 },
@@ -220,13 +271,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFC50A', borderRadius: 14, padding: 14,
     flexDirection: 'row', alignItems: 'center', gap: 12,
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
-    ...border3D,
   },
   fezuTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 20 },
   fezuSub: { fontFamily: 'Inter_400Regular', fontSize: 12, opacity: 0.7, marginBottom: 8, lineHeight: 18 },
   fezuBtn: {
     backgroundColor: '#000', borderRadius: 8, paddingHorizontal: 16, paddingVertical: 7, alignSelf: 'flex-start',
-    ...border3D,
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000',
   },
   fezuBtnText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 14, color: '#FFC50A', letterSpacing: 1 },
   fezuMascot: {
