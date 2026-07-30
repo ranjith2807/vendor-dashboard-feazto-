@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, Modal, Image } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
-import { C, F, shadow } from '../../theme'
+import { C, F, shadow, border3D } from '../../theme'
 import { DEFAULT_ORDERS, type VendorOrder, type OrderStatus } from '../../data/menuStore'
 
 const STATUS_SEQ: OrderStatus[] = ['NEW', 'ACCEPTED', 'PREPARING', 'READY_FOR_PICKUP', 'PICKED_UP', 'COMPLETED']
@@ -246,15 +246,15 @@ const s = StyleSheet.create({
   statusBadge: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5 },
   statusBadgeText: { fontFamily: F.barlow, fontSize: 11 },
   body: { paddingHorizontal: 20, paddingBottom: 100, gap: 10 },
-  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14 },
+  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, padding: 14 },
   cardLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 10 },
   customerRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
-  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
+  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center', ...border3D },
   avatarText: { fontFamily: F.barlow, fontSize: 16, color: C.black },
   customerName: { fontFamily: F.interBold, fontSize: 14, color: C.black },
   customerPhone: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.5 },
-  callBtn: { width: 38, height: 38, borderRadius: 10, backgroundColor: C.green, borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', alignItems: 'center', justifyContent: 'center' },
-  addressRow: { flexDirection: 'row', gap: 6, alignItems: 'flex-start', backgroundColor: C.cream, borderRadius: 8, padding: 10 },
+  callBtn: { width: 38, height: 38, borderRadius: 10, backgroundColor: C.green, alignItems: 'center', justifyContent: 'center', ...border3D },
+  addressRow: { flexDirection: 'row', gap: 6, alignItems: 'flex-start', backgroundColor: C.cream, borderRadius: 8, padding: 10, ...border3D },
   addressText: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.65, flex: 1 },
   itemRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 8 },
   itemRowBorder: { borderBottomWidth: 1.5, borderBottomColor: 'rgba(0,0,0,0.08)' },
@@ -276,23 +276,23 @@ const s = StyleSheet.create({
   timelineLabel: { fontSize: 12, color: C.black },
   timelineNow: { fontFamily: F.interBold, fontSize: 10 },
   actionBar: { backgroundColor: C.white, padding: 12, paddingHorizontal: 20, flexDirection: 'row', gap: 10 },
-  rejectBtn: { flex: 1, backgroundColor: C.red, borderRadius: 10, padding: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', alignItems: 'center', ...shadow(3, 3) },
+  rejectBtn: { flex: 1, backgroundColor: C.red, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D },
   rejectBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.white },
-  advanceBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', alignItems: 'center', ...shadow(3, 3) },
+  advanceBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D },
   advanceBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
   modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 32 },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 14 },
-  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 14, marginBottom: 8, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000' },
+  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 14, marginBottom: 8, ...border3D },
   reasonBtnActive: { backgroundColor: C.yellow, borderColor: C.black, ...shadow(3, 3) },
   reasonBtnText: { fontFamily: F.inter, fontSize: 13, color: C.black },
   reasonBtnTextActive: { fontFamily: F.interBold },
   modalActions: { flexDirection: 'row', gap: 10, marginTop: 4 },
-  modalCancel: { flex: 1, backgroundColor: C.white, borderRadius: 10, padding: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', alignItems: 'center', ...shadow(3, 3) },
+  modalCancel: { flex: 1, backgroundColor: C.white, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D },
   modalCancelText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  modalConfirm: { flex: 2, backgroundColor: C.red, borderRadius: 10, padding: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', alignItems: 'center', ...shadow(3, 3) },
+  modalConfirm: { flex: 2, backgroundColor: C.red, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D },
   modalConfirmDisabled: { backgroundColor: '#ddd', shadowOpacity: 0 },
   modalConfirmText: { fontFamily: F.barlow, fontSize: 15, color: C.white },
-  backHomeBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, paddingHorizontal: 20, marginTop: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3) },
+  backHomeBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, paddingHorizontal: 20, marginTop: 12, ...shadow(3, 3), ...border3D },
   backHomeBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
 })

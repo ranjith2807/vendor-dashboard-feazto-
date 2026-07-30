@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { vendorDocuments, type VendorDocument } from '../../data/mockData'
-import { C, F, shadow } from '../../theme'
+import { C, F, shadow, border3D } from '../../theme'
 
 const STATUS_META: Record<VendorDocument['status'], { label: string; color: string; bg: string }> = {
   verified: { label: 'VERIFIED', color: C.green,  bg: '#DCFCE7' },
@@ -94,20 +94,20 @@ const s = StyleSheet.create({
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black },
   body: { padding: 20, paddingBottom: 32, gap: 10 },
-  complianceCard: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', padding: 14, ...shadow(4, 4) } as any,
+  complianceCard: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 14, padding: 14, ...shadow(4, 4), ...border3D, backgroundColor: C.yellow } as any,
   complianceTitle: { fontFamily: F.barlow, fontSize: 20, color: C.black },
   complianceSub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.6 },
   progressBg: { height: 8, backgroundColor: '#ddd', borderRadius: 4, overflow: 'hidden' },
   progressFill: { height: '100%', backgroundColor: C.green },
-  docCard: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 },
-  docIcon: { width: 42, height: 42, borderRadius: 10, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  docCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  docIcon: { width: 42, height: 42, borderRadius: 10, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', flexShrink: 0, ...border3D },
   docName: { fontFamily: F.interBold, fontSize: 14, color: C.black },
   docMeta: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   statusBadge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2 },
   statusBadgeText: { fontFamily: F.barlow, fontSize: 10, letterSpacing: 1 },
-  uploadBtn: { backgroundColor: C.black, borderRadius: 6, paddingHorizontal: 10, paddingVertical: 4, borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000' },
+  uploadBtn: { backgroundColor: C.black, borderRadius: 6, paddingHorizontal: 10, paddingVertical: 4, ...border3D },
   uploadBtnText: { fontFamily: F.interBold, fontSize: 11, color: C.yellow },
-  infoCard: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: '#DBEAFE',  borderColor: C.blue, borderRadius: 12, padding: 12 },
+  infoCard: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: '#DBEAFE', borderRadius: 12, padding: 12, ...border3D },
   infoText: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.7, lineHeight: 18, flex: 1 },
   toast: { position: 'absolute', bottom: 40, left: 20, right: 20, backgroundColor: C.black,  borderColor: C.yellow, borderRadius: 12, padding: 12, alignItems: 'center', ...shadow(3, 3) },
   toastText: { fontFamily: F.interBold, fontSize: 13, color: C.yellow },

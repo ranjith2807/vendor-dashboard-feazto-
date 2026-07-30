@@ -41,7 +41,7 @@ const s = StyleSheet.create({
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black },
   body: { paddingHorizontal: 20, paddingBottom: 20, gap: 8 },
-  card: { backgroundColor: C.cream, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 12, flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
+  card: { backgroundColor: C.cream,  borderRadius: 12, ...shadow(4, 4), padding: 12, flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
   cardRead: { backgroundColor: C.white, borderColor: '#ddd', shadowOpacity: 0 },
   icon: { width: 36, height: 36, borderRadius: 18, backgroundColor: C.cream,  alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   notifTitle: { fontFamily: F.interBold, fontSize: 13, color: C.black },

@@ -68,7 +68,7 @@ export default function AppShell({ screen, setScreen, showNav, children }: AppSh
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFFFFF' },
+  container: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFF8E7' },
   content: { flex: 1, width: '100%', height: '100%' },
   nav: {
     flexDirection: 'row',
@@ -86,12 +86,12 @@ const styles = StyleSheet.create({
      borderColor: 'transparent',
   },
   navIconActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF8E7',
+    borderColor: '#000000',
     borderBottomWidth: 2.5,
     borderRightWidth: 2.5,
     borderTopWidth: 0,
     borderLeftWidth: 0,
-    borderColor: '#000000',
   },
   navIcon: { fontSize: 18 },
   navLabel: { fontFamily: 'Inter_400Regular', fontSize: 10, color: '#888' },

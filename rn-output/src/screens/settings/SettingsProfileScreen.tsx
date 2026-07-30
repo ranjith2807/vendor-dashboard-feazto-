@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
-import { C, F, shadow } from '../../theme'
+import { C, F, shadow, border3D } from '../../theme'
 
 const CUISINES = ['South Indian', 'North Indian', 'Chinese', 'Continental', 'Bakery', 'Fast Food', 'Desserts', 'Beverages']
 
@@ -85,7 +85,7 @@ function FField({ label, value, onChange, keyboardType, placeholder }: { label: 
     <View style={{ marginBottom: 12 }}>
       <Text style={{ fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.5, marginBottom: 5 }}>{label.toUpperCase()}</Text>
       <TextInput value={value} onChangeText={onChange} keyboardType={keyboardType} placeholder={placeholder}
-        style={{ fontFamily: F.inter, fontSize: 14, backgroundColor: C.white, borderRadius: 10, padding: 11, paddingHorizontal: 13, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000' }} />
+        style={{ fontFamily: F.inter, fontSize: 14, backgroundColor: C.white, borderRadius: 10, padding: 11, paddingHorizontal: 13, ...border3D }} />
     </View>
   )
 }
@@ -95,15 +95,15 @@ const s = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 20, paddingBottom: 14, borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.08)' },
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black, flex: 1 },
-  saveBtn: { backgroundColor: C.yellow, borderRadius: 9, paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3) },
+  saveBtn: { backgroundColor: C.yellow, borderRadius: 9, paddingHorizontal: 16, paddingVertical: 8, ...shadow(3, 3), ...border3D },
   saveBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
   body: { padding: 20, paddingBottom: 32 },
   avatarWrap: { alignItems: 'center', marginBottom: 20, position: 'relative' },
-  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.yellow, ...shadow(4, 4), alignItems: 'center', justifyContent: 'center' },
+  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.yellow, ...shadow(4, 4), ...border3D, alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: F.barlow, fontSize: 30, color: C.black },
-  avatarEdit: { position: 'absolute', bottom: -4, right: '50%', marginRight: -44, width: 28, height: 28, borderRadius: 14, backgroundColor: C.black, borderColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
+  avatarEdit: { position: 'absolute', bottom: -4, right: '50%', marginRight: -44, width: 28, height: 28, borderRadius: 14, backgroundColor: C.black, alignItems: 'center', justifyContent: 'center', ...border3D },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 },
-  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0 },
+  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, flexShrink: 0, ...border3D },
   chipActive: { backgroundColor: C.black, borderColor: C.black },
   chipText: { fontFamily: F.interBold, fontSize: 12, color: C.black, includeFontPadding: false },
   chipTextActive: { color: C.yellow },

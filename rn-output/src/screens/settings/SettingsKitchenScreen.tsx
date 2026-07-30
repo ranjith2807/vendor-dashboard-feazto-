@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
-import { C, F, shadow } from '../../theme'
+import { C, F, shadow, border3D } from '../../theme'
 
 const KITCHEN_TYPES = ['Home Kitchen', 'Cloud Kitchen', 'Restaurant', 'Bakery', 'Food Truck', 'Catering']
 
@@ -92,26 +92,26 @@ const s = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 20, paddingBottom: 14, borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.08)' },
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black, flex: 1 },
-  saveBtn: { backgroundColor: C.yellow, borderRadius: 9, paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3) },
+  saveBtn: { backgroundColor: C.yellow, borderRadius: 9, paddingHorizontal: 16, paddingVertical: 8, ...shadow(3, 3), ...border3D },
   saveBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
   body: { padding: 20, paddingBottom: 32 },
   sLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 8, marginTop: 4 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 },
-  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0 },
+  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, flexShrink: 0, ...border3D },
   chipActive: { backgroundColor: C.black, borderColor: C.black },
   chipText: { fontFamily: F.interBold, fontSize: 12, color: C.black, includeFontPadding: false },
   chipTextActive: { color: C.yellow },
   statsRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  numberCard: { flex: 1, backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), padding: 10, alignItems: 'center' },
+  numberCard: { flex: 1, backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), ...border3D, padding: 10, alignItems: 'center' },
   numberInput: { fontFamily: F.barlow, fontSize: 26, color: C.black, textAlign: 'center', width: '100%', borderBottomWidth: 2, borderBottomColor: C.black },
   numberLabel: { fontFamily: F.interBold, fontSize: 9, letterSpacing: 1, color: C.black, opacity: 0.4, textAlign: 'center', marginTop: 4 },
   numberUnit: { fontFamily: F.inter, fontSize: 10, color: C.black, opacity: 0.35 },
-  toggleCard: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), overflow: 'hidden', marginBottom: 16 },
+  toggleCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, overflow: 'hidden', marginBottom: 16 },
   toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 13, paddingHorizontal: 14 },
   toggleRowBorder: { borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.06)' },
   toggleLabel: { fontFamily: F.interBold, fontSize: 14, color: C.black, flex: 1 },
   toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },
   toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
   inputLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.5, marginBottom: 5 },
-  textInput: { fontFamily: F.inter, fontSize: 14, backgroundColor: C.white, borderRadius: 10, padding: 11, paddingHorizontal: 13, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000' },
+  textInput: { fontFamily: F.inter, fontSize: 14, backgroundColor: C.white, borderRadius: 10, padding: 11, paddingHorizontal: 13, ...border3D },
 })

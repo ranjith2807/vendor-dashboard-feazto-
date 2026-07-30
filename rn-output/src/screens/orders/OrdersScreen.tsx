@@ -12,7 +12,7 @@ import {
   type VendorOrder,
   type OrderStatus,
 } from '../../data/menuStore'
-import { C, F, shadow } from '../../theme'
+import { C, F, shadow, border3D } from '../../theme'
 
 const FILTER_TABS: { id: OrderStatus | 'ALL'; label: string }[] = [
   { id: 'ALL',             label: 'All' },
@@ -265,11 +265,11 @@ function OrderCard({
       {flow && (
         <View style={oc.actions}>
           {order.status === 'NEW' && (
-            <TouchableOpacity style={oc.rejectBtn} onPress={(e: any) => { e?.stopPropagation?.(); onReject() }}>
+            <TouchableOpacity style={oc.rejectBtn} onPress={e => { e.stopPropagation?.(); onReject() }}>
               <Text style={oc.rejectBtnText}>Reject</Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={oc.actionBtn} onPress={(e: any) => { e?.stopPropagation?.(); onAdvance() }}>
+          <TouchableOpacity style={oc.actionBtn} onPress={e => { e.stopPropagation?.(); onAdvance() }}>
             <Text style={oc.actionBtnText}>{flow.action} →</Text>
           </TouchableOpacity>
         </View>
@@ -279,7 +279,7 @@ function OrderCard({
 }
 
 const oc = StyleSheet.create({
-  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), overflow: 'hidden' },
+  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, overflow: 'hidden' },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 14, paddingBottom: 10 },
   orderNumRow: { gap: 4 },
   orderId: { fontFamily: F.barlow, fontSize: 18, color: C.black },
@@ -300,9 +300,9 @@ const oc = StyleSheet.create({
   footerMeta: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   total: { fontFamily: F.barlow, fontSize: 22, color: C.black },
   actions: { flexDirection: 'row', gap: 8, padding: 12, paddingTop: 0 },
-  rejectBtn: { flex: 1, backgroundColor: '#FEE2E2', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', borderRadius: 10, padding: 11, alignItems: 'center' },
+  rejectBtn: { flex: 1, backgroundColor: '#FEE2E2', borderRadius: 10, padding: 11, alignItems: 'center', ...border3D },
   rejectBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.red },
-  actionBtn: { flex: 2, backgroundColor: C.yellow, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', borderRadius: 10, padding: 11, alignItems: 'center', ...shadow(3, 3) },
+  actionBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 11, alignItems: 'center', ...shadow(3, 3), ...border3D },
   actionBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
 })
 
@@ -313,12 +313,12 @@ const s = StyleSheet.create({
   subtitle: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },
   summaryScroll: { flexGrow: 0 },
   summaryContent: { paddingHorizontal: 20, gap: 10, paddingBottom: 12 },
-  summaryCard: { borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', paddingHorizontal: 18, paddingVertical: 12, alignItems: 'center', minWidth: 80, ...shadow(3, 3) },
+  summaryCard: { borderRadius: 12, paddingHorizontal: 18, paddingVertical: 12, alignItems: 'center', minWidth: 80, ...shadow(3, 3), ...border3D, backgroundColor: C.white },
   summaryNum: { fontFamily: F.barlow, fontSize: 28, lineHeight: 30 },
   summaryLabel: { fontFamily: F.interBold, fontSize: 11 },
   filterScroll: { flexGrow: 0 },
   filterContent: { paddingHorizontal: 20, gap: 6, paddingBottom: 12, alignItems: 'center' },
-  filterTab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  filterTab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start', ...border3D },
   filterTabActive: { backgroundColor: C.black, borderColor: C.black },
   filterTabText: { fontFamily: F.barlow, fontSize: 12, color: C.black, includeFontPadding: false, textAlign: 'center' },
   filterTabTextActive: { color: C.yellow },
@@ -330,14 +330,14 @@ const s = StyleSheet.create({
   modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24, paddingBottom: 36 },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 6 },
   modalBody: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.5, marginBottom: 14 },
-  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 16, marginBottom: 8, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000' },
-  reasonBtnActive: { backgroundColor: C.yellow, borderColor: C.black, ...shadow(2, 2) },
+  reasonBtn: { backgroundColor: C.white, borderRadius: 10, padding: 12, paddingHorizontal: 16, marginBottom: 8, ...border3D },
+  reasonBtnActive: { backgroundColor: C.yellow, borderColor: C.yellow, ...shadow(2, 2) },
   reasonBtnText: { fontFamily: F.inter, fontSize: 13, color: C.black },
   reasonBtnTextActive: { fontFamily: F.interBold },
   modalBtns: { flexDirection: 'row', gap: 10, marginTop: 8 },
-  cancelBtn: { flex: 1, backgroundColor: C.white, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', borderRadius: 12, padding: 13, alignItems: 'center' },
+  cancelBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, padding: 13, alignItems: 'center', ...border3D },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  rejectConfirmBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', padding: 13, alignItems: 'center', ...shadow(3, 3) },
+  rejectConfirmBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3), ...border3D },
   rejectConfirmBtnDisabled: { backgroundColor: '#ddd', shadowOpacity: 0 },
   rejectConfirmBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.white },
   toast: { position: 'absolute', bottom: 20, left: 20, right: 20, backgroundColor: C.black, borderRadius: 12, padding: 14, alignItems: 'center', ...shadow(3, 3, C.yellow) },

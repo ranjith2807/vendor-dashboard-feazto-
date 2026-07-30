@@ -1,6 +1,6 @@
 export const C = {
   yellow: '#FFC50A',
-  cream: '#FFFFFF',
+  cream: '#FFF8E7',
   black: '#000000',
   white: '#FFFFFF',
   red: '#FF3B30',
@@ -39,13 +39,11 @@ export function softShadow(elevation = 2) {
   }
 }
 
-// 3D Offset Border — dark border on bottom and right sides only
-export function offsetBorder(width = 2.5, color = '#000000') {
-  return {
-    borderColor: color,
-    borderBottomWidth: width,
-    borderRightWidth: width,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-  }
+// 3D bottom-right dark offset border effect
+export const border3D = {
+  borderColor: '#000000',
+  borderBottomWidth: 2.5,
+  borderRightWidth: 2.5,
+  borderTopWidth: 0,
+  borderLeftWidth: 0,
 }

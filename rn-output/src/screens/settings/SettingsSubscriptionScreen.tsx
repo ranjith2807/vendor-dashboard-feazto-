@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { subscriptionInfo } from '../../data/mockData'
-import { C, F, shadow } from '../../theme'
+import { C, F, shadow, border3D } from '../../theme'
 
 interface Feature {
   id: string
@@ -96,16 +96,16 @@ const s = StyleSheet.create({
   back: { fontSize: 20, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black },
   body: { paddingHorizontal: 20, paddingBottom: 32, gap: 14 },
-  planCard: { backgroundColor: C.black, borderRadius: 16, borderBottomWidth: 3, borderRightWidth: 3, borderColor: '#000', ...shadow(6, 6, C.yellow), padding: 20, overflow: 'hidden' },
+  planCard: { backgroundColor: C.black, borderRadius: 16, ...shadow(6, 6, C.yellow), ...border3D, padding: 20, overflow: 'hidden' },
   planTop: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 },
   planLabel: { fontFamily: F.interBold, fontSize: 11, color: C.yellow, letterSpacing: 1, marginBottom: 4 },
   planName: { fontFamily: F.barlow, fontSize: 32, color: C.white, lineHeight: 34 },
-  activeBadge: { backgroundColor: C.yellow, borderColor: C.white, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 },
+  activeBadge: { backgroundColor: C.yellow, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, ...border3D },
   activeBadgeText: { fontFamily: F.barlow, fontSize: 12, color: C.black },
   planPrice: { fontFamily: F.barlow, fontSize: 28, color: C.yellow, marginBottom: 4 },
   planPriceSub: { fontSize: 14, fontFamily: 'Inter_400Regular', opacity: 0.7 },
   planRenews: { fontFamily: F.inter, fontSize: 12, color: C.cream, opacity: 0.55 },
-  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14 },
+  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), ...border3D, padding: 14 },
   cardTitle: { fontFamily: F.barlow, fontSize: 18, color: C.black, marginBottom: 12 },
   featureRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingBottom: 10, marginBottom: 10 },
   featureRowBorder: { borderBottomWidth: 1.5, borderBottomColor: 'rgba(0,0,0,0.06)' },
@@ -113,15 +113,15 @@ const s = StyleSheet.create({
   featureCheckText: { fontFamily: F.interBold, fontSize: 11 },
   featureLabel: { fontFamily: F.inter, fontSize: 13, color: C.black, flex: 1 },
   featureLabelDim: { opacity: 0.4 },
-  upgradeBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', alignItems: 'center', ...shadow(3, 3), marginTop: 4 },
+  upgradeBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3), ...border3D, marginTop: 4 },
   upgradeBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
   invoiceRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingBottom: 10, marginBottom: 10 },
   invoiceRowBorder: { borderBottomWidth: 1.5, borderBottomColor: 'rgba(0,0,0,0.06)' },
-  invoiceIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: '#DCFCE7', alignItems: 'center', justifyContent: 'center' },
+  invoiceIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: '#DCFCE7', alignItems: 'center', justifyContent: 'center', ...border3D },
   invoiceDate: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   invoiceMeta: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   invoiceAmount: { fontFamily: F.barlow, fontSize: 16, color: C.black },
   invoiceStatus: { fontFamily: F.interBold, fontSize: 10, color: C.green, letterSpacing: 1 },
-  cancelBtn: { borderRadius: 10, padding: 12, borderBottomWidth: 2, borderRightWidth: 2, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', alignItems: 'center' },
+  cancelBtn: { borderRadius: 10, padding: 12, alignItems: 'center', ...border3D, backgroundColor: C.white },
   cancelBtnText: { fontFamily: F.interBold, fontSize: 13, color: C.red },
 })

@@ -49,7 +49,7 @@ export default function NewPasswordScreen({ setScreen }: { setScreen: SetScreen 
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', padding: 20 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', padding: 20 },
   back: { marginBottom: 16 },
   backText: { fontSize: 22 },
   title: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 32, marginBottom: 6 },
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   label: { fontFamily: 'Inter_700Bold', fontSize: 11, letterSpacing: 1.5, opacity: 0.5, marginBottom: 6 },
   input: {
     fontFamily: 'Inter_400Regular', fontSize: 15,
-    backgroundColor: '#FFFFFF', borderRadius: 10,
+    backgroundColor: '#FFF8E7',  borderRadius: 10,
     paddingHorizontal: 14, paddingVertical: 12,
   },
   error: { fontFamily: 'Inter_700Bold', fontSize: 12, color: '#FF3B30' },
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
   },
   btnText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 17, letterSpacing: 1 },
-  success: { flex: 1, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', padding: 32 },
+  success: { flex: 1, backgroundColor: '#FFF8E7', alignItems: 'center', justifyContent: 'center', padding: 32 },
   tick: {
     width: 80, height: 80, borderRadius: 40, backgroundColor: '#22C55E',
     alignItems: 'center', justifyContent: 'center', marginBottom: 20,
