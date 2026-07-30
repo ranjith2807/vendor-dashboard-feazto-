@@ -14,16 +14,18 @@ export function TouchableOpacity({ style, onPressIn, onPressOut, children, ...pr
     onPressOut?.(e)
   }
 
-  // Dark border and dark shadow/elevation on press
+  // Dark 3D bottom-right border & solid shadow on press
   const pressedStyle = isPressed
     ? {
-        borderWidth: 1.5,
-        borderColor: '#000000',
+        borderBottomWidth: 3,
+        borderRightWidth: 3,
+        borderBottomColor: '#000000',
+        borderRightColor: '#000000',
         shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowOffset: { width: 3, height: 3 },
+        shadowOpacity: 1,
+        shadowRadius: 0,
+        elevation: 5,
       }
     : null
 
