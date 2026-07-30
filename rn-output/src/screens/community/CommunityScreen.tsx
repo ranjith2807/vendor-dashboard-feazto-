@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet, Modal } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet, Modal } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { communityPosts, leaderboard, communityGroups, tagMeta } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'

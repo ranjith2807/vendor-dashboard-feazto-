@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal, Image } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Modal, Image } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
 import { C, F, shadow } from '../../theme'
 import { DEFAULT_ORDERS, type VendorOrder, type OrderStatus } from '../../data/menuStore'

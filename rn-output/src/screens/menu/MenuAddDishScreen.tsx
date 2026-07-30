@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import {
-  View, Text, ScrollView, TouchableOpacity,
+  View, Text, ScrollView,
   TextInput, StyleSheet, Image, Alert,
 } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import * as ImagePicker from 'expo-image-picker'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'

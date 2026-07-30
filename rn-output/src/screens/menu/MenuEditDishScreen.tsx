@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import {
-  View, Text, ScrollView, TouchableOpacity,
+  View, Text, ScrollView,
   TextInput, StyleSheet, Modal, Image,
 } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
 import { C, F, shadow } from '../../theme'
 import { DEFAULT_MENU_ITEMS } from '../../data/menuStore'
