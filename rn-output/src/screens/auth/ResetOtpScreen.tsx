@@ -42,7 +42,7 @@ export default function ResetOtpScreen({ setScreen }: { setScreen: SetScreen }) 
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', padding: 20 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', padding: 20 },
   back: { marginBottom: 16 },
   backText: { fontSize: 22 },
   title: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 32, marginBottom: 6 },
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   otpBox: {
     width: 42, height: 50, textAlign: 'center',
     fontFamily: 'BarlowCondensed_700Bold', fontSize: 24,
-    backgroundColor: '#FFF8E7',  borderRadius: 10,
+    backgroundColor: '#FFFFFF', borderRadius: 10,
   },
   otpBoxFilled: {
     backgroundColor: '#FFC50A', borderColor: '#000',

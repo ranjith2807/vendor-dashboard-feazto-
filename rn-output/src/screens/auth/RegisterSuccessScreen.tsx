@@ -20,7 +20,7 @@ export default function RegisterSuccessScreen({ setScreen }: { setScreen: SetScr
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', alignItems: 'center', justifyContent: 'center', padding: 32 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', padding: 32 },
   icon: {
     width: 100, height: 100, borderRadius: 50, backgroundColor: '#FFC50A',
     alignItems: 'center', justifyContent: 'center', marginBottom: 24,

@@ -93,7 +93,7 @@ export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => vo
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', alignItems: 'center', paddingHorizontal: 24, paddingTop: 28 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', alignItems: 'center', paddingHorizontal: 24, paddingTop: 28 },
   mascot: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FFC50A', alignItems: 'center', justifyContent: 'center', marginBottom: 16, marginTop: 10 },
   mascotIcon: { fontSize: 40 },
   brand: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 38, letterSpacing: 1.5, marginBottom: 2 },
@@ -107,17 +107,17 @@ const styles = StyleSheet.create({
   cardSub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 18 },
   label: { fontFamily: 'Inter_700Bold', fontSize: 12, letterSpacing: 1, marginBottom: 6 },
   phoneRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
-  countryCode: { backgroundColor: '#FFF8E7', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000' },
+  countryCode: { backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000' },
   countryCodeText: { fontFamily: 'Inter_700Bold', fontSize: 15 },
   input: {
     flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15,
-    backgroundColor: '#FFF8E7', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000',
+    backgroundColor: '#FFFFFF', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000',
     borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12,
   },
   otpRow: { flexDirection: 'row', gap: 8, justifyContent: 'center', marginBottom: 20 },
   otpBox: {
     width: 42, height: 50, fontFamily: 'BarlowCondensed_700Bold', fontSize: 24, textAlign: 'center',
-    backgroundColor: '#FFF8E7', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', borderRadius: 10,
+    backgroundColor: '#FFFFFF', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', borderRadius: 10,
   },
   otpBoxFilled: {
     backgroundColor: '#FFC50A', borderColor: '#000',

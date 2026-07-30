@@ -122,7 +122,7 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7' },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF' },
   content: { padding: 20, paddingBottom: 32, gap: 12 },
 
   // Header

@@ -1,6 +1,6 @@
 export const C = {
   yellow: '#FFC50A',
-  cream: '#FFF8E7',
+  cream: '#FFFFFF',
   black: '#000000',
   white: '#FFFFFF',
   red: '#FF3B30',

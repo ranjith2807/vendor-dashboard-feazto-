@@ -128,7 +128,7 @@ function PwdField({ label, value, onChange, show, onToggle }: { label: string; v
           value={value}
           onChangeText={onChange}
           secureTextEntry={!show}
-          style={{ fontFamily: 'Inter_400Regular', fontSize: 15, backgroundColor: '#FFF8E7',  borderRadius: 10, padding: 11, paddingHorizontal: 13, paddingRight: 44, color: '#000' }}
+          style={{ fontFamily: 'Inter_400Regular', fontSize: 15, backgroundColor: '#FFFFFF', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', borderRadius: 10, padding: 11, paddingHorizontal: 13, paddingRight: 44, color: '#000' }}
         />
         <TouchableOpacity
           onPress={onToggle}

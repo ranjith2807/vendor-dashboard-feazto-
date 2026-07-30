@@ -52,7 +52,7 @@ export default function ForgotPasswordScreen({ setScreen }: { setScreen: SetScre
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', padding: 20 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', padding: 20 },
   back: { marginBottom: 16 },
   backText: { fontSize: 22 },
   title: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 32, marginBottom: 6 },
@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
   },
   label: { fontFamily: 'Inter_700Bold', fontSize: 11, letterSpacing: 1.5, opacity: 0.5, marginBottom: 6 },
   phoneRow: { flexDirection: 'row', gap: 8, marginBottom: 18 },
-  cc: { backgroundColor: '#FFF8E7', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center' },
+  cc: { backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, justifyContent: 'center' },
   ccText: { fontFamily: 'Inter_700Bold', fontSize: 15 },
   input: {
     flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15,
-    backgroundColor: '#FFF8E7',  borderRadius: 10,
+    backgroundColor: '#FFFFFF', borderRadius: 10,
     paddingHorizontal: 14, paddingVertical: 12,
   },
   btn: { backgroundColor: '#ddd', borderRadius: 12, padding: 13, alignItems: 'center' },
