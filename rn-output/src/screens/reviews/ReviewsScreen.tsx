@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
 import { mockReviews, type Review } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -107,7 +108,7 @@ const s = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 20, paddingBottom: 14 },
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 26, color: C.black },
-  summaryCard: { marginHorizontal: 20, backgroundColor: C.white, borderRadius: 14, ...shadow(5, 5), padding: 16, marginBottom: 14, flexDirection: 'row', gap: 16, alignItems: 'center' },
+  summaryCard: { marginHorizontal: 20, backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(5, 5), padding: 16, marginBottom: 14, flexDirection: 'row', gap: 16, alignItems: 'center' },
   ratingBig: { alignItems: 'center', flexShrink: 0 },
   avgText: { fontFamily: F.barlow, fontSize: 52, color: C.black, lineHeight: 56 },
   totalText: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45, marginTop: 3 },
@@ -119,7 +120,7 @@ const s = StyleSheet.create({
   distCount: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45, width: 14 },
   filtersScroll: { flexGrow: 0 },
   filtersContent: { paddingHorizontal: 20, gap: 7, paddingBottom: 12, alignItems: 'center' },
-  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 7, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   chipActive: { backgroundColor: C.black, borderColor: C.black },
   chipText: { fontFamily: F.barlow, fontSize: 13, color: C.black, includeFontPadding: false, textAlign: 'center' },
   chipTextActive: { color: C.yellow },
@@ -127,7 +128,7 @@ const s = StyleSheet.create({
   list: { paddingHorizontal: 20, paddingBottom: 24, gap: 10 },
   empty: { alignItems: 'center', paddingTop: 40 },
   emptyTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black },
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(3, 3), padding: 14 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), padding: 14 },
   cardTop: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
   avatar: { width: 38, height: 38, borderRadius: 19, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: F.barlow, fontSize: 14, color: C.black },

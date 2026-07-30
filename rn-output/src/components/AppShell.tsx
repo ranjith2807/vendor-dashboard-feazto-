@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import TouchableOpacity from './TouchableOpacity'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import type { Screen, SetScreen } from '../types'
 
@@ -67,7 +68,7 @@ export default function AppShell({ screen, setScreen, showNav, children }: AppSh
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFFFFF' },
+  container: { flex: 1, width: '100%', height: '100%', backgroundColor: '#FFF8E7' },
   content: { flex: 1, width: '100%', height: '100%' },
   nav: {
     flexDirection: 'row',
@@ -82,13 +83,15 @@ const styles = StyleSheet.create({
   navIconWrap: {
     width: 36, height: 36, borderRadius: 10,
     alignItems: 'center', justifyContent: 'center',
+     borderColor: 'transparent',
   },
   navIconActive: {
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 3,
-    borderRightWidth: 3,
-    borderBottomColor: '#000',
-    borderRightColor: '#000',
+    backgroundColor: '#FFF8E7',
+    borderBottomWidth: 2.5,
+    borderRightWidth: 2.5,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderColor: '#000000',
   },
   navIcon: { fontSize: 18 },
   navLabel: { fontFamily: 'Inter_400Regular', fontSize: 10, color: '#888' },

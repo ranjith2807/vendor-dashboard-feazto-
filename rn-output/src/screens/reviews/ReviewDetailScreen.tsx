@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
 import { mockReviews, type Review } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -98,7 +99,7 @@ const s = StyleSheet.create({
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 24, color: C.black },
   body: { paddingHorizontal: 20, paddingBottom: 24, gap: 12 },
-  reviewCard: { backgroundColor: C.white, borderRadius: 16, ...shadow(5, 5), padding: 18 },
+  reviewCard: { backgroundColor: C.white, borderRadius: 16, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(5, 5), padding: 18 },
   authorRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14 },
   avatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: C.yellow, ...shadow(3, 3), alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: F.barlow, fontSize: 18, color: C.black },
@@ -117,13 +118,13 @@ const s = StyleSheet.create({
   photoPlaceholder: { backgroundColor: '#e5e5e5', borderRadius: 12, height: 120, alignItems: 'center', justifyContent: 'center', marginBottom: 14 },
   helpfulRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTopWidth: 2, borderTopColor: 'rgba(0,0,0,0.08)' },
   helpfulLabel: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },
-  helpfulBtn: { backgroundColor: C.white,  borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6, ...shadow(2, 2) },
+  helpfulBtn: { backgroundColor: C.white, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6, borderBottomWidth: 2, borderRightWidth: 2, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', ...shadow(2, 2) },
   helpfulBtnVoted: { backgroundColor: C.green, borderColor: C.green, shadowOpacity: 0 },
   helpfulBtnText: { fontFamily: F.interBold, fontSize: 12, color: C.black },
   helpfulBtnTextVoted: { color: C.white },
-  replyCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 14 },
+  replyCard: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14 },
   replyTitle: { fontFamily: F.barlow, fontSize: 16, color: C.black, marginBottom: 10 },
-  replyInput: { fontFamily: F.inter, fontSize: 13, backgroundColor: C.cream,  borderRadius: 10, padding: 10, paddingHorizontal: 12, height: 90, marginBottom: 10 },
-  replyBtn: { backgroundColor: C.yellow,  borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3) },
+  replyInput: { fontFamily: F.inter, fontSize: 13, backgroundColor: C.cream, borderRadius: 10, padding: 10, paddingHorizontal: 12, height: 90, marginBottom: 10, borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000' },
+  replyBtn: { backgroundColor: C.yellow, borderRadius: 10, padding: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', alignItems: 'center', ...shadow(3, 3) },
   replyBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
 })

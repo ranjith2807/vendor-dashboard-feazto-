@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { mockOrders, analyticsStats } from '../../data/mockData'
 
@@ -121,7 +122,7 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF' },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7' },
   content: { padding: 20, paddingBottom: 32, gap: 12 },
 
   // Header
@@ -131,8 +132,8 @@ const styles = StyleSheet.create({
   notifBtn: {
     width: 40, height: 40, borderRadius: 12, backgroundColor: '#fff',
     alignItems: 'center', justifyContent: 'center',
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000',
     shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.10, shadowRadius: 3, elevation: 2,
-    borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000',
   },
   notifIcon: { fontSize: 18 },
   badge: {
@@ -146,8 +147,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 10,
     backgroundColor: '#fff', borderRadius: 12,
     padding: 10, paddingHorizontal: 14,
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000',
     shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 4, elevation: 2,
-    borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000',
   },
   searchIcon: { fontSize: 16, opacity: 0.4 },
   searchPlaceholder: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.4 },
@@ -156,8 +157,8 @@ const styles = StyleSheet.create({
   statusCard: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
     backgroundColor: '#fff', borderRadius: 14, padding: 14,
+    borderBottomWidth: 3, borderRightWidth: 3, borderTopWidth: 0, borderLeftWidth: 0,
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
-    borderBottomWidth: 4, borderRightWidth: 4, borderBottomColor: '#000', borderRightColor: '#000',
   },
   statusDot: { width: 10, height: 10, borderRadius: 5 },
   statusTitle: { fontFamily: 'Inter_700Bold', fontSize: 14, color: '#000' },
@@ -168,7 +169,6 @@ const styles = StyleSheet.create({
     width: 46, height: 26, borderRadius: 13,
     position: 'relative',
     shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 1,
-    borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000',
   },
   toggleThumb: {
     position: 'absolute', top: 2, width: 22, height: 22,
@@ -180,8 +180,8 @@ const styles = StyleSheet.create({
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   statCard: {
     width: '47%' as any, backgroundColor: '#fff', borderRadius: 12, padding: 12,
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000',
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
-    borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000',
   },
   statIcon: { fontSize: 20, marginBottom: 2 },
   statValue: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 22 },
@@ -193,24 +193,22 @@ const styles = StyleSheet.create({
   sectionTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 20 },
   seeAllBtn: {
     borderRadius: 6, paddingHorizontal: 10, paddingVertical: 3,
-    backgroundColor: '#fff',
-    borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000',
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000',
   },
   seeAllText: { fontFamily: 'Inter_700Bold', fontSize: 12 },
   emptyOrders: {
     backgroundColor: '#fff', borderRadius: 12, padding: 20, alignItems: 'center',
     shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3,
-    borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000',
   },
   emptyOrdersText: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.45 },
   orderCard: {
     backgroundColor: '#fff', borderRadius: 12, padding: 12,
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000',
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
-    borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000',
   },
   orderCardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   orderId: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 17 },
-  statusBadge: { borderRadius: 6, paddingHorizontal: 9, paddingVertical: 2, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
+  statusBadge: { borderRadius: 6, paddingHorizontal: 9, paddingVertical: 2 },
   statusBadgeText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 11 },
   orderCustomer: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.7 },
   orderMeta: { fontFamily: 'Inter_400Regular', fontSize: 11, opacity: 0.4, marginTop: 2 },
@@ -219,19 +217,18 @@ const styles = StyleSheet.create({
   fezuBanner: {
     backgroundColor: '#FFC50A', borderRadius: 14, padding: 14,
     flexDirection: 'row', alignItems: 'center', gap: 12,
+    borderBottomWidth: 3, borderRightWidth: 3, borderColor: '#000',
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
-    borderBottomWidth: 4, borderRightWidth: 4, borderBottomColor: '#000', borderRightColor: '#000',
   },
   fezuTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 20 },
   fezuSub: { fontFamily: 'Inter_400Regular', fontSize: 12, opacity: 0.7, marginBottom: 8, lineHeight: 18 },
   fezuBtn: {
     backgroundColor: '#000', borderRadius: 8, paddingHorizontal: 16, paddingVertical: 7, alignSelf: 'flex-start',
-    borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000',
+    borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000',
   },
   fezuBtnText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 14, color: '#FFC50A', letterSpacing: 1 },
   fezuMascot: {
     width: 72, height: 72, borderRadius: 36, backgroundColor: '#000',
     alignItems: 'center', justifyContent: 'center',
-    borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000',
   },
 })

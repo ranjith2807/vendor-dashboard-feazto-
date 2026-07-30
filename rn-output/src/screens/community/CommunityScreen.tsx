@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, Modal, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet, Modal } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { communityPosts, leaderboard, communityGroups, tagMeta } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -216,19 +217,19 @@ const s = StyleSheet.create({
   // Header
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20, paddingBottom: 0 },
   title: { fontFamily: F.barlow, fontSize: 28, color: C.black },
-  postBtn: { backgroundColor: C.yellow, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8, ...shadow(3, 3) },
+  postBtn: { backgroundColor: C.yellow, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3) },
   postBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
 
   // Tabs
   tabsScroll: { flexGrow: 0 },
   tabsContent: { paddingHorizontal: 20, gap: 6, paddingVertical: 10, alignItems: 'center' },
-  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   tabActive: { backgroundColor: C.black, borderColor: C.black },
   tabText: { fontFamily: F.barlow, fontSize: 13, color: C.black, includeFontPadding: false, textAlign: 'center' },
   tabTextActive: { color: C.yellow },
 
   // Section header (same yellow banner for all tabs)
-  sectionHeader: { backgroundColor: C.yellow, borderRadius: 14, ...shadow(4, 4), padding: 14, marginBottom: 12 },
+  sectionHeader: { backgroundColor: C.yellow, borderRadius: 14, borderBottomWidth: 3, borderRightWidth: 3, borderColor: '#000', ...shadow(4, 4), padding: 14, marginBottom: 12 },
   sectionHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   sectionHeaderEmoji: { fontSize: 28 },
   sectionHeaderTitle: { fontFamily: F.barlow, fontSize: 20, color: C.black },
@@ -239,13 +240,13 @@ const s = StyleSheet.create({
   list: { paddingHorizontal: 20, paddingBottom: 28, gap: 10 },
 
   // Post cards
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 14 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14 },
   authorRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
   avatar: { width: 38, height: 38, borderRadius: 19, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
   authorName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   authorMeta: { fontFamily: F.inter, fontSize: 10, color: C.black, opacity: 0.45 },
-  tagBadge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
+  tagBadge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2 },
   tagText: { fontFamily: F.barlow, fontSize: 10, letterSpacing: 1 },
   content: { fontFamily: F.inter, fontSize: 13, color: C.black, lineHeight: 20, marginBottom: 12 },
   actions: { flexDirection: 'row', gap: 6, paddingTop: 10, borderTopWidth: 1.5, borderTopColor: 'rgba(0,0,0,0.08)' },
@@ -258,17 +259,17 @@ const s = StyleSheet.create({
   emptyText: { fontFamily: F.barlow, fontSize: 20, color: C.black, opacity: 0.4 },
 
   // Groups
-  grpCard: { backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  grpCard: { backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 10 },
   grpIcon: { width: 44, height: 44, borderRadius: 10, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   grpName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   grpMembers: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
-  joinBtn: { backgroundColor: C.yellow, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 6, flexShrink: 0, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
+  joinBtn: { backgroundColor: C.yellow, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 6, borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', flexShrink: 0 },
   joinBtnActive: { backgroundColor: C.black },
   joinBtnText: { fontFamily: F.barlow, fontSize: 13, color: C.black },
   joinBtnTextActive: { color: C.cream },
 
   // Leaderboard
-  lbCard: { backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  lbCard: { backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 },
   lbRank: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   lbRankText: { fontFamily: F.barlow, fontSize: 16, color: C.black },
   lbName: { fontFamily: F.interBold, fontSize: 14, color: C.black },
@@ -279,15 +280,15 @@ const s = StyleSheet.create({
 
   // Modal
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalSheet: { backgroundColor: C.white, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 32, borderTopWidth: 2, borderTopColor: '#000' },
+  modalSheet: { backgroundColor: C.white, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 32 },
   modalHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black },
-  postInput: { fontFamily: F.inter, fontSize: 14, backgroundColor: C.cream, borderRadius: 12, padding: 12, height: 100, ...shadow(3, 3) },
+  postInput: { fontFamily: F.inter, fontSize: 14, backgroundColor: C.cream, borderRadius: 12, padding: 12, height: 100, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3) },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10 },
-  tagChip: { borderRadius: 6, paddingHorizontal: 10, paddingVertical: 3, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
+  tagChip: { borderRadius: 6, paddingHorizontal: 10, paddingVertical: 3 },
   tagChipText: { fontFamily: F.barlow, fontSize: 11 },
-  cancelBtn: { flex: 1, backgroundColor: C.white, borderWidth: 2, borderColor: C.black, borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(3, 3) },
+  cancelBtn: { flex: 1, backgroundColor: C.white, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(3, 3) },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 17, color: C.black },
-  publishBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(4, 4) },
+  publishBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 11, padding: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', alignItems: 'center', ...shadow(4, 4) },
   publishBtnText: { fontFamily: F.barlow, fontSize: 17, color: C.black },
 })

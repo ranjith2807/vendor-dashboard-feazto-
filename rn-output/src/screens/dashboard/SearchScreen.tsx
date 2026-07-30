@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { searchCategories, recentSearches, mockMenu } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -105,24 +106,24 @@ const s = StyleSheet.create({
   root: { flex: 1, width: '100%', backgroundColor: C.cream },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 20, paddingBottom: 14 },
   back: { fontSize: 22, color: C.black },
-  inputWrap: { flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: C.white,  borderRadius: 12, paddingHorizontal: 12, ...shadow(3, 3) },
+  inputWrap: { flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: C.white, borderRadius: 12, paddingHorizontal: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3) },
   searchIcon: { fontSize: 16, opacity: 0.4, marginRight: 6 },
   input: { flex: 1, fontFamily: F.inter, fontSize: 14, color: C.black, paddingVertical: 11 },
   clearBtn: { fontSize: 16, color: C.black, opacity: 0.4 },
   body: { paddingHorizontal: 20, paddingBottom: 20 },
   sectionLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 10 },
-  recentRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 10, paddingHorizontal: 14, backgroundColor: C.white, borderRadius: 10, marginBottom: 6, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
+  recentRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 10, paddingHorizontal: 14, backgroundColor: C.white, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', borderRadius: 10, marginBottom: 6 },
   recentIcon: { fontSize: 14, opacity: 0.35 },
   recentQuery: { fontFamily: F.inter, fontSize: 13, color: C.black, flex: 1 },
   recentArrow: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.25 },
   browseGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  browseCard: { width: '47%', backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  browseCard: { width: '47%', backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10 },
   browseLabel: { fontFamily: F.interBold, fontSize: 12, color: C.black },
   browseType: { fontFamily: F.interBold, fontSize: 10, letterSpacing: 1 },
   empty: { alignItems: 'center', paddingTop: 48 },
   emptyTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 6 },
   emptySub: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.4 },
-  resultCard: { backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 8 },
+  resultCard: { backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 8 },
   resultIcon: { width: 40, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   resultName: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   resultMeta: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },

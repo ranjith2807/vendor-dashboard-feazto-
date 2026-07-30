@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
 import { customerSubscriptions, type CustomerSubscription } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -92,9 +93,9 @@ const s = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 20, paddingBottom: 14 },
   back: { fontSize: 22, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 24, color: C.black, flex: 1 },
-  callBtn: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.green,  alignItems: 'center', justifyContent: 'center' },
+  callBtn: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.green, borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', alignItems: 'center', justifyContent: 'center' },
   body: { paddingHorizontal: 20, paddingBottom: 24, gap: 10 },
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 14 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14 },
   customerName: { fontFamily: F.interBold, fontSize: 16, color: C.black },
   customerPhone: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45, marginBottom: 8 },
   infoRow: { flexDirection: 'row', gap: 6, alignItems: 'flex-start', marginTop: 4 },
@@ -114,8 +115,8 @@ const s = StyleSheet.create({
   payKey: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.5 },
   payVal: { fontFamily: F.interBold, fontSize: 13 },
   actions: { flexDirection: 'row', gap: 10 },
-  pauseBtn: { flex: 1,  borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3) },
+  pauseBtn: { flex: 1, borderRadius: 10, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', padding: 12, alignItems: 'center', ...shadow(3, 3) },
   pauseBtnText: { fontFamily: F.barlow, fontSize: 14 },
-  contactBtn: { flex: 1, backgroundColor: C.white,  borderRadius: 10, padding: 12, alignItems: 'center', ...shadow(3, 3) },
+  contactBtn: { flex: 1, backgroundColor: C.white, borderRadius: 10, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', padding: 12, alignItems: 'center', ...shadow(3, 3) },
   contactBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
 })

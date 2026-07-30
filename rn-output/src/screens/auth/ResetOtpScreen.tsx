@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 
 export default function ResetOtpScreen({ setScreen }: { setScreen: SetScreen }) {
@@ -41,20 +42,20 @@ export default function ResetOtpScreen({ setScreen }: { setScreen: SetScreen }) 
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', padding: 20 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', padding: 20 },
   back: { marginBottom: 16 },
   backText: { fontSize: 22 },
   title: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 32, marginBottom: 6 },
   sub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 28 },
   card: {
-    backgroundColor: '#fff', borderRadius: 24, padding: 24,
+    backgroundColor: '#fff', borderRadius: 16, padding: 24,
     shadowColor: '#000', shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0, elevation: 5,
   },
   otpRow: { flexDirection: 'row', gap: 8, justifyContent: 'center', marginBottom: 22 },
   otpBox: {
     width: 42, height: 50, textAlign: 'center',
     fontFamily: 'BarlowCondensed_700Bold', fontSize: 24,
-    backgroundColor: '#FFFFFF',  borderRadius: 10,
+    backgroundColor: '#FFF8E7',  borderRadius: 10,
   },
   otpBoxFilled: {
     backgroundColor: '#FFC50A', borderColor: '#000',

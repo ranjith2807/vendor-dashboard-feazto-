@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { analyticsStats, revenueData, peakHoursData, topDishes } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -112,17 +113,17 @@ const s = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   title: { fontFamily: F.barlow, fontSize: 28, color: C.black },
   periodsRow: { flexDirection: 'row', gap: 5, alignItems: 'center' },
-  periodBtn: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  periodBtn: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   periodBtnActive: { backgroundColor: C.black, borderColor: C.black },
   periodBtnText: { fontFamily: F.barlow, fontSize: 13, color: C.black, includeFontPadding: false, textAlign: 'center' },
   periodBtnTextActive: { color: C.yellow },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  statCard: { width: '47%', backgroundColor: C.white, borderRadius: 12, ...shadow(4, 4), padding: 12 },
+  statCard: { width: '47%', backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 12 },
   statIcon: { fontSize: 20, marginBottom: 2 },
   statValue: { fontFamily: F.barlow, fontSize: 22, color: C.black, lineHeight: 26 },
   statLabel: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.5 },
   statDelta: { fontFamily: F.interBold, fontSize: 10, marginTop: 2 },
-  chartCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 14 },
+  chartCard: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14 },
   chartHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 },
   chartTitle: { fontFamily: F.barlow, fontSize: 18, color: C.black },
   chartSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.4 },

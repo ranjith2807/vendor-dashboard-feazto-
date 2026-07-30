@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 
 const SLIDES = [
@@ -54,7 +55,7 @@ export default function OnboardingScreen({ setScreen }: { setScreen: SetScreen }
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF' },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7' },
   skip: { alignSelf: 'flex-end', padding: 16, paddingTop: 12 },
   skipText: { fontFamily: 'Inter_700Bold', fontSize: 13, opacity: 0.35 },
   illustrationWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24 },

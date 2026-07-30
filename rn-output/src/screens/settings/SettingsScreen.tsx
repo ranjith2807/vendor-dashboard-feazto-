@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, Screen } from '../../types'
 import { settingsSections } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -119,35 +120,35 @@ const s = StyleSheet.create({
   root: { flex: 1, width: '100%', backgroundColor: C.cream },
   body: { padding: 20, gap: 14, paddingBottom: 32 },
   pageTitle: { fontFamily: F.barlow, fontSize: 28, color: C.black },
-  profileCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(5, 5), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 14 },
+  profileCard: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(5, 5), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 14 },
   avatar: { width: 56, height: 56, borderRadius: 28, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: F.barlow, fontSize: 22, color: C.black },
   kitchenName: { fontFamily: F.interBold, fontSize: 16, color: C.black },
   kitchenSub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.5 },
   badges: { flexDirection: 'row', gap: 5, marginTop: 5 },
-  badge: { borderRadius: 5, paddingHorizontal: 8, paddingVertical: 1, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomColor: '#000', borderRightColor: '#000' },
+  badge: { borderRadius: 5, paddingHorizontal: 8, paddingVertical: 1 },
   badgeText: { fontFamily: F.barlow, fontSize: 10, color: C.white },
-  editBtn: { borderRadius: 9, paddingHorizontal: 12, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', backgroundColor: C.white },
+  editBtn: { borderRadius: 9, paddingHorizontal: 12, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000' },
   editBtnText: { fontFamily: F.interBold, fontSize: 12, color: C.black },
   quickRow: { flexDirection: 'row', gap: 8 },
-  quickBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), paddingVertical: 12, alignItems: 'center', gap: 4 },
+  quickBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), paddingVertical: 12, alignItems: 'center', gap: 4 },
   quickLabel: { fontFamily: F.interBold, fontSize: 11, color: C.black },
   featureRow: { flexDirection: 'row', gap: 8 },
-  featureBtn: { flex: 1,  borderRadius: 12, ...shadow(3, 3), paddingVertical: 12, alignItems: 'center', gap: 3 },
+  featureBtn: { flex: 1, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), paddingVertical: 12, alignItems: 'center', gap: 3 },
   featureLabel: { fontFamily: F.interBold, fontSize: 11, color: C.black },
   sectionLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.35, marginBottom: 8 },
-  sectionCard: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), overflow: 'hidden' },
+  sectionCard: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), overflow: 'hidden' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 13, paddingHorizontal: 14 },
   rowBorder: { borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.06)' },
-  rowIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
+  rowIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center' },
   rowLabel: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   rowSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },
   toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
   chevron: { fontFamily: F.inter, fontSize: 20, color: C.black, opacity: 0.3 },
-  footerCard: { backgroundColor: C.cream, borderRadius: 14, ...shadow(4, 4), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  footerCard: { backgroundColor: C.cream, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10 },
   footerTitle: { fontFamily: F.barlow, fontSize: 16, color: C.black },
   footerSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.5 },
-  logoutBtn: { backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(4, 4) },
+  logoutBtn: { backgroundColor: C.red, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', padding: 13, alignItems: 'center', ...shadow(4, 4) },
   logoutBtnText: { fontFamily: F.barlow, fontSize: 17, letterSpacing: 1, color: C.white },
 })

@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import {
   View, Text, ScrollView,
-  TextInput, StyleSheet, Modal, Alert, FlatList, Image, TouchableOpacity,
+  TextInput, StyleSheet, Modal, Alert, FlatList, Image,
 } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
 import { DEFAULT_MENU_ITEMS, type MenuItem } from '../../data/menuStore'
@@ -274,7 +275,7 @@ function MenuItemCard({
 }
 
 const mc = StyleSheet.create({
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), flexDirection: 'row', alignItems: 'center', padding: 12, gap: 10 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), flexDirection: 'row', alignItems: 'center', padding: 12, gap: 10 },
   cardDim: { opacity: 0.6 },
   imageBox: { width: 72, height: 72, borderRadius: 12, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' },
   imageEmoji: { fontSize: 36 },
@@ -291,9 +292,9 @@ const mc = StyleSheet.create({
   toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative' },
   toggleThumb: { position: 'absolute', top: 2, width: 22, height: 22, borderRadius: 11, backgroundColor: C.white, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.15, shadowRadius: 2, elevation: 2 },
   actionRow: { flexDirection: 'row', gap: 6 },
-  editBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: C.cream, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
+  editBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: C.cream, borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', alignItems: 'center', justifyContent: 'center' },
   editText: { fontSize: 14 },
-  delBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: '#FEE2E2', alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000' },
+  delBtn: { width: 32, height: 32, borderRadius: 8, backgroundColor: '#FEE2E2', borderBottomWidth: 2, borderRightWidth: 2, borderColor: '#000', alignItems: 'center', justifyContent: 'center' },
   delText: { fontSize: 14 },
 })
 
@@ -306,19 +307,19 @@ const s = StyleSheet.create({
   back: { fontSize: 24, color: C.black },
   title: { fontFamily: F.barlow, fontSize: 28, color: C.black },
   subtitle: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },
-  addBtn: { backgroundColor: C.yellow, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 9, ...shadow(3, 3), alignSelf: 'flex-start' },
+  addBtn: { backgroundColor: C.yellow, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 9, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), alignSelf: 'flex-start' },
   addBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
-  summaryRow: { flexDirection: 'row', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), padding: 12, marginBottom: 12 },
+  summaryRow: { flexDirection: 'row', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(3, 3), padding: 12, marginBottom: 12 },
   summaryCard: { flex: 1, alignItems: 'center' },
   summaryNum: { fontFamily: F.barlow, fontSize: 26, color: C.black, lineHeight: 28 },
   summaryLabel: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   summaryDivider: { width: 1, backgroundColor: 'rgba(0,0,0,0.08)', marginVertical: 4 },
-  searchWrap: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, paddingHorizontal: 12, marginBottom: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2, borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000' },
+  searchWrap: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, backgroundColor: C.white, borderRadius: 12, paddingHorizontal: 12, marginBottom: 4, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 },
   searchIcon: { fontSize: 15, opacity: 0.4, marginRight: 6 },
   searchInput: { flex: 1, fontFamily: F.inter, fontSize: 14, color: C.black, paddingVertical: 11 },
   tabsScroll: { flexGrow: 0 },
   tabsContent: { paddingHorizontal: 20, gap: 6, paddingVertical: 10, alignItems: 'center' },
-  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderBottomWidth: 2, borderRightWidth: 2, borderBottomColor: '#000', borderRightColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   tabActive: { backgroundColor: C.black, borderColor: C.black },
   tabText: { fontFamily: F.barlow, fontSize: 12, color: C.black, includeFontPadding: false, textAlign: 'center' },
   tabTextActive: { color: C.yellow },
@@ -328,13 +329,13 @@ const s = StyleSheet.create({
   emptyTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 6, textAlign: 'center' },
   emptySub: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.4, textAlign: 'center', marginBottom: 20 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24, paddingBottom: 36, borderTopWidth: 2, borderTopColor: '#000' },
+  modalSheet: { backgroundColor: C.cream, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24, paddingBottom: 36 },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 8 },
   modalBody: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.55, marginBottom: 20, lineHeight: 20 },
   modalBtns: { flexDirection: 'row', gap: 10 },
-  cancelBtn: { flex: 1, backgroundColor: C.white, borderRadius: 12, padding: 13, alignItems: 'center', borderBottomWidth: 3, borderRightWidth: 3, borderBottomColor: '#000', borderRightColor: '#000' },
+  cancelBtn: { flex: 1, backgroundColor: C.white, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', borderRadius: 12, padding: 13, alignItems: 'center' },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  deleteBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, padding: 13, alignItems: 'center', ...shadow(3, 3) },
+  deleteBtn: { flex: 1, backgroundColor: C.red, borderRadius: 12, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', padding: 13, alignItems: 'center', ...shadow(3, 3) },
   deleteBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.white },
   toast: { position: 'absolute', bottom: 20, left: 20, right: 20, backgroundColor: C.black, borderRadius: 12, padding: 14, alignItems: 'center', ...shadow(3, 3, C.yellow) },
   toastText: { fontFamily: F.interBold, fontSize: 13, color: C.yellow },

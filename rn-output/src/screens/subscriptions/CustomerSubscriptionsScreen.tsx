@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
 import { customerSubscriptions, type CustomerSubscription } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -115,7 +116,7 @@ const s = StyleSheet.create({
   sub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },
   tabsScroll: { flexGrow: 0 },
   tabsContent: { paddingHorizontal: 20, gap: 7, paddingVertical: 10, alignItems: 'center' },
-  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 7, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
+  tab: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 7, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderTopWidth: 0, borderLeftWidth: 0, borderColor: '#000', flexShrink: 0, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start' },
   tabActive: { backgroundColor: C.black, borderColor: C.black },
   tabText: { fontFamily: F.barlow, fontSize: 13, color: C.black, includeFontPadding: false, textAlign: 'center' },
   tabTextActive: { color: C.yellow },
@@ -123,7 +124,7 @@ const s = StyleSheet.create({
   empty: { alignItems: 'center', paddingTop: 48 },
   emptyTitle: { fontFamily: F.barlow, fontSize: 24, color: C.black, marginBottom: 6 },
   emptySub: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.4, textAlign: 'center', maxWidth: 240 },
-  card: { backgroundColor: C.white, borderRadius: 14, ...shadow(4, 4), padding: 14 },
+  card: { backgroundColor: C.white, borderRadius: 14, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', ...shadow(4, 4), padding: 14 },
   cardTop: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 },
   customerName: { fontFamily: F.interBold, fontSize: 14, color: C.black },
   planMeta: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45 },

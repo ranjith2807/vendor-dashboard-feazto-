@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 
 export default function AppReviewScreen({ setScreen }: { setScreen: SetScreen }) {
@@ -27,7 +28,7 @@ export default function AppReviewScreen({ setScreen }: { setScreen: SetScreen })
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: '100%', backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', padding: 32 },
+  container: { flex: 1, width: '100%', backgroundColor: '#FFF8E7', alignItems: 'center', justifyContent: 'center', padding: 32 },
   icon: {
     width: 90, height: 90, borderRadius: 45, backgroundColor: '#FFC50A',
     alignItems: 'center', justifyContent: 'center', marginBottom: 20,
