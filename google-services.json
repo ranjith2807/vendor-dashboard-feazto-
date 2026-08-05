@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "337038716736",
+    "project_id": "feazto-e14b3",
+    "storage_bucket": "feazto-e14b3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337038716736:android:0731806a5f463c72ee94a5",
+        "android_client_info": {
+          "package_name": "com.feazto.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337038716736-agpkgt0jd7667tb3r5cdoct3ub87lsu8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt7KKRQUHRS8vAGZQuBYH1Ir5EhDkmwvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337038716736-agpkgt0jd7667tb3r5cdoct3ub87lsu8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

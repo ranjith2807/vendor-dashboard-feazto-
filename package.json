@@ -1,31 +1,31 @@
 {
-  "name": "figma-make-app",
-  "private": true,
+  "name": "feazto-vendor",
   "version": "1.0.0",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
-    "preview": "vite preview",
-    "format": "oxfmt",
-    "start": "npx expo start rn-output",
-    "expo": "npx expo start rn-output",
-    "android": "npx expo start rn-output --android",
-    "ios": "npx expo start rn-output --ios"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@expo-google-fonts/barlow-condensed": "^0.4.1",
+    "@expo-google-fonts/inter": "^0.4.2",
+    "expo": "~57.0.2",
+    "expo-firebase-recaptcha": "^2.3.1",
+    "expo-font": "~57.0.1",
+    "expo-image-picker": "^57.0.6",
+    "expo-status-bar": "~57.0.1",
+    "firebase": "^12.17.0",
+    "react": "19.2.3",
+    "react-native": "0.86.0",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-webview": "13.16.1"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.0.0",
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^6.0.0",
-    "oxfmt": "^0.2.0",
-    "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.0",
-    "vite": "^8.0.0"
-  }
+    "@babel/core": "^7.24.0",
+    "@types/react": "~19.2.2",
+    "@types/react-native": "^0.72.8",
+    "typescript": "~6.0.3"
+  },
+  "private": true
 }
