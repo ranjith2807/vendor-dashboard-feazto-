@@ -1,19 +1,24 @@
 # Dependencies
 node_modules/
-rn-output/node_modules/
 
 # Expo / React Native
 .expo/
-rn-output/.expo/
 dist/
-rn-output/dist/
 build/
-rn-output/build/
 *.jks
 *.p8
+*.p12
+*.mobileprovision
 *.sentry-mappings
 
-# IDE / Editor configuration
+# Expo web build
+web-build/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
 .idea/
 .vscode/
 *.suo

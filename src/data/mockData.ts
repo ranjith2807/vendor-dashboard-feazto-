@@ -422,6 +422,7 @@ export const settingsSections = [
     id: 'sec_kitchen',
     label: 'Kitchen',
     items: [
+      { id: 'set_menu', icon: '📖', label: 'Menu Management', sub: 'Manage dishes, prices & availability' },
       { id: 'set_005', icon: '⏰', label: 'Operating Hours', sub: '7:00 AM – 2:00 PM' },
       { id: 'set_006', icon: '🍽️', label: 'Cuisine Types', sub: 'South Indian, Sweets' },
       { id: 'set_007', icon: '📦', label: 'Delivery Radius', sub: '5 km' },
