@@ -105,6 +105,16 @@ export async function createVendor(
       return { success: false, message: 'An account with this email already exists.' }
     }
 
+    // Strip undefined values from documents and bank before writing
+    const cleanDocs: Record<string, string> = {}
+    for (const [k, v] of Object.entries(profile.documents ?? {})) {
+      if (v !== undefined) cleanDocs[k] = v
+    }
+    const cleanBank: Record<string, string> = {}
+    for (const [k, v] of Object.entries(profile.bank ?? {})) {
+      if (v !== undefined) cleanBank[k] = v
+    }
+
     await setDoc(docRef, {
       vendor_name:  profile.vendor_name,
       company_name: profile.company_name,
@@ -115,8 +125,8 @@ export async function createVendor(
       state:        profile.state,
       country:      profile.country,
       postal_code:  profile.postal_code,
-      documents:    profile.documents ?? {},
-      bank:         profile.bank ?? {},
+      documents:    cleanDocs,
+      bank:         cleanBank,
       status:       'pending',
       created_at:   serverTimestamp(),
       updated_at:   serverTimestamp(),
@@ -152,10 +162,33 @@ export async function updateVendor(
 ): Promise<{ success: boolean; message: string }> {
   try {
     const docRef = doc(db, COLLECTION, email.toLowerCase())
-    await updateDoc(docRef, {
-      ...updates,
-      updated_at: serverTimestamp(),
-    } as DocumentData)
+
+    // Firestore rejects undefined values — flatten and strip them out.
+    // For nested objects like `documents`, expand to dot-notation fields
+    // so we only write the keys that actually have values.
+    const flat: Record<string, unknown> = {}
+
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === undefined) continue
+
+      if (key === 'documents' && typeof value === 'object' && value !== null) {
+        // Expand documents to dot-notation: "documents.fssai", etc.
+        for (const [dk, dv] of Object.entries(value as Record<string, unknown>)) {
+          if (dv !== undefined) flat[`documents.${dk}`] = dv
+        }
+      } else if (key === 'bank' && typeof value === 'object' && value !== null) {
+        // Expand bank similarly
+        for (const [bk, bv] of Object.entries(value as Record<string, unknown>)) {
+          if (bv !== undefined) flat[`bank.${bk}`] = bv
+        }
+      } else {
+        flat[key] = value
+      }
+    }
+
+    flat['updated_at'] = serverTimestamp()
+
+    await updateDoc(docRef, flat as DocumentData)
     return { success: true, message: 'Profile updated' }
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Failed to update profile'
