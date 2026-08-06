@@ -1,30 +1,46 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
-import type { SetScreen } from '../../types'
+import type { SetScreen, NavParams } from '../../types'
 
-export default function RegisterStep1Screen({ setScreen }: { setScreen: SetScreen }) {
-  const [form, setForm] = useState({ name: '', phone: '', email: '', password: '', confirm: '' })
+export default function RegisterStep1Screen({ setScreen, navParams }: { setScreen: SetScreen; navParams: NavParams }) {
+  const [form, setForm] = useState({
+    vendor_name:  navParams.vendor_name  ?? '',
+    phone_number: navParams.phone_number ?? '',
+    email:        navParams.email        ?? '',
+    password:     navParams.password     ?? '',
+    confirm:      navParams.confirm      ?? '',
+  })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const set = (k: string, v: string) => { setForm(p => ({ ...p, [k]: v })); setErrors(p => ({ ...p, [k]: '' })) }
 
   const validate = () => {
     const e: Record<string, string> = {}
-    if (!form.name.trim()) e.name = 'Full name is required'
-    if (form.phone.length !== 10) e.phone = 'Enter valid 10-digit number'
-    if (!form.email.includes('@')) e.email = 'Enter valid email'
-    if (form.password.length < 8) e.password = 'Minimum 8 characters'
-    if (form.password !== form.confirm) e.confirm = "Passwords don't match"
+    if (!form.vendor_name.trim())        e.vendor_name  = 'Full name is required'
+    if (form.phone_number.length !== 10) e.phone_number = 'Enter valid 10-digit number'
+    if (!form.email.includes('@'))       e.email        = 'Enter valid email'
+    if (form.password.length < 8)        e.password     = 'Minimum 8 characters'
+    if (form.password !== form.confirm)  e.confirm      = "Passwords don't match"
     setErrors(e)
     return Object.keys(e).length === 0
   }
 
+  const handleNext = () => {
+    if (!validate()) return
+    setScreen('register_2', {
+      ...navParams,
+      vendor_name:  form.vendor_name,
+      phone_number: form.phone_number,
+      email:        form.email,
+    })
+  }
+
   const fields = [
-    { key: 'name', label: 'Full Name', placeholder: 'Priya Krishnan', secure: false, keyboard: 'default' as const },
-    { key: 'phone', label: 'Mobile Number', placeholder: '98765 43210', secure: false, keyboard: 'phone-pad' as const },
-    { key: 'email', label: 'Email Address', placeholder: 'you@email.com', secure: false, keyboard: 'email-address' as const },
-    { key: 'password', label: 'Password', placeholder: 'Min. 8 characters', secure: true, keyboard: 'default' as const },
-    { key: 'confirm', label: 'Confirm Password', placeholder: 'Re-enter password', secure: true, keyboard: 'default' as const },
+    { key: 'vendor_name',  label: 'Full Name',      placeholder: 'Priya Krishnan',   secure: false, keyboard: 'default' as const },
+    { key: 'phone_number', label: 'Mobile Number',  placeholder: '98765 43210',       secure: false, keyboard: 'phone-pad' as const },
+    { key: 'email',        label: 'Email Address',  placeholder: 'you@email.com',     secure: false, keyboard: 'email-address' as const },
+    { key: 'password',     label: 'Password',       placeholder: 'Min. 8 characters', secure: true,  keyboard: 'default' as const },
+    { key: 'confirm',      label: 'Confirm Password', placeholder: 'Re-enter password', secure: true, keyboard: 'default' as const },
   ]
 
   return (
@@ -46,16 +62,17 @@ export default function RegisterStep1Screen({ setScreen }: { setScreen: SetScree
             <Text style={styles.label}>{f.label.toUpperCase()}</Text>
             <TextInput
               placeholder={f.placeholder}
-              value={(form as any)[f.key]}
+              value={(form as Record<string, string>)[f.key]}
               onChangeText={v => set(f.key, v)}
               secureTextEntry={f.secure}
               keyboardType={f.keyboard}
+              autoCapitalize={f.keyboard === 'email-address' ? 'none' : 'words'}
               style={[styles.input, errors[f.key] && styles.inputError]}
             />
             {errors[f.key] ? <Text style={styles.errorText}>{errors[f.key]}</Text> : null}
           </View>
         ))}
-        <TouchableOpacity style={styles.btn} onPress={() => validate() && setScreen('register_2')}>
+        <TouchableOpacity style={styles.btn} onPress={handleNext}>
           <Text style={styles.btnText}>Next: Kitchen Info →</Text>
         </TouchableOpacity>
       </View>

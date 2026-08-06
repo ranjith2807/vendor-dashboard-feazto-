@@ -7,7 +7,9 @@ import TouchableOpacity from '../../components/TouchableOpacity'
 import * as ImagePicker from 'expo-image-picker'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
-import { DEFAULT_MENU_ITEMS, type MenuItem } from '../../data/menuStore'
+import { type MenuItem } from '../../data/menuStore'
+import { useVendor } from '../../context/VendorContext'
+import { saveMenuItem } from '../../lib/menuDb'
 
 const CATEGORIES = ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Beverages', 'Desserts', 'Specials']
 
@@ -18,6 +20,8 @@ export default function MenuAddDishScreen({
   setScreen: SetScreen
   setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>
 }) {
+  const { vendor } = useVendor()
+  const email = vendor?.email ?? ''
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -37,13 +41,19 @@ export default function MenuAddDishScreen({
       return
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.8,
+      quality: 0.6,
+      base64: true,
     })
-    if (!result.canceled && result.assets?.[0]?.uri) {
-      setImageUri(result.assets[0].uri)
+    if (!result.canceled && result.assets?.[0]) {
+      const asset = result.assets[0]
+      const mime = asset.mimeType ?? 'image/jpeg'
+      const uri = asset.base64
+        ? `data:${mime};base64,${asset.base64}`
+        : asset.uri
+      setImageUri(uri)
       setErrors(p => ({ ...p, image: '' }))
     }
   }
@@ -55,13 +65,19 @@ export default function MenuAddDishScreen({
       return
     }
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.8,
+      quality: 0.6,
+      base64: true,
     })
-    if (!result.canceled && result.assets?.[0]?.uri) {
-      setImageUri(result.assets[0].uri)
+    if (!result.canceled && result.assets?.[0]) {
+      const asset = result.assets[0]
+      const mime = asset.mimeType ?? 'image/jpeg'
+      const uri = asset.base64
+        ? `data:${mime};base64,${asset.base64}`
+        : asset.uri
+      setImageUri(uri)
       setErrors(p => ({ ...p, image: '' }))
     }
   }
@@ -77,7 +93,7 @@ export default function MenuAddDishScreen({
     return Object.keys(e).length === 0
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!validate()) return
     const newItem: MenuItem = {
       id: `menu_${Date.now()}`,
@@ -92,8 +108,9 @@ export default function MenuAddDishScreen({
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
-    
-    // Save to the global shared state
+    // Save to Firestore — MenuScreen listener will pick it up automatically
+    if (email) await saveMenuItem(email, newItem)
+    // Also update local state immediately
     setMenuItems(prev => [...prev, newItem])
     setSavedName(name.trim())
     setSaved(true)

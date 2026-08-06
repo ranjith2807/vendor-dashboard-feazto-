@@ -38,6 +38,7 @@ export default defineConfig({
     strictPort: true,
     hmr: isFigmaSandbox ? { clientPort: 443 } : undefined,
     watch: { ignored: ['**/.figma/**'] },
+
   },
   preview: {
     host: '0.0.0.0',

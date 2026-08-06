@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   View, Text, StyleSheet,
   FlatList, Modal, ScrollView, Image,
@@ -6,14 +6,12 @@ import {
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import {
-  ORDER_STATUS_META,
-  ORDER_STATUS_FLOW,
-  timeAgo,
-  type VendorOrder,
-  type OrderStatus,
+  ORDER_STATUS_META, ORDER_STATUS_FLOW, timeAgo,
+  type VendorOrder, type OrderStatus,
 } from '../../data/menuStore'
 import { C, F, shadow } from '../../theme'
-import { getActiveState, setActiveState } from '../../data/activeStateStore'
+import { useVendor } from '../../context/VendorContext'
+import { subscribeOrders, updateOrderStatus } from '../../lib/ordersDb'
 
 const FILTER_TABS: { id: OrderStatus | 'ALL'; label: string }[] = [
   { id: 'ALL',             label: 'All' },
@@ -41,8 +39,19 @@ export default function OrdersScreen({
   vendorOrders: VendorOrder[]
   setVendorOrders: React.Dispatch<React.SetStateAction<VendorOrder[]>>
 }) {
+  const { vendor } = useVendor()
+  const email = vendor?.email ?? ''
   const orders = vendorOrders
   const setOrders = setVendorOrders
+
+  // Real-time Firestore listener
+  useEffect(() => {
+    if (!email) return
+    const unsub = subscribeOrders(email, (liveOrders) => {
+      setOrders(liveOrders)
+    })
+    return unsub
+  }, [email])
   const [activeFilter, setActiveFilter] = useState<OrderStatus | 'ALL'>('ALL')
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
   const [rejectTarget, setRejectTarget] = useState<VendorOrder | null>(null)
@@ -70,20 +79,25 @@ export default function OrdersScreen({
       const now = new Date().toISOString()
       const next = flow.next
       const timestamps: Partial<VendorOrder> = {}
-      if (next === 'ACCEPTED')         timestamps.acceptedAt = now
+      if (next === 'ACCEPTED')         timestamps.acceptedAt  = now
       if (next === 'PREPARING')        timestamps.preparingAt = now
-      if (next === 'READY_FOR_PICKUP') timestamps.readyAt = now
-      if (next === 'PICKED_UP')        timestamps.pickedUpAt = now
+      if (next === 'READY_FOR_PICKUP') timestamps.readyAt     = now
+      if (next === 'PICKED_UP')        timestamps.pickedUpAt  = now
       if (next === 'COMPLETED')        timestamps.completedAt = now
+      // sync to Firestore
+      if (email) updateOrderStatus(email, orderId, next, timestamps)
       return { ...o, status: next, ...timestamps }
     }))
-  }, [])
+  }, [email])
 
   const confirmReject = () => {
     if (!rejectTarget) return
+    const id = rejectTarget.id
     setOrders(prev => prev.map(o =>
-      o.id === rejectTarget.id ? { ...o, status: 'CANCELLED' as OrderStatus } : o
+      o.id === id ? { ...o, status: 'CANCELLED' as OrderStatus } : o
     ))
+    // sync to Firestore
+    if (email) updateOrderStatus(email, id, 'CANCELLED')
     setRejectTarget(null)
     setRejectReason('')
     showToast('Order cancelled')

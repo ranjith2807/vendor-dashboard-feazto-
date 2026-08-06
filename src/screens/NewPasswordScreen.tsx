@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import type { SetScreen } from '../App'
+import type { SetScreen, NavParams } from '../App'
 
-export default function NewPasswordScreen({ setScreen }: { setScreen: SetScreen }) {
+export default function NewPasswordScreen({ setScreen, navParams }: { setScreen: SetScreen; navParams: NavParams }) {
+  const _phone = navParams.phone  // available if needed for a real password-reset API call
   const [pw, setPw] = useState('')
   const [confirm, setConfirm] = useState('')
   const [done, setDone] = useState(false)

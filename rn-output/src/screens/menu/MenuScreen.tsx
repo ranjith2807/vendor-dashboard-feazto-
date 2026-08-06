@@ -1,12 +1,14 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   View, Text, ScrollView,
-  TextInput, StyleSheet, Modal, Alert, FlatList, Image,
+  TextInput, StyleSheet, Modal, FlatList, Image, ActivityIndicator,
 } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
 import { DEFAULT_MENU_ITEMS, type MenuItem } from '../../data/menuStore'
+import { useVendor } from '../../context/VendorContext'
+import { subscribeMenuItems, updateMenuItem, deleteMenuItem, saveMenuItem } from '../../lib/menuDb'
 
 const FILTER_TABS = [
   { id: 'all',         label: 'All' },
@@ -31,6 +33,26 @@ export default function MenuScreen({
   menuItems: MenuItem[]
   setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>
 }) {
+  const { vendor } = useVendor()
+  const email = vendor?.email ?? ''
+
+  // Seed Firestore with default items on first load if empty
+  // seeded ref prevents re-seeding on subsequent snapshots
+  const seededRef = React.useRef(false)
+  useEffect(() => {
+    if (!email) return
+    const unsub = subscribeMenuItems(email, (items) => {
+      if (items.length === 0 && !seededRef.current) {
+        seededRef.current = true
+        Promise.all(DEFAULT_MENU_ITEMS.map(item => saveMenuItem(email, item)))
+        setMenuItems(DEFAULT_MENU_ITEMS)
+      } else {
+        setMenuItems(items)
+      }
+    })
+    return unsub
+  }, [email])
+
   const items = menuItems
   const setItems = setMenuItems
 
@@ -66,15 +88,23 @@ export default function MenuScreen({
   }
 
   const toggleAvailability = useCallback((id: string) => {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, isAvailable: !i.isAvailable, updatedAt: new Date().toISOString() } : i))
-  }, [setItems])
+    const item = items.find(i => i.id === id)
+    if (!item) return
+    const newVal = !item.isAvailable
+    setItems(prev => prev.map(i => i.id === id ? { ...i, isAvailable: newVal, updatedAt: new Date().toISOString() } : i))
+    // sync to Firestore
+    if (email) updateMenuItem(email, id, { isAvailable: newVal })
+  }, [setItems, items, email])
 
   const confirmDelete = () => {
     if (!deleteTarget) return
     const name = deleteTarget.name
-    setItems(prev => prev.filter(i => i.id !== deleteTarget.id))
+    const id = deleteTarget.id
+    setItems(prev => prev.filter(i => i.id !== id))
     setDeleteTarget(null)
     showToast(`${name} removed from menu`)
+    // sync to Firestore
+    if (email) deleteMenuItem(email, id)
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -220,7 +250,7 @@ function MenuItemCard({
   onEdit: () => void
   onDelete: () => void
 }) {
-  const isUri = item.imageUri.startsWith('http') || item.imageUri.startsWith('file') || item.imageUri.startsWith('content')
+  const isUri = item.imageUri.startsWith('http') || item.imageUri.startsWith('data:') || item.imageUri.startsWith('file') || item.imageUri.startsWith('content')
 
   return (
     <View style={[mc.card, !item.isAvailable && mc.cardDim]}>

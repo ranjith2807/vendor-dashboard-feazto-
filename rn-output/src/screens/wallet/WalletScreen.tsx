@@ -1,44 +1,96 @@
-import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
-import { transactions } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
+import { useVendor } from '../../context/VendorContext'
+import {
+  subscribeTransactions, computeWalletSummary,
+  type Transaction,
+} from '../../lib/walletDb'
+import { subscribeOrders } from '../../lib/ordersDb'
+import type { VendorOrder } from '../../data/menuStore'
 
 const FILTERS = [
-  { id: 'wf_all', label: 'All' },
-  { id: 'wf_credit', label: 'Credits' },
-  { id: 'wf_debit', label: 'Debits' },
+  { id: 'wf_all',     label: 'All' },
+  { id: 'wf_credit',  label: 'Credits' },
+  { id: 'wf_debit',   label: 'Debits' },
   { id: 'wf_pending', label: 'Pending' },
 ]
 
 export default function WalletScreen({ setScreen: _setScreen }: { setScreen: SetScreen }) {
+  const { vendor } = useVendor()
+  const email       = vendor?.email ?? ''
+  const kitchenName = vendor?.company_name ?? 'My Kitchen'
+
   const [activeFilter, setActiveFilter] = useState('wf_all')
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [orders, setOrders]             = useState<VendorOrder[]>([])
+  const [loading, setLoading]           = useState(true)
+
+  // Subscribe to transactions and orders
+  useEffect(() => {
+    if (!email) return
+    let loaded = 0
+    const done = () => { loaded++; if (loaded >= 2) setLoading(false) }
+
+    const unsubTxn = subscribeTransactions(email, txns => {
+      setTransactions(txns)
+      done()
+    })
+    const unsubOrd = subscribeOrders(email, ords => {
+      setOrders(ords)
+      done()
+    })
+    return () => { unsubTxn(); unsubOrd() }
+  }, [email])
+
+  const { balance, pendingAmount, todayEarnings } = computeWalletSummary(orders)
 
   const filtered = transactions.filter(t => {
-    if (activeFilter === 'wf_credit') return t.type === 'credit'
-    if (activeFilter === 'wf_debit') return t.type === 'debit'
+    if (activeFilter === 'wf_credit')  return t.type === 'credit'
+    if (activeFilter === 'wf_debit')   return t.type === 'debit'
     if (activeFilter === 'wf_pending') return t.status === 'pending'
     return true
   })
 
+  // If no transactions yet, build them from completed orders
+  const displayTxns: Transaction[] = filtered.length > 0 ? filtered : orders
+    .filter(o => o.status === 'COMPLETED')
+    .slice(0, 10)
+    .map(o => ({
+      id:          `txn_${o.id}`,
+      type:        'credit' as const,
+      description: `Order #${o.orderNumber} — ${o.customerName}`,
+      amount:      o.total,
+      date:        o.completedAt ?? o.createdAt,
+      status:      'success' as const,
+      orderId:     o.id,
+    }))
+
   return (
     <ScrollView style={s.root} contentContainerStyle={s.body}>
-      {/* Hero card */}
+      {/* Hero balance card */}
       <View style={s.heroCard}>
-        <Text style={s.heroLabel}>FEAZTO WALLET · PRIYA'S KITCHEN</Text>
-        <Text style={s.heroBalance}>₹ 8,420</Text>
-        <Text style={s.heroSub}>Available balance</Text>
-        <View style={s.heroStats}>
-          <View style={s.heroStat}>
-            <Text style={s.heroStatLabel}>PENDING</Text>
-            <Text style={[s.heroStatVal, { color: C.amber }]}>₹ 3,280</Text>
-          </View>
-          <View style={s.heroStat}>
-            <Text style={s.heroStatLabel}>TODAY'S EARN</Text>
-            <Text style={[s.heroStatVal, { color: C.green }]}>₹ 475</Text>
-          </View>
-        </View>
+        <Text style={s.heroLabel}>FEAZTO WALLET · {kitchenName.toUpperCase()}</Text>
+        {loading ? (
+          <ActivityIndicator color={C.yellow} size="large" style={{ marginVertical: 12 }} />
+        ) : (
+          <>
+            <Text style={s.heroBalance}>₹ {balance.toLocaleString()}</Text>
+            <Text style={s.heroSub}>Available balance</Text>
+            <View style={s.heroStats}>
+              <View style={s.heroStat}>
+                <Text style={s.heroStatLabel}>PENDING</Text>
+                <Text style={[s.heroStatVal, { color: C.amber }]}>₹ {pendingAmount.toLocaleString()}</Text>
+              </View>
+              <View style={s.heroStat}>
+                <Text style={s.heroStatLabel}>TODAY'S EARN</Text>
+                <Text style={[s.heroStatVal, { color: C.green }]}>₹ {todayEarnings.toLocaleString()}</Text>
+              </View>
+            </View>
+          </>
+        )}
         <View style={s.heroBtns}>
           <TouchableOpacity style={s.withdrawBtn}>
             <Text style={s.withdrawBtnText}>💳 WITHDRAW</Text>
@@ -53,10 +105,12 @@ export default function WalletScreen({ setScreen: _setScreen }: { setScreen: Set
       <View style={s.bankCard}>
         <View style={s.bankIcon}><Text style={{ fontSize: 18 }}>🏦</Text></View>
         <View style={{ flex: 1 }}>
-          <Text style={s.bankName}>HDFC Bank Savings</Text>
-          <Text style={s.bankDetails}>AC ×××× ×××× ×××× 4321 · HDFC0001234</Text>
+          <Text style={s.bankName}>Bank Account</Text>
+          <Text style={s.bankDetails}>Link your bank to withdraw earnings</Text>
         </View>
-        <TouchableOpacity style={s.editBtn}><Text style={s.editBtnText}>Edit</Text></TouchableOpacity>
+        <TouchableOpacity style={s.editBtn}>
+          <Text style={s.editBtnText}>Link</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Filters */}
@@ -64,8 +118,11 @@ export default function WalletScreen({ setScreen: _setScreen }: { setScreen: Set
         {FILTERS.map(f => {
           const active = activeFilter === f.id
           return (
-            <TouchableOpacity key={f.id} onPress={() => setActiveFilter(f.id)} style={[s.filterBtn, active && s.filterBtnActive]}>
-              <Text style={[s.filterBtnText, active && s.filterBtnTextActive]}>{f.label.toUpperCase()}</Text>
+            <TouchableOpacity key={f.id} onPress={() => setActiveFilter(f.id)}
+              style={[s.filterBtn, active && s.filterBtnActive]}>
+              <Text style={[s.filterBtnText, active && s.filterBtnTextActive]}>
+                {f.label.toUpperCase()}
+              </Text>
             </TouchableOpacity>
           )
         })}
@@ -73,20 +130,34 @@ export default function WalletScreen({ setScreen: _setScreen }: { setScreen: Set
 
       {/* Transactions */}
       <Text style={s.sectionTitle}>Transactions</Text>
-      {filtered.map(txn => (
+      {loading ? (
+        <ActivityIndicator color={C.black} />
+      ) : displayTxns.length === 0 ? (
+        <View style={s.empty}>
+          <Text style={{ fontSize: 32, marginBottom: 8 }}>💳</Text>
+          <Text style={s.emptyText}>No transactions yet</Text>
+          <Text style={s.emptySub}>Completed orders will appear here</Text>
+        </View>
+      ) : displayTxns.map(txn => (
         <View key={txn.id} style={s.txnCard}>
           <View style={[s.txnIcon, { backgroundColor: txn.type === 'credit' ? '#DCFCE7' : '#FEE2E2' }]}>
             <Text style={s.txnArrow}>{txn.type === 'credit' ? '↓' : '↑'}</Text>
           </View>
           <View style={{ flex: 1 }}>
             <Text style={s.txnDesc} numberOfLines={1}>{txn.description}</Text>
-            <Text style={s.txnDate}>{txn.date}</Text>
+            <Text style={s.txnDate}>
+              {new Date(txn.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+            </Text>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
             <Text style={[s.txnAmount, { color: txn.type === 'credit' ? C.green : C.red }]}>
               {txn.type === 'credit' ? '+' : '−'} ₹ {txn.amount.toLocaleString()}
             </Text>
-            <Text style={[s.txnStatus, { color: txn.status === 'pending' ? C.amber : txn.status === 'success' ? C.green : C.red }]}>
+            <Text style={[s.txnStatus, {
+              color: txn.status === 'pending' ? C.amber
+                   : txn.status === 'success' ? C.green
+                   : C.red
+            }]}>
               {txn.status.toUpperCase()}
             </Text>
           </View>
@@ -108,9 +179,9 @@ const s = StyleSheet.create({
   heroStatLabel: { fontFamily: F.interBold, fontSize: 10, color: C.cream, opacity: 0.5, letterSpacing: 1, marginBottom: 2 },
   heroStatVal: { fontFamily: F.barlow, fontSize: 20 },
   heroBtns: { flexDirection: 'row', gap: 8 },
-  withdrawBtn: { flex: 1, backgroundColor: C.yellow,  borderColor: C.cream, borderRadius: 10, padding: 11, alignItems: 'center' },
+  withdrawBtn: { flex: 1, backgroundColor: C.yellow, borderRadius: 10, padding: 11, alignItems: 'center' },
   withdrawBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
-  invoiceBtn: { flex: 1,  borderColor: 'rgba(255,255,255,0.4)', borderRadius: 10, padding: 11, alignItems: 'center' },
+  invoiceBtn: { flex: 1, borderWidth: 1, borderColor: 'rgba(255,255,255,0.4)', borderRadius: 10, padding: 11, alignItems: 'center' },
   invoiceBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.cream },
   bankCard: { backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(4, 4), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 10 },
   bankIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: C.blue, alignItems: 'center', justifyContent: 'center' },
@@ -119,10 +190,10 @@ const s = StyleSheet.create({
   editBtn: { borderRadius: 6, paddingHorizontal: 9, paddingVertical: 3, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.15)' },
   editBtnText: { fontFamily: F.interBold, fontSize: 11, color: C.black },
   filtersRow: { flexDirection: 'row', gap: 7, alignItems: 'center' },
-  filterBtn: { flex: 1, minWidth: 60, backgroundColor: C.white, borderRadius: 20, paddingVertical: 7, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000000' },
-  filterBtnActive: { backgroundColor: '#f9be08', borderWidth: 2, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4 },
+  filterBtn: { flex: 1, minWidth: 60, backgroundColor: C.white, borderRadius: 20, paddingVertical: 7, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000' },
+  filterBtnActive: { backgroundColor: '#f9be08', borderWidth: 2, borderColor: '#000', shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4 },
   filterBtnText: { fontFamily: F.barlow, fontSize: 12, color: C.black, includeFontPadding: false, textAlign: 'center' },
-  filterBtnTextActive: { color: '#000000' },
+  filterBtnTextActive: { color: C.black },
   sectionTitle: { fontFamily: F.barlow, fontSize: 18, color: C.black },
   txnCard: { backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 },
   txnIcon: { width: 38, height: 38, borderRadius: 10, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
@@ -131,4 +202,7 @@ const s = StyleSheet.create({
   txnDate: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
   txnAmount: { fontFamily: F.barlow, fontSize: 18 },
   txnStatus: { fontFamily: F.interBold, fontSize: 10, letterSpacing: 1 },
+  empty: { alignItems: 'center', padding: 24 },
+  emptyText: { fontFamily: F.barlow, fontSize: 18, color: C.black, marginBottom: 4 },
+  emptySub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.4 },
 })
