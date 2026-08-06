@@ -41,3 +41,8 @@ Thumbs.db
 # Firebase secrets — never commit these
 feazto-e14b3-firebase-adminsdk-*.json
 *-firebase-adminsdk-*.json
+
+# Environment variables — never commit
+.env
+.env.local
+.env.production

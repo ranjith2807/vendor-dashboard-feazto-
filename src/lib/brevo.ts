@@ -1,9 +1,9 @@
-const BREVO_API_KEY = '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'
+const BREVO_API_KEY = process.env.EXPO_PUBLIC_BREVO_API_KEY ?? ''
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
 
 // Sender — verified in Brevo account
-const FROM_EMAIL = 'mdhussain5255@gmail.com'
-const FROM_NAME = 'FEAZTO Vendor'
+const FROM_EMAIL = process.env.EXPO_PUBLIC_BREVO_FROM_EMAIL ?? ''
+const FROM_NAME  = process.env.EXPO_PUBLIC_BREVO_FROM_NAME  ?? 'FEAZTO Vendor'
 
 // In-memory OTP store: email → { code, expiresAt }
 const otpStore: Record<string, { code: string; expiresAt: number }> = {}

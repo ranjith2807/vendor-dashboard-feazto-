@@ -3,12 +3,12 @@ import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDt7KKRQUHRS8vAGZQuBYH1Ir5EhDkmwvc',
-  authDomain: 'feazto-e14b3.firebaseapp.com',
-  projectId: 'feazto-e14b3',
-  storageBucket: 'feazto-e14b3.firebasestorage.app',
-  messagingSenderId: '337038716736',
-  appId: '1:337038716736:android:0731806a5f463c72ee94a5',
+  apiKey:            process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain:        process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId:         process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket:     process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 }
 
 // Prevent duplicate initialization on hot reload
