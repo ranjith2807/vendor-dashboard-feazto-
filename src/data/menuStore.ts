@@ -34,6 +34,14 @@ export type OrderStatus =
   | 'READY_FOR_PICKUP' | 'PICKED_UP'
   | 'COMPLETED' | 'CANCELLED'
 
+export type DeliveryStatus =
+  | 'SEARCHING_FOR_RIDER'
+  | 'RIDER_ASSIGNED'
+  | 'RIDER_ARRIVED_AT_KITCHEN'
+  | 'PICKED_UP'
+  | 'ON_THE_WAY'
+  | 'DELIVERED'
+
 export type PaymentStatus = 'PAID' | 'COD' | 'PENDING'
 
 export interface VendorOrder {
@@ -53,6 +61,20 @@ export interface VendorOrder {
     vehicleNumber?: string
     etaMinutes?: number
   }
+  deliveryStatus?: DeliveryStatus
+  assignedRiderId?: string
+  assignedRiderDetails?: {
+    riderId?: string
+    name: string
+    phone?: string
+    vehicleNumber?: string
+    vehicleType?: string
+    photoUrl?: string
+    rating?: number
+    distanceKm?: number
+    etaMinutes?: number
+  }
+  riderAssignedAt?: string
   notes?: string
   createdAt: string
   acceptedAt?: string

@@ -12,6 +12,7 @@ import {
 import { C, F, shadow } from '../../theme'
 import { useVendor } from '../../context/VendorContext'
 import { subscribeOrders, updateOrderStatus } from '../../lib/ordersDb'
+import { useFezuStore, DELIVERY_STATUS_META } from '../../context/FezuContext'
 
 const FILTER_TABS: { id: OrderStatus | 'ALL'; label: string }[] = [
   { id: 'ALL',             label: 'All' },
@@ -43,6 +44,7 @@ export default function OrdersScreen({
   const email = vendor?.email ?? ''
   const orders = vendorOrders
   const setOrders = setVendorOrders
+  const { getOrderDelivery } = useFezuStore()
 
   // Real-time Firestore listener
   useEffect(() => {
@@ -158,6 +160,7 @@ export default function OrdersScreen({
           renderItem={({ item: order }) => (
             <OrderCard
               order={order}
+              delivery={getOrderDelivery(order.id)}
               isSelected={selectedOrderId === order.id}
               onPress={() => {
                 setSelectedOrderId(order.id)
@@ -223,9 +226,10 @@ export default function OrdersScreen({
 // ─── OrderCard ────────────────────────────────────────────────────────────────
 
 function OrderCard({
-  order, isSelected, onPress, onAdvance, onReject,
+  order, delivery, isSelected, onPress, onAdvance, onReject,
 }: {
   order: VendorOrder
+  delivery: ReturnType<ReturnType<typeof useFezuStore>['getOrderDelivery']>
   isSelected?: boolean
   onPress: () => void
   onAdvance: () => void
@@ -233,6 +237,10 @@ function OrderCard({
 }) {
   const meta = ORDER_STATUS_META[order.status]
   const flow = ORDER_STATUS_FLOW[order.status]
+
+  // Delivery chip — show for orders that have a non-idle delivery
+  const showDeliveryChip = delivery.deliveryStatus !== 'IDLE'
+  const delivMeta = showDeliveryChip ? DELIVERY_STATUS_META[delivery.deliveryStatus] : null
 
   return (
     <TouchableOpacity style={[oc.card, isSelected && oc.cardActive]} onPress={onPress} activeOpacity={0.85}>
@@ -285,6 +293,21 @@ function OrderCard({
         <Text style={oc.total}>₹{order.total}</Text>
       </View>
 
+      {/* Delivery chip */}
+      {showDeliveryChip && delivMeta && (
+        <View style={[oc.delivChip, { backgroundColor: delivMeta.bg }]}>
+          <Text style={[oc.delivChipText, { color: delivMeta.color }]}>
+            {delivMeta.icon}  {
+              delivery.deliveryStatus === 'SEARCHING_FOR_RIDER'
+                ? 'Searching rider…'
+                : delivery.deliveryStatus === 'RIDER_ASSIGNED' && delivery.assignedRiderDetails
+                ? `${delivery.assignedRiderDetails.name.split(' ')[0]} · ${delivery.assignedRiderDetails.etaMinutes}m ETA`
+                : delivMeta.label
+            }
+          </Text>
+        </View>
+      )}
+
       {/* Action buttons */}
       {flow && (
         <View style={oc.actions}>
@@ -329,6 +352,8 @@ const oc = StyleSheet.create({
   rejectBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.red },
   actionBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 10, padding: 11, alignItems: 'center', ...shadow(3, 3) },
   actionBtnText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
+  delivChip: { marginHorizontal: 12, marginBottom: 6, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5 },
+  delivChipText: { fontFamily: F.interBold, fontSize: 11 },
 })
 
 const s = StyleSheet.create({

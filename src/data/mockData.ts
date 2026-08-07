@@ -50,6 +50,7 @@ export interface CommunityPost {
 
 export interface Rider {
   id: string
+  riderId: string
   name: string
   phone: string
   rating: number
@@ -58,6 +59,10 @@ export interface Rider {
   status: 'available' | 'busy' | 'offline'
   vehicleType: string
   vehicleNo: string
+  photoUrl?: string
+  currentLocation: { lat: number; lng: number }
+  currentOrderId?: string
+  lastLocationUpdate?: string
 }
 
 export interface Transaction {

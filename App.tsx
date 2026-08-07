@@ -5,6 +5,7 @@ import { useFonts, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/in
 import { BarlowCondensed_700Bold } from '@expo-google-fonts/barlow-condensed'
 import AppShell from './src/components/AppShell'
 import { VendorProvider } from './src/context/VendorContext'
+import { FezuProvider } from './src/context/FezuContext'
 import type { Screen, NavParams, SetScreen } from './src/types'
 import { DEFAULT_MENU_ITEMS, DEFAULT_ORDERS, type MenuItem, type VendorOrder } from './src/data/menuStore'
 
@@ -170,20 +171,22 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <VendorProvider>
-        <View style={styles.root}>
-          <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-          <AppShell screen={screen} setScreen={setScreen} showNav={showNav}>
-            <ScreenContent
-              screen={screen}
-              setScreen={setScreen}
-              navParams={navParams}
-              menuItems={menuItems}
-              setMenuItems={setMenuItems}
-              vendorOrders={vendorOrders}
-              setVendorOrders={setVendorOrders}
-            />
-          </AppShell>
-        </View>
+        <FezuProvider>
+          <View style={styles.root}>
+            <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+            <AppShell screen={screen} setScreen={setScreen} showNav={showNav}>
+              <ScreenContent
+                screen={screen}
+                setScreen={setScreen}
+                navParams={navParams}
+                menuItems={menuItems}
+                setMenuItems={setMenuItems}
+                vendorOrders={vendorOrders}
+                setVendorOrders={setVendorOrders}
+              />
+            </AppShell>
+          </View>
+        </FezuProvider>
       </VendorProvider>
     </SafeAreaProvider>
   )
