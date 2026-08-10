@@ -1,6 +1,6 @@
 export type Screen =
   | 'auth' | 'splash' | 'onboarding'
-  | 'register_1' | 'register_2' | 'register_3' | 'register_4'
+  | 'register_1' | 'register_email_otp' | 'register_2' | 'register_3' | 'register_4'
   | 'register_success' | 'app_review' | 'app_rejected' | 'app_approved'
   | 'forgot_password' | 'reset_otp' | 'new_password'
   | 'dashboard' | 'orders' | 'order_detail' | 'order_qr'

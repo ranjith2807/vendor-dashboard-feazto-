@@ -36,7 +36,7 @@ function BarChart({ data, maxValue, color = C.yellow, height = 80 }: {
   )
 }
 
-export default function AnalyticsScreen({ setScreen: _setScreen }: { setScreen: SetScreen }) {
+export default function AnalyticsScreen({ setScreen }: { setScreen: SetScreen }) {
   const { vendor } = useVendor()
   const email = vendor?.email ?? ''
 
@@ -68,6 +68,9 @@ export default function AnalyticsScreen({ setScreen: _setScreen }: { setScreen: 
     <ScrollView style={s.root} contentContainerStyle={s.body}>
       {/* Header */}
       <View style={s.header}>
+        <TouchableOpacity onPress={() => setScreen('settings')}>
+          <Text style={s.back}>←</Text>
+        </TouchableOpacity>
         <Text style={s.title}>Analytics</Text>
         <View style={s.periodsRow}>
           {PERIODS.map(p => {
@@ -166,8 +169,9 @@ export default function AnalyticsScreen({ setScreen: _setScreen }: { setScreen: 
 const s = StyleSheet.create({
   root: { flex: 1, width: '100%', backgroundColor: C.cream },
   body: { padding: 20, gap: 14, paddingBottom: 32 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  title: { fontFamily: F.barlow, fontSize: 28, color: C.black },
+  header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  back: { fontSize: 22, color: C.black },
+  title: { fontFamily: F.barlow, fontSize: 28, color: C.black, flex: 1 },
   periodsRow: { flexDirection: 'row', gap: 5, alignItems: 'center' },
   periodBtn: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#000', flexShrink: 0 },
   periodBtnActive: { backgroundColor: '#f9be08', borderWidth: 2, borderColor: '#000', shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4 },

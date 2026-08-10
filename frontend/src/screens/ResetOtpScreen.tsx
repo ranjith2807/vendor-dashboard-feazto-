@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { SetScreen, NavParams } from '../App'
+import type { SetScreen, NavParams } from '../types'
 
 export default function ResetOtpScreen({ setScreen, navParams }: { setScreen: SetScreen; navParams: NavParams }) {
   const phone = navParams.phone ?? ''

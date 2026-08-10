@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { type VendorOrder } from '../../data/menuStore'
+import { notificationItems } from '../../data/mockData'
 import { useVendor } from '../../context/VendorContext'
 import { subscribeOrders } from '../../../../backend/services/ordersService'
 
@@ -67,6 +68,7 @@ function computeStats(orders: VendorOrder[]): DashStats {
 export default function DashboardScreen({ setScreen }: { setScreen: SetScreen }) {
   const { vendor } = useVendor()
   const kitchenName = vendor?.company_name ?? 'My Kitchen'
+  const unreadCount = notificationItems.filter(n => !n.read).length
   const email = vendor?.email ?? ''
 
   const [isOpen, setIsOpen] = useState(true)
@@ -149,7 +151,11 @@ export default function DashboardScreen({ setScreen }: { setScreen: SetScreen })
           onPress={() => handlePress('notif', () => setScreen('notifications'))}
         >
           <Text style={styles.notifIcon}>🔔</Text>
-          <View style={styles.badge}><Text style={styles.badgeText}>2</Text></View>
+          {unreadCount > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 

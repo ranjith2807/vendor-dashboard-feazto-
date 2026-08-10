@@ -27,11 +27,12 @@ export default function RegisterStep1Screen({ setScreen, navParams }: { setScree
 
   const handleNext = () => {
     if (!validate()) return
-    setScreen('register_2', {
+    setScreen('register_email_otp', {
       ...navParams,
       vendor_name:  form.vendor_name,
       phone_number: form.phone_number,
       email:        form.email,
+      password:     form.password,
     })
   }
 
@@ -73,7 +74,7 @@ export default function RegisterStep1Screen({ setScreen, navParams }: { setScree
           </View>
         ))}
         <TouchableOpacity style={styles.btn} onPress={handleNext}>
-          <Text style={styles.btnText}>Next: Kitchen Info →</Text>
+          <Text style={styles.btnText}>Next: Verify Email →</Text>
         </TouchableOpacity>
       </View>
 

@@ -84,102 +84,13 @@ export interface VendorOrder {
   completedAt?: string
 }
 
-// ─── Real Food Image URLs (Unsplash — free, no attribution required) ──────────
-// Content sourced from Unsplash (unsplash.com) under the Unsplash License
-
-const IMG = {
-  idli:       'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400&q=80',
-  dosa:       'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400&q=80',
-  masalaDosa: 'https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?w=400&q=80',
-  upma:       'https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?w=400&q=80',
-  pongal:     'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&q=80',
-  vada:       'https://images.unsplash.com/photo-1630409346824-4f0e7b080087?w=400&q=80',
-}
-
-// ─── Default Menu Items (Seed Data) ──────────────────────────────────────────
+// ─── Default Menu Items ───────────────────────────────────────────────────────
 
 export const DEFAULT_MENU_ITEMS: MenuItem[] = []
 
-// ─── Default Orders (Seed Data) ───────────────────────────────────────────────
+// ─── Default Orders ───────────────────────────────────────────────────────────
 
-export const DEFAULT_ORDERS: VendorOrder[] = [
-  {
-    id: 'vord_001',
-    orderNumber: '1001',
-    status: 'NEW',
-    items: [
-      { menuItemId: 'menu_001', name: 'Idli',  quantity: 2, unitPrice: 10, subtotal: 20, imageUri: IMG.idli },
-      { menuItemId: 'menu_006', name: 'Vada',  quantity: 1, unitPrice: 10, subtotal: 10, imageUri: IMG.vada },
-    ],
-    subtotal: 30, total: 30,
-    customerName: 'Arun Kumar', customerPhone: '+91 98765 11111',
-    address: 'Cloud Kitchen - Anna Nagar',
-    paymentStatus: 'PAID', notes: 'Extra sambar please',
-    createdAt: new Date(Date.now() - 2 * 60000).toISOString(),
-  },
-  {
-    id: 'vord_002',
-    orderNumber: '1002',
-    status: 'PREPARING',
-    items: [
-      { menuItemId: 'menu_003', name: 'Masala Dosa', quantity: 1, unitPrice: 30, subtotal: 30, imageUri: IMG.masalaDosa },
-      { menuItemId: 'menu_005', name: 'Pongal',      quantity: 1, unitPrice: 30, subtotal: 30, imageUri: IMG.pongal },
-    ],
-    subtotal: 60, total: 60,
-    customerName: 'Preethi S', customerPhone: '+91 98765 22222',
-    address: 'Cloud Kitchen - Anna Nagar', paymentStatus: 'PAID',
-    createdAt:   new Date(Date.now() - 12 * 60000).toISOString(),
-    acceptedAt:  new Date(Date.now() - 10 * 60000).toISOString(),
-    preparingAt: new Date(Date.now() -  8 * 60000).toISOString(),
-    rider: { name: 'Muthu Kumar', phone: '+91 98765 99999', vehicleNumber: 'TN38 AB 1234', etaMinutes: 5 },
-  },
-  {
-    id: 'vord_003',
-    orderNumber: '1003',
-    status: 'READY_FOR_PICKUP',
-    items: [
-      { menuItemId: 'menu_002', name: 'Dosa', quantity: 2, unitPrice: 20, subtotal: 40, imageUri: IMG.dosa },
-    ],
-    subtotal: 40, total: 40,
-    customerName: 'Rajesh M', customerPhone: '+91 98765 33333',
-    address: 'Cloud Kitchen - Anna Nagar', paymentStatus: 'COD',
-    createdAt:   new Date(Date.now() - 25 * 60000).toISOString(),
-    acceptedAt:  new Date(Date.now() - 22 * 60000).toISOString(),
-    preparingAt: new Date(Date.now() - 18 * 60000).toISOString(),
-    readyAt:     new Date(Date.now() -  3 * 60000).toISOString(),
-    rider: { name: 'Muthu Kumar', phone: '+91 98765 99999', vehicleNumber: 'TN38 AB 1234', etaMinutes: 5 },
-  },
-  {
-    id: 'vord_004',
-    orderNumber: '1000',
-    status: 'COMPLETED',
-    items: [
-      { menuItemId: 'menu_004', name: 'Upma', quantity: 1, unitPrice: 25, subtotal: 25, imageUri: IMG.upma },
-      { menuItemId: 'menu_001', name: 'Idli', quantity: 2, unitPrice: 10, subtotal: 20, imageUri: IMG.idli },
-    ],
-    subtotal: 45, total: 45,
-    customerName: 'Kavitha R', customerPhone: '+91 98765 44444',
-    address: 'Cloud Kitchen - Anna Nagar', paymentStatus: 'PAID',
-    createdAt:   new Date(Date.now() - 90 * 60000).toISOString(),
-    acceptedAt:  new Date(Date.now() - 85 * 60000).toISOString(),
-    preparingAt: new Date(Date.now() - 80 * 60000).toISOString(),
-    readyAt:     new Date(Date.now() - 65 * 60000).toISOString(),
-    pickedUpAt:  new Date(Date.now() - 55 * 60000).toISOString(),
-    completedAt: new Date(Date.now() - 50 * 60000).toISOString(),
-  },
-  {
-    id: 'vord_005',
-    orderNumber: '999',
-    status: 'CANCELLED',
-    items: [
-      { menuItemId: 'menu_003', name: 'Masala Dosa', quantity: 1, unitPrice: 30, subtotal: 30, imageUri: IMG.masalaDosa },
-    ],
-    subtotal: 30, total: 30,
-    customerName: 'Suresh B', customerPhone: '+91 98765 55555',
-    address: 'Cloud Kitchen - Anna Nagar', paymentStatus: 'PENDING',
-    createdAt: new Date(Date.now() - 3 * 3600000).toISOString(),
-  },
-]
+export const DEFAULT_ORDERS: VendorOrder[] = []
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, Modal } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet, Modal, KeyboardAvoidingView, Platform } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
-import { communityPosts, leaderboard, communityGroups, tagMeta } from '../../data/mockData'
+import { communityPosts as initialPosts, leaderboard, communityGroups, tagMeta, type CommunityPost } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
 import { getActiveState, setActiveState } from '../../data/activeStateStore'
 
@@ -25,19 +25,32 @@ export default function CommunityScreen({ setScreen: _setScreen }: { setScreen: 
   const [showCreate, setShowCreate] = useState(false)
   const [isPostActive, setIsPostActive] = useState(false)
   const [draftPost, setDraftPost] = useState('')
+  const [draftTag, setDraftTag] = useState<string>(Object.keys(tagMeta)[0])
+  const [posts, setPosts] = useState<CommunityPost[]>(initialPosts)
   const [joinedGroups, setJoinedGroups] = useState<Record<string, boolean>>(
     Object.fromEntries(communityGroups.map(g => [g.id, g.joined]))
   )
   const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>(
-    Object.fromEntries(communityPosts.map(p => [p.id, p.liked]))
+    Object.fromEntries(initialPosts.map(p => [p.id, p.liked]))
   )
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>(
-    Object.fromEntries(communityPosts.map(p => [p.id, p.likes]))
+    Object.fromEntries(initialPosts.map(p => [p.id, p.likes]))
   )
 
+  const [menuPostId, setMenuPostId] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+
+  const handleDeletePost = (postId: string) => {
+    setPosts(prev => prev.filter(p => p.id !== postId))
+    setLikedPosts(p => { const n = { ...p }; delete n[postId]; return n })
+    setLikeCounts(p => { const n = { ...p }; delete n[postId]; return n })
+    setConfirmDeleteId(null)
+    setMenuPostId(null)
+  }
+
   const feedPosts = activeTab === 'st_trending'
-    ? [...communityPosts].sort((a, b) => b.likes - a.likes)
-    : communityPosts
+    ? [...posts].sort((a, b) => b.likes - a.likes)
+    : posts
 
   const hdr = TAB_HEADERS[activeTab]
 
@@ -45,6 +58,36 @@ export default function CommunityScreen({ setScreen: _setScreen }: { setScreen: 
     const wasLiked = likedPosts[postId]
     setLikedPosts(p => ({ ...p, [postId]: !wasLiked }))
     setLikeCounts(p => ({ ...p, [postId]: wasLiked ? p[postId] - 1 : p[postId] + 1 }))
+  }
+
+  const handlePublish = () => {
+    const text = draftPost.trim()
+    if (!text) return
+    const newPost: CommunityPost = {
+      id: `post_${Date.now()}`,
+      authorId: 'usr_me',
+      authorName: 'My Kitchen',
+      authorRole: 'Vendor',
+      authorAvatar: 'ME',
+      tag: draftTag,
+      content: text,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      bookmarks: 0,
+      liked: false,
+      bookmarked: false,
+      following: false,
+      timeAgo: 'just now',
+    }
+    setPosts(prev => [newPost, ...prev])
+    setLikedPosts(p => ({ ...p, [newPost.id]: false }))
+    setLikeCounts(p => ({ ...p, [newPost.id]: 0 }))
+    setDraftPost('')
+    setDraftTag(Object.keys(tagMeta)[0])
+    setShowCreate(false)
+    // Switch to feed tab so the new post is visible
+    setActiveTab('st_feed')
   }
 
   return (
@@ -114,6 +157,15 @@ export default function CommunityScreen({ setScreen: _setScreen }: { setScreen: 
                     <View style={[s.tagBadge, { backgroundColor: tag.bg }]}>
                       <Text style={[s.tagText, { color: tag.text }]}>{tag.label.toUpperCase()}</Text>
                     </View>
+                    {post.authorId === 'usr_me' && (
+                      <TouchableOpacity
+                        style={s.menuBtn}
+                        onPress={() => setMenuPostId(post.id)}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <Text style={s.menuBtnText}>⋯</Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                   <Text style={s.content}>{post.content}</Text>
                   <View style={s.actions}>
@@ -137,87 +189,175 @@ export default function CommunityScreen({ setScreen: _setScreen }: { setScreen: 
         )}
 
         {/* GROUPS */}
-        {activeTab === 'st_groups' && communityGroups.map(grp => (
-          <View key={grp.id} style={s.grpCard}>
-            <View style={s.grpIcon}>
-              <Text style={{ fontSize: 20 }}>
-                {grp.name.includes('Chef') ? '👨‍🍳' : grp.name.includes('Photo') ? '📸' : grp.name.includes('Business') ? '📈' : grp.name.includes('Recipe') ? '📝' : '🏪'}
-              </Text>
+        {activeTab === 'st_groups' && (
+          communityGroups.length === 0 ? (
+            <View style={s.empty}>
+              <Text style={{ fontSize: 40 }}>👥</Text>
+              <Text style={s.emptyText}>No groups yet</Text>
+              <Text style={s.emptyHint}>Groups will appear here once they're created</Text>
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={s.grpName}>{grp.name}</Text>
-              <Text style={s.grpMembers}>{grp.members.toLocaleString()} members</Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => setJoinedGroups(p => ({ ...p, [grp.id]: !p[grp.id] }))}
-              style={[s.joinBtn, joinedGroups[grp.id] && s.joinBtnActive]}
-            >
-              <Text style={[s.joinBtnText, joinedGroups[grp.id] && s.joinBtnTextActive]}>
-                {joinedGroups[grp.id] ? 'Joined ✓' : 'Join'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ))}
+          ) : (
+            communityGroups.map(grp => (
+              <View key={grp.id} style={s.grpCard}>
+                <View style={s.grpIcon}>
+                  <Text style={{ fontSize: 20 }}>
+                    {grp.name.includes('Chef') ? '👨‍🍳' : grp.name.includes('Photo') ? '📸' : grp.name.includes('Business') ? '📈' : grp.name.includes('Recipe') ? '📝' : '🏪'}
+                  </Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={s.grpName}>{grp.name}</Text>
+                  <Text style={s.grpMembers}>{grp.members.toLocaleString()} members</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setJoinedGroups(p => ({ ...p, [grp.id]: !p[grp.id] }))}
+                  style={[s.joinBtn, joinedGroups[grp.id] && s.joinBtnActive]}
+                >
+                  <Text style={[s.joinBtnText, joinedGroups[grp.id] && s.joinBtnTextActive]}>
+                    {joinedGroups[grp.id] ? 'Joined ✓' : 'Join'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ))
+          )
+        )}
 
         {/* LEADERBOARD */}
-        {activeTab === 'st_leaderboard' && leaderboard.map(chef => (
-          <View key={chef.id} style={s.lbCard}>
-            <View style={[s.lbRank, {
-              backgroundColor: chef.rank === 1 ? C.yellow : chef.rank === 2 ? '#E0E0E0' : chef.rank === 3 ? '#F4A460' : C.cream
-            }]}>
-              <Text style={s.lbRankText}>{chef.rank}</Text>
+        {activeTab === 'st_leaderboard' && (
+          leaderboard.length === 0 ? (
+            <View style={s.empty}>
+              <Text style={{ fontSize: 40 }}>🏆</Text>
+              <Text style={s.emptyText}>No rankings yet</Text>
+              <Text style={s.emptyHint}>Start posting to earn points and appear here</Text>
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={s.lbName}>{chef.name}</Text>
-              <Text style={s.lbStreak}>🔥 {chef.streak} day streak</Text>
-            </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={s.lbPoints}>{chef.points.toLocaleString()}</Text>
-              <Text style={s.lbPtsLabel}>pts</Text>
-            </View>
-            <Text style={s.lbBadge}>{chef.badge}</Text>
-          </View>
-        ))}
+          ) : (
+            leaderboard.map(chef => (
+              <View key={chef.id} style={s.lbCard}>
+                <View style={[s.lbRank, {
+                  backgroundColor: chef.rank === 1 ? C.yellow : chef.rank === 2 ? '#E0E0E0' : chef.rank === 3 ? '#F4A460' : C.cream
+                }]}>
+                  <Text style={s.lbRankText}>{chef.rank}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={s.lbName}>{chef.name}</Text>
+                  <Text style={s.lbStreak}>🔥 {chef.streak} day streak</Text>
+                </View>
+                <View style={{ alignItems: 'flex-end' }}>
+                  <Text style={s.lbPoints}>{chef.points.toLocaleString()}</Text>
+                  <Text style={s.lbPtsLabel}>pts</Text>
+                </View>
+                <Text style={s.lbBadge}>{chef.badge}</Text>
+              </View>
+            ))
+          )
+        )}
 
       </ScrollView>
 
       {/* Create post modal */}
       <Modal visible={showCreate} transparent animationType="slide">
-        <View style={s.modalOverlay}>
-          <View style={s.modalSheet}>
-            <View style={s.modalHeader}>
-              <Text style={s.modalTitle}>Create Post</Text>
-              <TouchableOpacity onPress={() => setShowCreate(false)}>
-                <Text style={{ fontSize: 20 }}>✕</Text>
-              </TouchableOpacity>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <View style={s.modalOverlay}>
+            <View style={s.modalSheet}>
+              <View style={s.modalHeader}>
+                <Text style={s.modalTitle}>Create Post</Text>
+                <TouchableOpacity onPress={() => { setShowCreate(false); setDraftPost('') }}>
+                  <Text style={{ fontSize: 20 }}>✕</Text>
+                </TouchableOpacity>
+              </View>
+              <TextInput
+                value={draftPost}
+                onChangeText={setDraftPost}
+                placeholder="Share a tip, recipe, or story…"
+                multiline
+                numberOfLines={4}
+                style={s.postInput}
+                textAlignVertical="top"
+                autoFocus
+              />
+              {draftPost.trim().length === 0 && (
+                <Text style={s.postHint}>Write something to enable posting</Text>
+              )}
+              {/* Tag selector */}
+              <Text style={s.tagLabel}>TAG</Text>
+              <View style={s.tagRow}>
+                {Object.entries(tagMeta).map(([key, val]) => (
+                  <TouchableOpacity
+                    key={key}
+                    onPress={() => setDraftTag(key)}
+                    style={[
+                      s.tagChip,
+                      { backgroundColor: val.bg },
+                      draftTag === key && s.tagChipSelected,
+                    ]}
+                  >
+                    <Text style={[s.tagChipText, { color: val.text }]}>{val.label}</Text>
+                    {draftTag === key && <Text style={[s.tagChipCheck, { color: val.text }]}> ✓</Text>}
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <View style={{ flexDirection: 'row', gap: 8, marginTop: 14 }}>
+                <TouchableOpacity style={s.cancelBtn} onPress={() => { setShowCreate(false); setDraftPost('') }}>
+                  <Text style={s.cancelBtnText}>CANCEL</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[s.publishBtn, draftPost.trim().length === 0 && s.publishBtnDisabled]}
+                  onPress={handlePublish}
+                  disabled={draftPost.trim().length === 0}
+                >
+                  <Text style={s.publishBtnText}>PUBLISH POST</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TextInput
-              value={draftPost}
-              onChangeText={setDraftPost}
-              placeholder="Share a tip, recipe, or story…"
-              multiline
-              numberOfLines={4}
-              style={s.postInput}
-              textAlignVertical="top"
-            />
-            <View style={s.tagRow}>
-              {Object.entries(tagMeta).map(([key, val]) => (
-                <View key={key} style={[s.tagChip, { backgroundColor: val.bg }]}>
-                  <Text style={[s.tagChipText, { color: val.text }]}>{val.label}</Text>
-                </View>
-              ))}
-            </View>
-            <View style={{ flexDirection: 'row', gap: 8, marginTop: 14 }}>
-              <TouchableOpacity style={s.cancelBtn} onPress={() => setShowCreate(false)}>
-                <Text style={s.cancelBtnText}>CANCEL</Text>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+      {/* Post options menu (own posts only) */}
+      <Modal visible={menuPostId !== null} transparent animationType="fade">
+        <TouchableOpacity style={s.menuOverlay} activeOpacity={1} onPress={() => setMenuPostId(null)}>
+          <View style={s.menuSheet}>
+            <View style={s.menuHandle} />
+            <TouchableOpacity
+              style={s.menuDeleteBtn}
+              onPress={() => {
+                setConfirmDeleteId(menuPostId)
+                setMenuPostId(null)
+              }}
+            >
+              <Text style={s.menuDeleteIcon}>🗑️</Text>
+              <Text style={s.menuDeleteText}>Delete Post</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={s.menuCancelRow} onPress={() => setMenuPostId(null)}>
+              <Text style={s.menuCancelText}>CANCEL</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Confirm delete dialog */}
+      <Modal visible={confirmDeleteId !== null} transparent animationType="fade">
+        <View style={s.confirmOverlay}>
+          <View style={s.confirmBox}>
+            <Text style={s.confirmEmoji}>🗑️</Text>
+            <Text style={s.confirmTitle}>Delete Post?</Text>
+            <Text style={s.confirmSub}>This can't be undone. The post will be permanently removed.</Text>
+            <View style={s.confirmBtns}>
+              <TouchableOpacity style={s.confirmCancel} onPress={() => setConfirmDeleteId(null)}>
+                <Text style={s.confirmCancelText}>KEEP IT</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={s.publishBtn} onPress={() => { setShowCreate(false); setDraftPost('') }}>
-                <Text style={s.publishBtnText}>PUBLISH POST</Text>
+              <TouchableOpacity
+                style={s.confirmDelete}
+                onPress={() => confirmDeleteId && handleDeletePost(confirmDeleteId)}
+              >
+                <Text style={s.confirmDeleteText}>DELETE</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
+
     </View>
   )
 }
@@ -269,6 +409,7 @@ const s = StyleSheet.create({
   // Empty
   empty: { alignItems: 'center', paddingTop: 32, gap: 8 },
   emptyText: { fontFamily: F.barlow, fontSize: 20, color: C.black, opacity: 0.4 },
+  emptyHint: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.35, textAlign: 'center', paddingHorizontal: 32 },
 
   // Groups
   grpCard: { backgroundColor: C.white, borderRadius: 12, ...shadow(3, 3), padding: 12, flexDirection: 'row', alignItems: 'center', gap: 10 },
@@ -296,11 +437,42 @@ const s = StyleSheet.create({
   modalHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 },
   modalTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black },
   postInput: { fontFamily: F.inter, fontSize: 14, backgroundColor: C.cream, borderRadius: 12, padding: 12, height: 100, ...shadow(3, 3) },
-  tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10 },
-  tagChip: { borderRadius: 6, paddingHorizontal: 10, paddingVertical: 3 },
+  postHint: { fontFamily: F.inter, fontSize: 11, color: '#999', marginTop: 5 },
+  tagLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.5, marginTop: 12, marginBottom: 4 },
+  tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  tagChip: { borderRadius: 6, paddingHorizontal: 10, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' },
+  tagChipSelected: { borderWidth: 2, borderColor: C.black },
   tagChipText: { fontFamily: F.barlow, fontSize: 11 },
+  tagChipCheck: { fontFamily: F.barlow, fontSize: 11 },
   cancelBtn: { flex: 1, backgroundColor: C.white, borderWidth: 2, borderColor: C.black, borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(3, 3) },
   cancelBtnText: { fontFamily: F.barlow, fontSize: 17, color: C.black },
   publishBtn: { flex: 2, backgroundColor: C.yellow, borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(4, 4) },
+  publishBtnDisabled: { backgroundColor: '#e0e0e0', shadowOpacity: 0, elevation: 0 },
   publishBtnText: { fontFamily: F.barlow, fontSize: 17, color: C.black },
+
+  // Post menu button (⋯)
+  menuBtn: { marginLeft: 6, padding: 4 },
+  menuBtnText: { fontSize: 18, color: '#999', fontWeight: '700', letterSpacing: 2 },
+
+  // Post options bottom sheet
+  menuOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
+  menuSheet: { backgroundColor: C.white, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: 36 },
+  menuHandle: { width: 40, height: 4, borderRadius: 2, backgroundColor: '#e0e0e0', alignSelf: 'center', marginBottom: 20 },
+  menuDeleteBtn: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 4 },
+  menuDeleteIcon: { fontSize: 20 },
+  menuDeleteText: { fontFamily: F.interBold, fontSize: 16, color: '#EF4444' },
+  menuCancelRow: { marginTop: 8, paddingVertical: 14, alignItems: 'center', borderTopWidth: 1, borderTopColor: 'rgba(0,0,0,0.07)' },
+  menuCancelText: { fontFamily: F.barlow, fontSize: 15, color: '#888' },
+
+  // Confirm delete dialog
+  confirmOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center', padding: 32 },
+  confirmBox: { backgroundColor: C.white, borderRadius: 20, padding: 24, width: '100%', alignItems: 'center', ...shadow(6, 6) },
+  confirmEmoji: { fontSize: 36, marginBottom: 10 },
+  confirmTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black, marginBottom: 8 },
+  confirmSub: { fontFamily: F.inter, fontSize: 13, color: '#666', textAlign: 'center', lineHeight: 20, marginBottom: 20 },
+  confirmBtns: { flexDirection: 'row', gap: 10, width: '100%' },
+  confirmCancel: { flex: 1, backgroundColor: C.white, borderWidth: 2, borderColor: C.black, borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(3, 3) },
+  confirmCancelText: { fontFamily: F.barlow, fontSize: 15, color: C.black },
+  confirmDelete: { flex: 1, backgroundColor: '#EF4444', borderRadius: 11, padding: 12, alignItems: 'center', ...shadow(3, 3) },
+  confirmDeleteText: { fontFamily: F.barlow, fontSize: 15, color: '#fff' },
 })

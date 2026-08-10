@@ -3,27 +3,30 @@
  * Firestore operations for vendor orders.
  *
  * Collection path: vendors/{email}/orders/{orderId}
- *
- * Real-time listener keeps the orders list live — any new order
- * or status change syncs instantly to the UI.
  */
 
 import {
-  collection, doc, setDoc, updateDoc,
-  onSnapshot, query, orderBy,
-  type Unsubscribe, type DocumentData,
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  type Unsubscribe,
+  type DocumentData,
 } from 'firebase/firestore'
-import { db } from '../firebase/config'
-import type { VendorOrder, OrderStatus } from '../../frontend/src/data/menuStore'
+import { db } from '../../../backend/firebase/config'
+import type { VendorOrder, OrderStatus } from '../data/menuStore'
 
 const ordersCol = (email: string) =>
   collection(db, 'vendors', email.toLowerCase(), 'orders')
 
-// ── Real-time listener (most important — keeps live orders updated) ───────────
+// ── Real-time listener ───────────────────────────────────────────────────────
 
 export function subscribeOrders(
   email: string,
-  onChange: (orders: VendorOrder[]) => void
+  onChange: (orders: VendorOrder[]) => void,
 ): Unsubscribe {
   const q = query(ordersCol(email), orderBy('createdAt', 'desc'))
   return onSnapshot(q, snap => {
@@ -31,11 +34,11 @@ export function subscribeOrders(
   })
 }
 
-// ── Create a new order ────────────────────────────────────────────────────────
+// ── Create a new order ───────────────────────────────────────────────────────
 
 export async function createOrder(
   email: string,
-  order: VendorOrder
+  order: VendorOrder,
 ): Promise<{ success: boolean; message: string }> {
   try {
     const ref = doc(ordersCol(email), order.id)
@@ -46,32 +49,32 @@ export async function createOrder(
   }
 }
 
-// ── Update order status ───────────────────────────────────────────────────────
+// ── Update order status ──────────────────────────────────────────────────────
 
 export async function updateOrderStatus(
   email: string,
   orderId: string,
   status: OrderStatus,
-  timestamps: Partial<VendorOrder> = {}
+  timestamps: Partial<VendorOrder> = {},
 ): Promise<void> {
   try {
     const ref = doc(ordersCol(email), orderId)
     await updateDoc(ref, {
       status,
-      ...timestamps as DocumentData,
+      ...(timestamps as DocumentData),
     })
   } catch {
-    // local state already updated
+    // local state already updated — swallow the error
   }
 }
 
-// ── Update order delivery status & rider details ──────────────────────────────
+// ── Update delivery status & assigned rider details ──────────────────────────
 
 export async function updateOrderDeliveryStatus(
   email: string,
   orderId: string,
   deliveryStatus: VendorOrder['deliveryStatus'],
-  riderDetails: VendorOrder['assignedRiderDetails'] | null
+  riderDetails: VendorOrder['assignedRiderDetails'] | null,
 ): Promise<void> {
   try {
     if (!email) return

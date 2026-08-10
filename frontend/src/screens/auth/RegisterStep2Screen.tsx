@@ -51,13 +51,13 @@ export default function RegisterStep2Screen({ setScreen, navParams }: { setScree
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => setScreen('register_1', navParams)}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => setScreen('register_email_otp', navParams)}><Text style={styles.back}>←</Text></TouchableOpacity>
         <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Register — Step 2 of 4</Text>
+          <Text style={styles.title}>Register — Step 3 of 5</Text>
           <Text style={styles.sub}>Kitchen Details</Text>
         </View>
         <View style={styles.steps}>
-          {[1,2,3,4].map(i => <View key={i} style={[styles.step, i <= 2 && styles.stepActive]} />)}
+          {[1,2,3,4,5].map(i => <View key={i} style={[styles.step, i <= 3 && styles.stepActive]} />)}
         </View>
       </View>
 

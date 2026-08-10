@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet, ActivityIndicator, Image, Alert } from 'react-native'
+import * as ImagePicker from 'expo-image-picker'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
@@ -26,6 +27,37 @@ export default function SettingsProfileScreen({ setScreen }: { setScreen: SetScr
   const [saving, setSaving] = useState(false)
   const [saved, setSaved]   = useState(false)
   const [error, setError]   = useState('')
+  const [photoUri, setPhotoUri] = useState<string | null>(vendor?.photoUrl ?? null)
+
+  const pickImage = async (source: 'camera' | 'gallery') => {
+    const permResult = source === 'camera'
+      ? await ImagePicker.requestCameraPermissionsAsync()
+      : await ImagePicker.requestMediaLibraryPermissionsAsync()
+
+    if (!permResult.granted) {
+      Alert.alert(
+        'Permission Required',
+        `Please allow ${source === 'camera' ? 'camera' : 'photo library'} access to set a profile photo.`,
+      )
+      return
+    }
+
+    const result = source === 'camera'
+      ? await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.8 })
+      : await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.8, mediaTypes: ImagePicker.MediaTypeOptions.Images })
+
+    if (!result.canceled && result.assets.length > 0) {
+      setPhotoUri(result.assets[0].uri)
+    }
+  }
+
+  const handlePickPhoto = () => {
+    Alert.alert('Profile Photo', 'Choose a source', [
+      { text: '📷  Camera',        onPress: () => pickImage('camera') },
+      { text: '🖼️  Photo Library', onPress: () => pickImage('gallery') },
+      { text: 'Cancel', style: 'cancel' },
+    ])
+  }
 
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }))
   const toggleCuisine = (c: string) =>
@@ -73,9 +105,20 @@ export default function SettingsProfileScreen({ setScreen }: { setScreen: SetScr
       <ScrollView style={{ flex: 1 }} contentContainerStyle={s.body}>
         {/* Avatar */}
         <View style={s.avatarWrap}>
-          <View style={s.avatar}>
-            <Text style={s.avatarText}>{initials || '?'}</Text>
-          </View>
+          <TouchableOpacity onPress={handlePickPhoto} activeOpacity={0.85} style={s.avatarTouchable}>
+            {photoUri ? (
+              <Image source={{ uri: photoUri }} style={s.avatarImage} />
+            ) : (
+              <View style={s.avatar}>
+                <Text style={s.avatarText}>{initials || '?'}</Text>
+              </View>
+            )}
+            {/* Camera badge overlay */}
+            <View style={s.cameraBadge}>
+              <Text style={s.cameraBadgeText}>📷</Text>
+            </View>
+          </TouchableOpacity>
+          <Text style={s.avatarHint}>Tap to change photo</Text>
         </View>
 
         {error ? <Text style={s.errorText}>{error}</Text> : null}
@@ -162,8 +205,18 @@ const s = StyleSheet.create({
   saveBtnText: { fontFamily: F.barlow, fontSize: 14, color: C.black },
   body: { padding: 20, paddingBottom: 32 },
   avatarWrap: { alignItems: 'center', marginBottom: 20 },
-  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.yellow, ...shadow(4, 4), alignItems: 'center', justifyContent: 'center' },
-  avatarText: { fontFamily: F.barlow, fontSize: 30, color: C.black },
+  avatarTouchable: { position: 'relative' },
+  avatar: { width: 90, height: 90, borderRadius: 45, backgroundColor: C.yellow, ...shadow(4, 4), alignItems: 'center', justifyContent: 'center' },
+  avatarImage: { width: 90, height: 90, borderRadius: 45, ...shadow(4, 4) },
+  avatarText: { fontFamily: F.barlow, fontSize: 32, color: C.black },
+  cameraBadge: {
+    position: 'absolute', bottom: 0, right: 0,
+    width: 28, height: 28, borderRadius: 14,
+    backgroundColor: C.black, borderWidth: 2, borderColor: C.white,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  cameraBadgeText: { fontSize: 13 },
+  avatarHint: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.4, marginTop: 8 },
   errorText: { fontFamily: F.interBold, fontSize: 12, color: C.red, textAlign: 'center', marginBottom: 12 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 },
   chip: { backgroundColor: C.white, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.10)', flexShrink: 0 },

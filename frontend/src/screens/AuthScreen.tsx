@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import type { SetScreen } from '../App'
-import fezuImg from '../imports/image.png'
+import type { SetScreen } from '../types'
 
 export default function AuthScreen({ setScreen }: { setScreen: SetScreen }) {
   const [phone, setPhone] = useState('')
@@ -47,9 +46,7 @@ export default function AuthScreen({ setScreen }: { setScreen: SetScreen }) {
     <div style={{ backgroundColor: '#FFF8E7', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px' }}>
       {/* FEZU mascot */}
       <div style={{ marginBottom: '16px', marginTop: '10px' }}>
-        <div style={{ width: '90px', height: '90px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0 }}>
-          <img src={fezuImg} alt="FEZU" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', transform: 'scale(1.1)', transformOrigin: 'center top' }} />
-        </div>
+        <div style={{ width: '90px', height: '90px', borderRadius: '50%', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px', flexShrink: 0 }}>🚴</div>
       </div>
 
       {/* Brand */}

@@ -50,7 +50,7 @@ export interface CommunityPost {
 
 export interface Rider {
   id: string
-  riderId: string
+  riderId?: string
   name: string
   phone: string
   rating: number
@@ -60,7 +60,7 @@ export interface Rider {
   vehicleType: string
   vehicleNo: string
   photoUrl?: string
-  currentLocation: { lat: number; lng: number }
+  currentLocation?: { lat: number; lng: number }
   currentOrderId?: string
   lastLocationUpdate?: string
 }
@@ -168,18 +168,7 @@ export const mockOrders: Order[] = [
 // ──────────────────────────────────────
 // MENU ITEMS
 // ──────────────────────────────────────
-export const mockMenu: MenuItem[] = [
-  { id: 'menu_001', name: 'Masala Dosa', category: 'cat_breakfast', price: 80, rating: 4.8, reviews: 324, available: true, veg: true, popular: true, description: 'Crispy rice crepe with spiced potato filling', calories: 280 },
-  { id: 'menu_002', name: 'Idli (×4)', category: 'cat_breakfast', price: 60, rating: 4.7, reviews: 512, available: true, veg: true, popular: true, description: 'Steamed rice cakes with sambar & chutney', calories: 160 },
-  { id: 'menu_003', name: 'Medu Vada (×2)', category: 'cat_breakfast', price: 55, rating: 4.6, reviews: 208, available: true, veg: true, popular: false, description: 'Crispy lentil donuts', calories: 220 },
-  { id: 'menu_004', name: 'Ghee Pongal', category: 'cat_breakfast', price: 80, rating: 4.9, reviews: 176, available: true, veg: true, popular: true, description: 'Rich rice & moong dal with ghee', calories: 320 },
-  { id: 'menu_005', name: 'Rava Dosa', category: 'cat_breakfast', price: 90, rating: 4.7, reviews: 143, available: false, veg: true, popular: false, description: 'Crispy semolina crepe', calories: 260 },
-  { id: 'menu_006', name: 'Upma', category: 'cat_breakfast', price: 50, rating: 4.4, reviews: 98, available: true, veg: true, popular: false, description: 'Semolina porridge with vegetables', calories: 200 },
-  { id: 'menu_007', name: 'Filter Coffee', category: 'cat_beverages', price: 35, rating: 4.9, reviews: 621, available: true, veg: true, popular: true, description: 'South Indian decoction coffee', calories: 45 },
-  { id: 'menu_008', name: 'Chai', category: 'cat_beverages', price: 20, rating: 4.5, reviews: 287, available: true, veg: true, popular: false, description: 'Spiced milk tea', calories: 80 },
-  { id: 'menu_009', name: 'Kesari', category: 'cat_sweets', price: 45, rating: 4.8, reviews: 154, available: true, veg: true, popular: true, description: 'Saffron semolina halwa', calories: 280 },
-  { id: 'menu_010', name: 'Poori Masala', category: 'cat_mains', price: 75, rating: 4.7, reviews: 189, available: true, veg: true, popular: false, description: 'Fried wheat bread with potato masala', calories: 380 },
-]
+export const mockMenu: MenuItem[] = []
 
 export const menuCategories = [
   { id: 'cat_all', label: 'All' },
@@ -192,110 +181,7 @@ export const menuCategories = [
 // ──────────────────────────────────────
 // COMMUNITY POSTS
 // ──────────────────────────────────────
-export const communityPosts: CommunityPost[] = [
-  {
-    id: 'post_c001',
-    authorId: 'usr_a001',
-    authorName: 'Annamalai Chef',
-    authorRole: 'Featured Kitchen',
-    authorAvatar: 'AC',
-    tag: 'recipe',
-    content: 'My secret for the crispiest Masala Dosa — ferment the batter for 18 hours, not 8! The lactic acid creates that perfect golden crunch. 🍳',
-    likes: 482,
-    comments: 67,
-    shares: 34,
-    bookmarks: 91,
-    liked: false,
-    bookmarked: true,
-    following: true,
-    timeAgo: '2h ago',
-  },
-  {
-    id: 'post_c002',
-    authorId: 'usr_a002',
-    authorName: 'Priya Kitchen Co.',
-    authorRole: 'Trending Vendor',
-    authorAvatar: 'PK',
-    tag: 'business_tip',
-    content: 'Raised menu prices by ₹10 across all items last month. Revenue up 18%, order count dropped only 4%. Premium pricing works when quality is consistent! 📈',
-    likes: 311,
-    comments: 45,
-    shares: 78,
-    bookmarks: 55,
-    liked: true,
-    bookmarked: false,
-    following: false,
-    timeAgo: '4h ago',
-  },
-  {
-    id: 'post_c003',
-    authorId: 'usr_a003',
-    authorName: 'Selvam Catering',
-    authorRole: 'Verified Vendor',
-    authorAvatar: 'SC',
-    tag: 'food_photo',
-    content: 'Natural light from a north-facing window at 7 AM hits differently for breakfast plating. No ring lights needed! 📸',
-    likes: 726,
-    comments: 103,
-    shares: 112,
-    bookmarks: 188,
-    liked: false,
-    bookmarked: false,
-    following: false,
-    timeAgo: '6h ago',
-  },
-  {
-    id: 'post_c004',
-    authorId: 'usr_a004',
-    authorName: 'Meena Sweets',
-    authorRole: 'New Vendor',
-    authorAvatar: 'MS',
-    tag: 'kitchen_growth',
-    content: 'Went from 8 to 34 orders/day in 3 months. The trick? Respond to every single review — good or bad. Customers notice when you care! 🙌',
-    likes: 545,
-    comments: 89,
-    shares: 45,
-    bookmarks: 122,
-    liked: true,
-    bookmarked: true,
-    following: true,
-    timeAgo: '1d ago',
-  },
-  {
-    id: 'post_c005',
-    authorId: 'usr_a005',
-    authorName: 'Rajan Tiffin House',
-    authorRole: 'Community Leader',
-    authorAvatar: 'RT',
-    tag: 'marketing',
-    content: 'WhatsApp status updates at 7:30 AM showing today\'s specials drove 22% of my weekend orders. Zero ad spend. 💪',
-    likes: 398,
-    comments: 52,
-    shares: 67,
-    bookmarks: 84,
-    liked: false,
-    bookmarked: false,
-    following: true,
-    timeAgo: '1d ago',
-  },
-  {
-    id: 'post_c006',
-    authorId: 'usr_a006',
-    authorName: 'Divya Meals',
-    authorRole: 'Verified Vendor',
-    authorAvatar: 'DM',
-    tag: 'recipe',
-    content: 'Perfect Sambar ratio: 1 cup toor dal, 2 cups tamarind water, 1 tomato, 2 drumsticks. Temper with mustard + curry leaves in ghee. Never fails! 🥘',
-    likes: 612,
-    comments: 94,
-    shares: 156,
-    bookmarks: 203,
-    liked: false,
-    bookmarked: false,
-    following: false,
-    timeAgo: '2d ago',
-  },
-]
+export const communityPosts: CommunityPost[] = []
 
 export const communityTabs = [
   { id: 'tab_feed', label: 'Feed' },
@@ -313,40 +199,19 @@ export const tagMeta: Record<string, { label: string; bg: string; text: string }
   marketing: { label: 'Marketing', bg: '#FF6B35', text: '#fff' },
 }
 
-export const leaderboard = [
-  { id: 'ldr_001', name: 'Annamalai Chef', points: 4820, badge: '🏆', streak: 14, rank: 1 },
-  { id: 'ldr_002', name: 'Selvam Catering', points: 3940, badge: '🥈', streak: 9, rank: 2 },
-  { id: 'ldr_003', name: 'Divya Meals', points: 3580, badge: '🥉', streak: 7, rank: 3 },
-  { id: 'ldr_004', name: 'Priya Kitchen Co.', points: 2920, badge: '⭐', streak: 5, rank: 4 },
-  { id: 'ldr_005', name: 'Meena Sweets', points: 2340, badge: '⭐', streak: 3, rank: 5 },
-]
+export const leaderboard: Array<{ id: string; name: string; points: number; badge: string; streak: number; rank: number }> = []
 
-export const communityGroups = [
-  { id: 'grp_001', name: 'South Indian Chefs', members: 1240, joined: true },
-  { id: 'grp_002', name: 'Coimbatore Vendors', members: 876, joined: true },
-  { id: 'grp_003', name: 'Photography Masters', members: 543, joined: false },
-  { id: 'grp_004', name: 'Business Growth Hub', members: 2100, joined: false },
-  { id: 'grp_005', name: 'Recipe Exchange', members: 1680, joined: false },
-]
+export const communityGroups: Array<{ id: string; name: string; members: number; joined: boolean }> = []
 
 // ──────────────────────────────────────
 // FEZU RIDERS
 // ──────────────────────────────────────
-export const mockRiders: Rider[] = [
-  { id: 'rider_001', name: 'Muthu Kumar', phone: '+91 98001 11001', rating: 4.9, totalDeliveries: 1842, distanceKm: 0.4, status: 'available', vehicleType: 'Scooter', vehicleNo: 'TN 33 AB 1234' },
-  { id: 'rider_002', name: 'Selvam R.', phone: '+91 98001 11002', rating: 4.7, totalDeliveries: 983, distanceKm: 1.1, status: 'busy', vehicleType: 'Bike', vehicleNo: 'TN 33 CD 5678' },
-  { id: 'rider_003', name: 'Karthik P.', phone: '+91 98001 11003', rating: 4.8, totalDeliveries: 2211, distanceKm: 0.8, status: 'available', vehicleType: 'Scooter', vehicleNo: 'TN 33 EF 9012' },
-  { id: 'rider_004', name: 'Ramesh S.', phone: '+91 98001 11004', rating: 4.6, totalDeliveries: 678, distanceKm: 1.5, status: 'available', vehicleType: 'Cycle', vehicleNo: '—' },
-  { id: 'rider_005', name: 'Vijay M.', phone: '+91 98001 11005', rating: 4.5, totalDeliveries: 445, distanceKm: 2.1, status: 'offline', vehicleType: 'Bike', vehicleNo: 'TN 33 GH 3456' },
-]
+export const mockRiders: Rider[] = []
 
-export const deliveryHistory = [
-  { id: 'del_h001', orderId: 'ord_0991', customerName: 'Lakshmi R.', riderName: 'Muthu Kumar', amount: 285, status: 'delivered', time: '9:12 AM', duration: '18 min' },
-  { id: 'del_h002', orderId: 'ord_0992', customerName: 'Ganesh P.', riderName: 'Karthik P.', amount: 170, status: 'delivered', time: '8:45 AM', duration: '22 min' },
-  { id: 'del_h003', orderId: 'ord_0993', customerName: 'Sunita K.', riderName: 'Selvam R.', amount: 350, status: 'delivered', time: '8:20 AM', duration: '27 min' },
-  { id: 'del_h004', orderId: 'ord_0994', customerName: 'Arjun N.', riderName: 'Ramesh S.', amount: 130, status: 'cancelled', time: '7:55 AM', duration: '—' },
-  { id: 'del_h005', orderId: 'ord_0995', customerName: 'Pooja M.', riderName: 'Muthu Kumar', amount: 205, status: 'delivered', time: '7:30 AM', duration: '20 min' },
-]
+export const deliveryHistory: Array<{
+  id: string; orderId: string; customerName: string; riderName: string
+  amount: number; status: string; time: string; duration: string
+}> = []
 
 // ──────────────────────────────────────
 // WALLET TRANSACTIONS
@@ -418,7 +283,6 @@ export const settingsSections = [
     label: 'Account',
     items: [
       { id: 'set_001', icon: '👤', label: 'Profile & Kitchen', sub: 'Name, photo, description' },
-      { id: 'set_002', icon: '📞', label: 'Phone & Email', sub: '+91 98765 43210' },
       { id: 'set_003', icon: '🔒', label: 'Password & Security', sub: 'Change password, 2FA' },
       { id: 'set_004', icon: '📍', label: 'Kitchen Address', sub: '14, Kamaraj St, Coimbatore' },
     ],
@@ -456,13 +320,9 @@ export const settingsSections = [
   },
 ]
 
-export const notificationItems = [
-  { id: 'notif_001', title: 'New Order #ord_1001', body: 'Priya Krishnan placed ₹285 order', time: '2m ago', read: false, type: 'order' },
-  { id: 'notif_002', title: 'Rider Assigned', body: 'Muthu Kumar accepted #ord_1002', time: '5m ago', read: false, type: 'fezu' },
-  { id: 'notif_003', title: 'Payment Received', body: '₹8,420 settlement credited', time: '1h ago', read: true, type: 'payment' },
-  { id: 'notif_004', title: 'New Review ★4.5', body: 'Ravi Kumar reviewed your Masala Dosa', time: '2h ago', read: true, type: 'review' },
-  { id: 'notif_005', title: 'Community Post Liked', body: 'Annamalai Chef liked your recipe post', time: '3h ago', read: true, type: 'community' },
-]
+export const notificationItems: Array<{
+  id: string; title: string; body: string; time: string; read: boolean; type: string
+}> = []
 
 // ──────────────────────────────────────
 // BANK ACCOUNTS
@@ -569,11 +429,7 @@ export const subscriptionInfo = {
     { id: 'feat_006', label: 'White-label Menu Page', included: false },
     { id: 'feat_007', label: 'API Access', included: false },
   ],
-  invoices: [
-    { id: 'inv_001', date: '14 Jun 2026', amount: 1999, status: 'paid' },
-    { id: 'inv_002', date: '14 May 2026', amount: 1999, status: 'paid' },
-    { id: 'inv_003', date: '14 Apr 2026', amount: 1999, status: 'paid' },
-  ],
+  invoices: [] as Array<{ id: string; date: string; amount: number; status: string }>,
 }
 
 // ──────────────────────────────────────
@@ -610,14 +466,7 @@ export interface Review {
   bookmarked: boolean
 }
 
-export const mockReviews: Review[] = [
-  { id: 'rev_001', customerName: 'Priya S.', avatar: 'PS', rating: 5, dish: 'Masala Dosa', comment: 'Absolutely loved it! The dosa was crispy and the sambar was fresh. Will definitely order again!', date: '12 Jul 2026', hasPhoto: true, helpful: 12, bookmarked: false },
-  { id: 'rev_002', customerName: 'Ravi K.', avatar: 'RK', rating: 4, dish: 'Idli Set', comment: 'Great taste, soft idlis. Delivery was slightly delayed but the food quality made up for it.', date: '10 Jul 2026', hasPhoto: false, helpful: 7, bookmarked: false },
-  { id: 'rev_003', customerName: 'Deepa M.', avatar: 'DM', rating: 5, dish: 'Filter Coffee', comment: 'Best filter coffee I have had outside of a hotel. Authentic South Indian taste!', date: '8 Jul 2026', hasPhoto: true, helpful: 18, bookmarked: true },
-  { id: 'rev_004', customerName: 'Karthik R.', avatar: 'KR', rating: 3, dish: 'Pongal', comment: 'Pongal was good but could have been hotter. Packaging was slightly leaky.', date: '5 Jul 2026', hasPhoto: false, helpful: 3, bookmarked: false },
-  { id: 'rev_005', customerName: 'Meena T.', avatar: 'MT', rating: 5, dish: 'Ghee Pongal', comment: 'Perfect ghee pongal! Just like grandma used to make. Generous portion too.', date: '3 Jul 2026', hasPhoto: false, helpful: 9, bookmarked: false },
-  { id: 'rev_006', customerName: 'Senthil A.', avatar: 'SA', rating: 4, dish: 'Rava Dosa', comment: 'Crispy rava dosa. Chutney was excellent. Slightly oily but still tasty.', date: '1 Jul 2026', hasPhoto: true, helpful: 5, bookmarked: false },
-]
+export const mockReviews: Review[] = []
 
 // ──────────────────────────────────────
 // CUSTOMER SUBSCRIPTIONS

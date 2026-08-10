@@ -66,19 +66,25 @@ export default function SettingsSubscriptionScreen({ setScreen }: { setScreen: S
         {/* Billing history */}
         <View style={s.card}>
           <Text style={s.cardTitle}>Billing History</Text>
-          {invoices.map((inv: Invoice, i: number) => (
-            <View key={inv.id} style={[s.invoiceRow, i < invoices.length - 1 && s.invoiceRowBorder]}>
-              <View style={s.invoiceIcon}><Text style={{ fontSize: 16 }}>📄</Text></View>
-              <View style={{ flex: 1 }}>
-                <Text style={s.invoiceDate}>Invoice — {inv.date}</Text>
-                <Text style={s.invoiceMeta}>{plan} Plan · {billingCycle}</Text>
-              </View>
-              <View style={{ alignItems: 'flex-end' }}>
-                <Text style={s.invoiceAmount}>₹{inv.amount}</Text>
-                <Text style={s.invoiceStatus}>{inv.status.toUpperCase()}</Text>
-              </View>
+          {invoices.length === 0 ? (
+            <View style={s.emptyInvoice}>
+              <Text style={s.emptyInvoiceText}>No billing history yet</Text>
             </View>
-          ))}
+          ) : (
+            invoices.map((inv: Invoice, i: number) => (
+              <View key={inv.id} style={[s.invoiceRow, i < invoices.length - 1 && s.invoiceRowBorder]}>
+                <View style={s.invoiceIcon}><Text style={{ fontSize: 16 }}>📄</Text></View>
+                <View style={{ flex: 1 }}>
+                  <Text style={s.invoiceDate}>Invoice — {inv.date}</Text>
+                  <Text style={s.invoiceMeta}>{plan} Plan · {billingCycle}</Text>
+                </View>
+                <View style={{ alignItems: 'flex-end' }}>
+                  <Text style={s.invoiceAmount}>₹{inv.amount}</Text>
+                  <Text style={s.invoiceStatus}>{inv.status.toUpperCase()}</Text>
+                </View>
+              </View>
+            ))
+          )}
         </View>
 
         {/* Cancel */}
@@ -124,4 +130,6 @@ const s = StyleSheet.create({
   invoiceStatus: { fontFamily: F.interBold, fontSize: 10, color: C.green, letterSpacing: 1 },
   cancelBtn: {  borderRadius: 10, padding: 12, alignItems: 'center' },
   cancelBtnText: { fontFamily: F.interBold, fontSize: 13, color: C.red },
+  emptyInvoice: { paddingVertical: 16, alignItems: 'center' },
+  emptyInvoiceText: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.35 },
 })

@@ -18,7 +18,7 @@ const FILTERS = [
   { id: 'wf_pending', label: 'Pending' },
 ]
 
-export default function WalletScreen({ setScreen: _setScreen }: { setScreen: SetScreen }) {
+export default function WalletScreen({ setScreen }: { setScreen: SetScreen }) {
   const { vendor } = useVendor()
   const email       = vendor?.email ?? ''
   const kitchenName = vendor?.company_name ?? 'My Kitchen'
@@ -70,6 +70,14 @@ export default function WalletScreen({ setScreen: _setScreen }: { setScreen: Set
 
   return (
     <ScrollView style={s.root} contentContainerStyle={s.body}>
+      {/* Header */}
+      <View style={s.header}>
+        <TouchableOpacity onPress={() => setScreen('settings')}>
+          <Text style={s.back}>←</Text>
+        </TouchableOpacity>
+        <Text style={s.headerTitle}>Wallet</Text>
+      </View>
+
       {/* Hero balance card */}
       <View style={s.heroCard}>
         <Text style={s.heroLabel}>FEAZTO WALLET · {kitchenName.toUpperCase()}</Text>
@@ -169,6 +177,9 @@ export default function WalletScreen({ setScreen: _setScreen }: { setScreen: Set
 
 const s = StyleSheet.create({
   root: { flex: 1, width: '100%', backgroundColor: C.cream },
+  header: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 20, paddingTop: 20, paddingBottom: 4 },
+  back: { fontSize: 22, color: C.black },
+  headerTitle: { fontFamily: F.barlow, fontSize: 26, color: C.black },
   body: { padding: 20, gap: 12, paddingBottom: 32 },
   heroCard: { backgroundColor: C.black, borderRadius: 16, ...shadow(6, 6, C.yellow), padding: 20 },
   heroLabel: { fontFamily: F.interBold, fontSize: 11, color: C.cream, opacity: 0.55, letterSpacing: 1, marginBottom: 4 },

@@ -1,12 +1,12 @@
 /**
  * FezuContext — FEZU automatic rider assignment store.
  *
- * Frontend-only mock implementation. All logic lives here.
- * To wire a real backend: replace the internals of each function
- * while keeping the same hook shape — components won't need changes.
+ * Riders and delivery history are loaded from Firestore.
+ * Falls back to MOCK_RIDERS if Firestore is unreachable.
  *
  * Public API (useFezuStore):
  *   riders              — live rider list with jittered locations
+ *   deliveryHistory     — past deliveries from Firestore
  *   getOrderDelivery    — delivery state for a given orderId
  *   triggerAssignment   — called when order reaches READY_FOR_PICKUP
  *   retryAssignment     — manual retry for "no rider found" case
@@ -22,6 +22,16 @@ import {
   type MockRider,
 } from '../data/mockRiders'
 import type { DeliveryStatus } from '../data/menuStore'
+import {
+  clearAllRiders,
+  subscribeAllRiders,
+  updateRiderStatus,
+  subscribeDeliveryHistory,
+  addDeliveryHistoryEntry,
+  type DeliveryHistoryEntry,
+} from '../../../backend/services/riderService'
+import { useVendor } from './VendorContext'
+import type { VendorOrder } from '../data/menuStore'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -47,10 +57,15 @@ export interface DeliveryEntry {
 
 interface FezuContextValue {
   riders: MockRider[]
+  deliveryHistory: DeliveryHistoryEntry[]
   allDeliveries: Record<string, DeliveryEntry>
+  simulateNoRiders: boolean
+  setSimulateNoRiders: (val: boolean | ((prev: boolean) => boolean)) => void
   getOrderDelivery: (orderId: string) => DeliveryEntry
   triggerAssignment: (orderId: string) => void
   retryAssignment: (orderId: string) => void
+  /** Call this from App.tsx to keep the context's order reference in sync */
+  setVendorOrdersRef: (orders: VendorOrder[]) => void
 }
 
 // ── Defaults ──────────────────────────────────────────────────────────────────
@@ -77,33 +92,48 @@ const PROGRESSION: Array<{ status: DeliveryStatus; delayMs: number }> = [
 
 const FezuContext = createContext<FezuContextValue>({
   riders: MOCK_RIDERS,
+  deliveryHistory: [],
   allDeliveries: {},
+  simulateNoRiders: false,
+  setSimulateNoRiders: () => {},
   getOrderDelivery: () => IDLE_ENTRY,
   triggerAssignment: () => {},
   retryAssignment: () => {},
+  setVendorOrdersRef: () => {},
 })
 
 export function FezuProvider({ children }: { children: React.ReactNode }) {
   const [riders, setRiders] = useState<MockRider[]>(MOCK_RIDERS)
   const [deliveries, setDeliveries] = useState<Record<string, DeliveryEntry>>({})
+  const [deliveryHistory, setDeliveryHistory] = useState<DeliveryHistoryEntry[]>([])
+  const [simulateNoRiders, setSimulateNoRiders] = useState<boolean>(false)
   const timersRef = useRef<Record<string, ReturnType<typeof setTimeout>[]>>({})
+  const { vendor } = useVendor()
+  const email = vendor?.email ?? ''
 
-  // ── Location jitter — moves all online riders slightly every 4s ──────────
-  useEffect(() => {
-    const id = setInterval(() => {
-      setRiders(prev => prev.map(r => {
-        if (r.status === 'offline') return r
-        return {
-          ...r,
-          currentLocation: {
-            lat: r.currentLocation.lat + (Math.random() - 0.5) * 0.0008,
-            lng: r.currentLocation.lng + (Math.random() - 0.5) * 0.0008,
-          },
-        }
-      }))
-    }, 4_000)
-    return () => clearInterval(id)
+  // Ref to latest vendorOrders — updated by App.tsx via setVendorOrdersRef
+  const vendorOrdersRef = useRef<VendorOrder[]>([])
+  const setVendorOrdersRef = useCallback((orders: VendorOrder[]) => {
+    vendorOrdersRef.current = orders
   }, [])
+
+  // ── Clear stale Firestore riders & subscribe on mount ────────────────────
+  useEffect(() => {
+    clearAllRiders()   // wipes any old seeded documents from Firestore
+    const unsub = subscribeAllRiders(liveRiders => {
+      setRiders(liveRiders)
+    })
+    return unsub
+  }, [])
+
+  // ── Subscribe to delivery history once vendor email is known ──────────────
+  useEffect(() => {
+    if (!email) return
+    const unsub = subscribeDeliveryHistory(email, entries => {
+      setDeliveryHistory(entries)
+    })
+    return unsub
+  }, [email])
 
   // ── Core assignment logic ─────────────────────────────────────────────────
 
@@ -125,8 +155,10 @@ export function FezuProvider({ children }: { children: React.ReactNode }) {
 
     const searchTimer = setTimeout(() => {
       setRiders(currentRiders => {
-        // Find nearest online rider
-        const available = currentRiders.filter(r => r.status === 'online' && !r.currentOrderId)
+        // If simulateNoRiders flag is ON, simulate no available rider
+        const available = simulateNoRiders
+          ? []
+          : currentRiders.filter(r => r.status === 'online' && !r.currentOrderId)
 
         if (available.length === 0) {
           // No rider available
@@ -179,6 +211,9 @@ export function FezuProvider({ children }: { children: React.ReactNode }) {
             : r,
         )
 
+        // Sync rider status to Firestore
+        updateRiderStatus(nearest.riderId, { status: 'busy', currentOrderId: orderId })
+
         // Schedule delivery progression
         let cumulative = 0
         const orderTimers: ReturnType<typeof setTimeout>[] = []
@@ -192,13 +227,33 @@ export function FezuProvider({ children }: { children: React.ReactNode }) {
               return { ...prev, [orderId]: { ...entry, deliveryStatus: status } }
             })
 
-            // On DELIVERED, release rider
+            // On DELIVERED, release rider and write history entry
             if (status === 'DELIVERED') {
               setRiders(r => r.map(rx =>
                 rx.riderId === nearest.riderId
                   ? { ...rx, status: 'online' as const, currentOrderId: null }
                   : rx,
               ))
+              // Sync release back to Firestore
+              updateRiderStatus(nearest.riderId, { status: 'online', currentOrderId: null })
+
+              // Write real delivery history entry from actual order data
+              if (email) {
+                const order = vendorOrdersRef.current.find(o => o.id === orderId)
+                const now = new Date()
+                const historyEntry: DeliveryHistoryEntry = {
+                  id: `del_${orderId}_${now.getTime()}`,
+                  orderId,
+                  customerName: order?.customerName ?? 'Customer',
+                  riderName: nearest.name,
+                  amount: order?.total ?? 0,
+                  status: 'delivered',
+                  time: now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+                  duration: `${Math.round((PROGRESSION.reduce((s, p) => s + p.delayMs, 0)) / 60000)} min`,
+                  createdAt: now.toISOString(),
+                }
+                addDeliveryHistoryEntry(email, historyEntry)
+              }
             }
           }, cumulative)
           orderTimers.push(t)
@@ -278,10 +333,14 @@ export function FezuProvider({ children }: { children: React.ReactNode }) {
   return (
     <FezuContext.Provider value={{
       riders,
+      deliveryHistory,
       allDeliveries: deliveries,
+      simulateNoRiders,
+      setSimulateNoRiders,
       getOrderDelivery,
       triggerAssignment,
       retryAssignment,
+      setVendorOrdersRef,
     }}>
       {children}
     </FezuContext.Provider>

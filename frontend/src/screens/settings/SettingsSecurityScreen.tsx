@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView, TextInput, Modal, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
+import Toggle from '../../components/Toggle'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
 
@@ -75,9 +76,7 @@ export default function SettingsSecurityScreen({ setScreen }: { setScreen: SetSc
                 <Text style={s.toggleLabel}>{item.label}</Text>
                 <Text style={s.toggleSub}>{item.sub}</Text>
               </View>
-              <TouchableOpacity onPress={item.set} style={[s.toggle, { backgroundColor: item.val ? C.green : '#ddd' }]}>
-                <View style={[s.toggleThumb, { left: item.val ? 18 : 2 }]} />
-              </TouchableOpacity>
+              <Toggle value={item.val} onToggle={item.set} />
             </View>
           ))}
         </View>
@@ -159,8 +158,8 @@ const s = StyleSheet.create({
   toggleIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center' },
   toggleLabel: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   toggleSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.4 },
-  toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },
-  toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
+  toggle: {},
+  toggleThumb: {},
   dangerCard: { backgroundColor: '#FEE2E2',  borderColor: C.red, borderRadius: 14, ...shadow(4, 4, C.red), padding: 14, marginBottom: 24 },
   dangerTitle: { fontFamily: F.interBold, fontSize: 13, color: C.black, marginBottom: 4 },
   dangerSub: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.6, marginBottom: 12 },

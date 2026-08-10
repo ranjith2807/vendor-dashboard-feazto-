@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
+import Toggle from '../../components/Toggle'
 import type { SetScreen } from '../../types'
 import { operatingHours, type DayHours } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
@@ -55,12 +56,7 @@ export default function SettingsHoursScreen({ setScreen }: { setScreen: SetScree
               </View>
               <Text style={[s.dayName, !day.open && s.textMuted]}>{day.day}</Text>
               <Text style={s.hoursLabel}>{day.open ? `${day.from} – ${day.to}` : 'Closed'}</Text>
-              <TouchableOpacity
-                onPress={() => toggle(day.id)}
-                style={[s.toggle, { backgroundColor: day.open ? C.green : '#ddd' }]}
-              >
-                <View style={[s.toggleThumb, { left: day.open ? 18 : 2 }]} />
-              </TouchableOpacity>
+              <Toggle value={day.open} onToggle={() => toggle(day.id)} />
             </View>
 
             {day.open && (
@@ -113,8 +109,8 @@ const s = StyleSheet.create({
   dayName: { fontFamily: F.interBold, fontSize: 14, color: C.black, flex: 1 },
   textMuted: { color: '#999' },
   hoursLabel: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.45, marginRight: 8 },
-  toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },
-  toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
+  toggle: {},
+  toggleThumb: {},
   timesRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 },
   timeLabel: { fontFamily: F.interBold, fontSize: 10, letterSpacing: 1, color: C.black, opacity: 0.4, marginBottom: 4 },
   timeInput: { fontFamily: F.interBold, fontSize: 15, backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', borderRadius: 8, padding: 8, paddingHorizontal: 10, color: C.black },

@@ -5,16 +5,6 @@ import type { SetScreen, NavParams } from '../../types'
 import { mockReviews, type Review } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
 
-const DIST = [
-  { id: 'dist_5', stars: 5, count: 3 },
-  { id: 'dist_4', stars: 4, count: 2 },
-  { id: 'dist_3', stars: 3, count: 1 },
-  { id: 'dist_2', stars: 2, count: 0 },
-  { id: 'dist_1', stars: 1, count: 0 },
-]
-const total = DIST.reduce((a, d) => a + d.count, 0)
-const avg = (DIST.reduce((a, d) => a + d.stars * d.count, 0) / total).toFixed(1)
-
 function Stars({ rating, size = 14 }: { rating: number; size?: number }) {
   return (
     <View style={{ flexDirection: 'row', gap: 2 }}>
@@ -29,6 +19,17 @@ export default function ReviewsScreen({ setScreen, navParams: _navParams }: { se
   const [filter, setFilter] = useState<number>(0)
   const [reviews, setReviews] = useState<Review[]>(mockReviews)
 
+  // Compute stats dynamically from real reviews
+  const total = reviews.length
+  const avg = total > 0
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / total).toFixed(1)
+    : '0.0'
+  const dist = [5, 4, 3, 2, 1].map(stars => ({
+    id: `dist_${stars}`,
+    stars,
+    count: reviews.filter(r => r.rating === stars).length,
+  }))
+
   const filtered = filter === 0 ? reviews : reviews.filter((r: Review) => r.rating === filter)
   const bookmark = (id: string) => setReviews((p: Review[]) => p.map((r: Review) => r.id === id ? { ...r, bookmarked: !r.bookmarked } : r))
 
@@ -41,64 +42,79 @@ export default function ReviewsScreen({ setScreen, navParams: _navParams }: { se
         <Text style={s.title}>Reviews & Ratings</Text>
       </View>
 
-      {/* Summary card */}
-      <View style={s.summaryCard}>
-        <View style={s.ratingBig}>
-          <Text style={s.avgText}>{avg}</Text>
-          <Stars rating={Math.round(parseFloat(avg))} size={16} />
-          <Text style={s.totalText}>{total} reviews</Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          {DIST.map(d => (
-            <View key={d.id} style={s.distRow}>
-              <Text style={s.distStar}>{d.stars}</Text>
-              <Text style={s.distStarIcon}>★</Text>
-              <View style={s.distBar}>
-                <View style={[s.distFill, { width: total ? `${(d.count / total) * 100}%` as any : '0%' }]} />
-              </View>
-              <Text style={s.distCount}>{d.count}</Text>
-            </View>
-          ))}
-        </View>
-      </View>
-
-      {/* Filter chips */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.filtersScroll} contentContainerStyle={s.filtersContent}>
-        {[{ id: 'rf_all', label: 'All', val: 0 }, ...[5, 4, 3, 2, 1].map(n => ({ id: `rf_${n}`, label: `${n} ★`, val: n }))].map(f => {
-          const active = filter === f.val
-          return (
-            <TouchableOpacity key={f.id} onPress={() => setFilter(f.val)} style={[s.chip, active && s.chipActive]}>
-              <Text style={[s.chipText, active && s.chipTextActive]}>{f.label}</Text>
-            </TouchableOpacity>
-          )
-        })}
-      </ScrollView>
-
-      <ScrollView style={s.scroll} contentContainerStyle={s.list}>
-        {filtered.length === 0 ? (
-          <View style={s.empty}>
-            <Text style={{ fontSize: 48, marginBottom: 12 }}>⭐</Text>
-            <Text style={s.emptyTitle}>No {filter}★ Reviews Yet</Text>
+      {/* Empty state — no reviews at all */}
+      {total === 0 ? (
+        <View style={s.emptyWrap}>
+          <View style={s.emptyIconWrap}>
+            <Text style={s.emptyIcon}>⭐</Text>
           </View>
-        ) : filtered.map((rev: Review) => (
-          <TouchableOpacity key={rev.id} style={s.card} onPress={() => setScreen('review_detail', { id: rev.id })}>
-            <View style={s.cardTop}>
-              <View style={s.avatar}><Text style={s.avatarText}>{rev.avatar}</Text></View>
-              <View style={{ flex: 1 }}>
-                <Text style={s.customerName}>{rev.customerName}</Text>
-                <Text style={s.meta}>{rev.date} · {rev.dish}</Text>
-              </View>
-              <TouchableOpacity onPress={() => bookmark(rev.id)} style={{ opacity: rev.bookmarked ? 1 : 0.3 }}>
-                <Text style={{ fontSize: 18 }}>🔖</Text>
-              </TouchableOpacity>
+          <Text style={s.emptyTitle}>No reviews yet</Text>
+          <Text style={s.emptySub}>
+            Customer reviews will appear here{'\n'}once they rate your orders.
+          </Text>
+        </View>
+      ) : (
+        <>
+          {/* Summary card — computed from real data */}
+          <View style={s.summaryCard}>
+            <View style={s.ratingBig}>
+              <Text style={s.avgText}>{avg}</Text>
+              <Stars rating={Math.round(parseFloat(avg))} size={16} />
+              <Text style={s.totalText}>{total} review{total !== 1 ? 's' : ''}</Text>
             </View>
-            <Stars rating={rev.rating} />
-            <Text style={s.comment} numberOfLines={2}>{rev.comment}</Text>
-            {rev.hasPhoto && <Text style={s.photoTag}>📷 Photo attached</Text>}
-            <Text style={s.helpful}>👍 {rev.helpful} found helpful</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+            <View style={{ flex: 1 }}>
+              {dist.map(d => (
+                <View key={d.id} style={s.distRow}>
+                  <Text style={s.distStar}>{d.stars}</Text>
+                  <Text style={s.distStarIcon}>★</Text>
+                  <View style={s.distBar}>
+                    <View style={[s.distFill, { width: total ? `${(d.count / total) * 100}%` as any : '0%' }]} />
+                  </View>
+                  <Text style={s.distCount}>{d.count}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Filter chips */}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.filtersScroll} contentContainerStyle={s.filtersContent}>
+            {[{ id: 'rf_all', label: 'All', val: 0 }, ...[5, 4, 3, 2, 1].map(n => ({ id: `rf_${n}`, label: `${n} ★`, val: n }))].map(f => {
+              const active = filter === f.val
+              return (
+                <TouchableOpacity key={f.id} onPress={() => setFilter(f.val)} style={[s.chip, active && s.chipActive]}>
+                  <Text style={[s.chipText, active && s.chipTextActive]}>{f.label}</Text>
+                </TouchableOpacity>
+              )
+            })}
+          </ScrollView>
+
+          <ScrollView style={s.scroll} contentContainerStyle={s.list}>
+            {filtered.length === 0 ? (
+              <View style={s.empty}>
+                <Text style={{ fontSize: 48, marginBottom: 12 }}>⭐</Text>
+                <Text style={s.emptyTitle}>No {filter}★ Reviews Yet</Text>
+              </View>
+            ) : filtered.map((rev: Review) => (
+              <TouchableOpacity key={rev.id} style={s.card} onPress={() => setScreen('review_detail', { id: rev.id })}>
+                <View style={s.cardTop}>
+                  <View style={s.avatar}><Text style={s.avatarText}>{rev.avatar}</Text></View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={s.customerName}>{rev.customerName}</Text>
+                    <Text style={s.meta}>{rev.date} · {rev.dish}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => bookmark(rev.id)} style={{ opacity: rev.bookmarked ? 1 : 0.3 }}>
+                    <Text style={{ fontSize: 18 }}>🔖</Text>
+                  </TouchableOpacity>
+                </View>
+                <Stars rating={rev.rating} />
+                <Text style={s.comment} numberOfLines={2}>{rev.comment}</Text>
+                {rev.hasPhoto && <Text style={s.photoTag}>📷 Photo attached</Text>}
+                <Text style={s.helpful}>👍 {rev.helpful} found helpful</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </>
+      )}
     </View>
   )
 }
@@ -128,6 +144,10 @@ const s = StyleSheet.create({
   list: { paddingHorizontal: 20, paddingBottom: 24, gap: 10 },
   empty: { alignItems: 'center', paddingTop: 40 },
   emptyTitle: { fontFamily: F.barlow, fontSize: 22, color: C.black },
+  emptyWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingBottom: 60, gap: 12 },
+  emptyIconWrap: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.yellow, ...shadow(4, 4), alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
+  emptyIcon: { fontSize: 36 },
+  emptySub: { fontFamily: F.inter, fontSize: 14, color: C.black, opacity: 0.4, textAlign: 'center', lineHeight: 21 },
   card: { backgroundColor: C.white, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(3, 3), padding: 14 },
   cardTop: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
   avatar: { width: 38, height: 38, borderRadius: 19, backgroundColor: C.yellow, alignItems: 'center', justifyContent: 'center' },

@@ -1,232 +1,156 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import {
   View, Text, TextInput, StyleSheet, ActivityIndicator,
-  NativeSyntheticEvent, TextInputKeyPressEventData, KeyboardAvoidingView, Platform, ScrollView,
+  KeyboardAvoidingView, Platform, ScrollView,
 } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
-import { sendEmailOtp, verifyEmailOtp } from '../../../../backend/services/brevoService'
+import { getVendorByEmail } from '../../../../backend/services/vendorService'
 import { getVendorStatus } from '../../../../backend/services/vendorService'
 import { useVendor } from '../../context/VendorContext'
 import type { Screen } from '../../types'
 
 export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => void }) {
   const { loadVendor, clearVendor } = useVendor()
-  const [email, setEmail] = useState('')
-  const [otp, setOtp] = useState(['', '', '', '', '', ''])
-  const [step, setStep] = useState<'email' | 'otp'>('email')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [resendCooldown, setResendCooldown] = useState(0)
-  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const inputRefs = useRef<(TextInput | null)[]>([])
+
+  const [email, setEmail]       = useState('')
+  const [password, setPassword] = useState('')
+  const [showPwd, setShowPwd]   = useState(false)
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
 
   const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
+  const canSubmit = isValidEmail(email) && password.length >= 1 && !loading
 
-  const startCooldown = () => {
-    setResendCooldown(30)
-    cooldownRef.current = setInterval(() => {
-      setResendCooldown(prev => {
-        if (prev <= 1) { clearInterval(cooldownRef.current!); return 0 }
-        return prev - 1
-      })
-    }, 1000)
-  }
-
-  // ── Send OTP ──────────────────────────────────────────────────────────────
-  const handleSendOtp = async () => {
-    if (!isValidEmail(email)) return
+  const handleLogin = async () => {
+    if (!canSubmit) return
     setLoading(true)
     setError('')
-    const result = await sendEmailOtp(email)
-    setLoading(false)
-    if (result.success) {
-      setStep('otp')
-      startCooldown()
-      setTimeout(() => inputRefs.current[0]?.focus(), 300)
-    } else {
-      setError(result.message)
-    }
-  }
 
-  // ── Verify OTP then check vendor status in Firestore ──────────────────────
-  const handleVerify = async (code: string) => {
-    if (code.length !== 6) return
-    const otpResult = verifyEmailOtp(email, code)
-    if (!otpResult.success) {
-      setError(otpResult.message)
-      setOtp(['', '', '', '', '', ''])
-      setTimeout(() => inputRefs.current[0]?.focus(), 100)
-      return
-    }
+    try {
+      // Check vendor exists and get their status
+      const status = await getVendorStatus(email.trim().toLowerCase())
 
-    // OTP verified — now check vendor status in Firestore
-    setLoading(true)
-    const status = await getVendorStatus(email)
-
-    if (status === 'approved' || status === 'pending' || status === 'rejected') {
-      await loadVendor(email) // load full vendor data into context
-    }
-
-    setLoading(false)
-
-    switch (status) {
-      case 'approved':   setScreen('dashboard');    break
-      case 'pending':    setScreen('app_review');   break
-      case 'rejected':   setScreen('app_rejected'); break
-      case 'not_found':
-        clearVendor()
+      if (status === 'not_found') {
         setError('No account found for this email. Please register first.')
-        setStep('email')
-        setOtp(['', '', '', '', '', ''])
-        break
-    }
-  }
+        setLoading(false)
+        return
+      }
 
-  // ── Resend OTP ────────────────────────────────────────────────────────────
-  const handleResend = async () => {
-    if (resendCooldown > 0) return
-    setLoading(true)
-    setError('')
-    const result = await sendEmailOtp(email)
-    setLoading(false)
-    if (result.success) {
-      startCooldown()
-      setOtp(['', '', '', '', '', ''])
-      setTimeout(() => inputRefs.current[0]?.focus(), 100)
-    } else {
-      setError(result.message)
-    }
-  }
+      // Fetch the full vendor record to verify password
+      const vendorRecord = await getVendorByEmail(email.trim().toLowerCase())
 
-  const handleOtpChange = (idx: number, val: string) => {
-    const clean = val.replace(/[^0-9]/g, '')
-    const next = [...otp]
-    next[idx] = clean
-    setOtp(next)
-    setError('')
-    if (clean && idx < 5) inputRefs.current[idx + 1]?.focus()
-    if (clean && idx === 5 && next.every(d => d)) {
-      setTimeout(() => handleVerify(next.join('')), 200)
-    }
-  }
+      if (!vendorRecord) {
+        setError('Account not found. Please register first.')
+        setLoading(false)
+        return
+      }
 
-  const handleOtpKeyPress = (idx: number, e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-    if (e.nativeEvent.key === 'Backspace' && !otp[idx] && idx > 0) {
-      inputRefs.current[idx - 1]?.focus()
-    }
-  }
+      // Password check — compare against stored password field
+      if (vendorRecord.password && vendorRecord.password !== password) {
+        setError('Incorrect password. Please try again.')
+        setLoading(false)
+        return
+      }
 
-  const handleBack = () => {
-    setStep('email')
-    setOtp(['', '', '', '', '', ''])
-    setError('')
-    if (cooldownRef.current) clearInterval(cooldownRef.current)
-    setResendCooldown(0)
+      // Load vendor into context
+      await loadVendor(email.trim().toLowerCase())
+      setLoading(false)
+
+      switch (status) {
+        case 'approved':  setScreen('dashboard');    break
+        case 'pending':   setScreen('app_review');   break
+        case 'rejected':  setScreen('app_rejected'); break
+        default:          setScreen('dashboard');    break
+      }
+    } catch {
+      setError('Something went wrong. Please try again.')
+      setLoading(false)
+    }
   }
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <View style={styles.mascot}>
-          <Text style={styles.mascotIcon}>🍽️</Text>
+      <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
+
+        {/* Logo */}
+        <View style={s.mascot}>
+          <Text style={s.mascotIcon}>🍽️</Text>
         </View>
-        <Text style={styles.brand}>FEAZTO</Text>
-        <Text style={styles.sub}>Vendor Partner App</Text>
+        <Text style={s.brand}>FEAZTO</Text>
+        <Text style={s.sub}>Vendor Partner App</Text>
 
-        <View style={styles.card}>
-          {step === 'email' ? (
-            <>
-              <Text style={styles.cardTitle}>Welcome back!</Text>
-              <Text style={styles.cardSub}>Enter your registered email address</Text>
-              <Text style={styles.label}>EMAIL ADDRESS</Text>
-              <TextInput
-                placeholder="you@example.com"
-                value={email}
-                onChangeText={t => { setEmail(t.trim()); setError('') }}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                style={[styles.input, error ? styles.inputError : null]}
-                returnKeyType="done"
-                onSubmitEditing={handleSendOtp}
-                editable={!loading}
-              />
-              {error ? <Text style={styles.errorText}>{error}</Text> : null}
-              <TouchableOpacity
-                style={[styles.btn, isValidEmail(email) && !loading ? styles.btnActive : null]}
-                onPress={handleSendOtp}
-                disabled={!isValidEmail(email) || loading}
-              >
-                {loading
-                  ? <ActivityIndicator color="#000" />
-                  : <Text style={styles.btnText}>Get OTP →</Text>
-                }
-              </TouchableOpacity>
-            </>
-          ) : (
-            <>
-              <Text style={styles.cardTitle}>Verify OTP</Text>
-              <Text style={styles.cardSub}>6-digit code sent to{'\n'}{email}</Text>
-              <View style={styles.otpRow}>
-                {otp.map((val, idx) => (
-                  <TextInput
-                    key={idx}
-                    ref={el => { inputRefs.current[idx] = el }}
-                    value={val}
-                    onChangeText={v => handleOtpChange(idx, v)}
-                    onKeyPress={e => handleOtpKeyPress(idx, e)}
-                    keyboardType="number-pad"
-                    maxLength={1}
-                    selectTextOnFocus
-                    style={[styles.otpBox, val ? styles.otpBoxFilled : null]}
-                  />
-                ))}
-              </View>
+        {/* Login card */}
+        <View style={s.card}>
+          <Text style={s.cardTitle}>Welcome back!</Text>
+          <Text style={s.cardSub}>Sign in to your vendor account</Text>
 
-              {/* Resend */}
-              <View style={styles.resendWrap}>
-                {resendCooldown > 0 ? (
-                  <Text style={styles.cooldownText}>Resend in {resendCooldown}s</Text>
-                ) : (
-                  <TouchableOpacity onPress={handleResend} disabled={loading}>
-                    <Text style={[styles.resendText, loading && styles.dimmed]}>Resend OTP</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+          {/* Email */}
+          <Text style={s.label}>EMAIL ADDRESS</Text>
+          <TextInput
+            placeholder="you@example.com"
+            value={email}
+            onChangeText={t => { setEmail(t.trim()); setError('') }}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            style={[s.input, !!error && s.inputError]}
+            returnKeyType="next"
+            editable={!loading}
+          />
 
-              {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          {/* Password */}
+          <Text style={s.label}>PASSWORD</Text>
+          <View style={s.pwdWrap}>
+            <TextInput
+              placeholder="Enter your password"
+              value={password}
+              onChangeText={t => { setPassword(t); setError('') }}
+              secureTextEntry={!showPwd}
+              style={[s.input, s.pwdInput, !!error && s.inputError]}
+              returnKeyType="done"
+              onSubmitEditing={handleLogin}
+              editable={!loading}
+            />
+            <TouchableOpacity
+              style={s.eyeBtn}
+              onPress={() => setShowPwd(v => !v)}
+            >
+              <Text style={s.eyeIcon}>{showPwd ? '🙈' : '👁'}</Text>
+            </TouchableOpacity>
+          </View>
 
-              <TouchableOpacity
-                style={[styles.btn, otp.every(d => d) && !loading ? styles.btnActive : null]}
-                onPress={() => handleVerify(otp.join(''))}
-                disabled={!otp.every(d => d) || loading}
-              >
-                {loading
-                  ? <ActivityIndicator color="#000" />
-                  : <Text style={styles.btnText}>Verify &amp; Login →</Text>
-                }
-              </TouchableOpacity>
+          {/* Error */}
+          {!!error && <Text style={s.errorText}>{error}</Text>}
 
-              <TouchableOpacity style={styles.changeBtn} onPress={handleBack}>
-                <Text style={styles.changeBtnText}>← Change email</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={() => setScreen('forgot_password')}>
-            <Text style={styles.link}>Forgot Password?</Text>
+          {/* Login button */}
+          <TouchableOpacity
+            style={[s.btn, canSubmit && s.btnActive]}
+            onPress={handleLogin}
+            disabled={!canSubmit}
+          >
+            {loading
+              ? <ActivityIndicator color="#000" />
+              : <Text style={s.btnText}>Login →</Text>
+            }
           </TouchableOpacity>
-          <View style={styles.row}>
-            <Text style={styles.footerText}>New vendor? </Text>
+
+          {/* Forgot password */}
+          <TouchableOpacity style={s.forgotBtn} onPress={() => setScreen('forgot_password')}>
+            <Text style={s.forgotText}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Register link */}
+        <View style={s.footer}>
+          <View style={s.row}>
+            <Text style={s.footerText}>New vendor? </Text>
             <TouchableOpacity onPress={() => setScreen('register_1')}>
-              <Text style={styles.link}>Register here →</Text>
+              <Text style={s.link}>Register here →</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Text style={styles.tos}>
+        <Text style={s.tos}>
           By continuing you agree to FEAZTO's Terms &amp; Privacy Policy
         </Text>
       </ScrollView>
@@ -234,7 +158,7 @@ export default function AuthScreen({ setScreen }: { setScreen: (s: Screen) => vo
   )
 }
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
   scroll: {
     flexGrow: 1, backgroundColor: '#FFF8E7',
     alignItems: 'center', paddingHorizontal: 24, paddingTop: 28, paddingBottom: 24,
@@ -246,47 +170,47 @@ const styles = StyleSheet.create({
   mascotIcon: { fontSize: 40 },
   brand: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 38, letterSpacing: 1.5, marginBottom: 2 },
   sub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.45, marginBottom: 28 },
+
   card: {
     width: '100%', backgroundColor: '#fff', borderRadius: 16, padding: 20,
     shadowColor: '#000', shadowOffset: { width: 6, height: 6 }, shadowOpacity: 1, shadowRadius: 0, elevation: 6,
   },
-  cardTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 22, marginBottom: 4 },
-  cardSub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 18, lineHeight: 20 },
-  label: { fontFamily: 'Inter_700Bold', fontSize: 12, letterSpacing: 1, marginBottom: 6 },
+  cardTitle: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 26, marginBottom: 4 },
+  cardSub: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5, marginBottom: 20 },
+
+  label: { fontFamily: 'Inter_700Bold', fontSize: 11, letterSpacing: 1, marginBottom: 6, opacity: 0.6 },
   input: {
     width: '100%', fontFamily: 'Inter_400Regular', fontSize: 15,
     backgroundColor: '#FFF8E7', borderWidth: 2, borderColor: '#000',
     borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, marginBottom: 16,
   },
   inputError: { borderColor: '#e53e3e' },
-  otpRow: { flexDirection: 'row', gap: 8, justifyContent: 'center', marginBottom: 16 },
-  otpBox: {
-    width: 42, height: 50, fontFamily: 'BarlowCondensed_700Bold', fontSize: 24,
-    textAlign: 'center', backgroundColor: '#FFF8E7', borderWidth: 2, borderColor: '#bbb', borderRadius: 10,
-  },
-  otpBoxFilled: {
-    backgroundColor: '#FFC50A', borderColor: '#000',
-    shadowColor: '#000', shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3,
-  },
-  resendWrap: { alignItems: 'center', marginBottom: 14 },
-  resendText: { fontFamily: 'Inter_700Bold', fontSize: 13, textDecorationLine: 'underline', opacity: 0.7 },
-  cooldownText: { fontFamily: 'Inter_400Regular', fontSize: 12, opacity: 0.5 },
-  dimmed: { opacity: 0.4 },
+
+  pwdWrap: { position: 'relative', width: '100%' },
+  pwdInput: { paddingRight: 48 },
+  eyeBtn: { position: 'absolute', right: 14, top: 0, bottom: 16, justifyContent: 'center' },
+  eyeIcon: { fontSize: 18, opacity: 0.5 },
+
   errorText: {
     fontFamily: 'Inter_700Bold', fontSize: 12, color: '#e53e3e',
-    textAlign: 'center', marginBottom: 12,
+    textAlign: 'center', marginBottom: 12, marginTop: -8,
   },
-  btn: { backgroundColor: '#ddd', borderRadius: 12, padding: 13, alignItems: 'center', marginBottom: 10 },
+  btn: {
+    backgroundColor: '#ddd', borderRadius: 12, padding: 14,
+    alignItems: 'center', marginBottom: 8,
+  },
   btnActive: {
     backgroundColor: '#FFC50A',
     shadowColor: '#000', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
   },
-  btnText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 17, letterSpacing: 1 },
-  changeBtn: { alignItems: 'center', paddingVertical: 8 },
-  changeBtnText: { fontFamily: 'Inter_700Bold', fontSize: 13, opacity: 0.4 },
-  footer: { marginTop: 16, alignItems: 'center', gap: 10 },
+  btnText: { fontFamily: 'BarlowCondensed_700Bold', fontSize: 18, letterSpacing: 1 },
+
+  forgotBtn: { alignItems: 'center', paddingVertical: 8 },
+  forgotText: { fontFamily: 'Inter_700Bold', fontSize: 13, opacity: 0.45, textDecorationLine: 'underline' },
+
+  footer: { marginTop: 20, alignItems: 'center' },
   row: { flexDirection: 'row', alignItems: 'center' },
-  footerText: { fontFamily: 'Inter_400Regular', fontSize: 12, opacity: 0.5 },
+  footerText: { fontFamily: 'Inter_400Regular', fontSize: 13, opacity: 0.5 },
   link: { fontFamily: 'Inter_700Bold', fontSize: 13, textDecorationLine: 'underline' },
   tos: {
     marginTop: 16, fontFamily: 'Inter_400Regular', fontSize: 11,

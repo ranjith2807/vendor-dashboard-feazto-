@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { SetScreen } from '../App'
+import type { SetScreen } from '../types'
 
 export default function ForgotPasswordScreen({ setScreen }: { setScreen: SetScreen }) {
   const [phone, setPhone] = useState('')

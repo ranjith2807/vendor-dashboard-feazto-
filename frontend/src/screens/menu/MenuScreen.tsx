@@ -6,9 +6,9 @@ import {
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
-import { DEFAULT_MENU_ITEMS, type MenuItem } from '../../data/menuStore'
+import { type MenuItem } from '../../data/menuStore'
 import { useVendor } from '../../context/VendorContext'
-import { subscribeMenuItems, updateMenuItem, deleteMenuItem, saveMenuItem } from '../../../../backend/services/menuService'
+import { subscribeMenuItems, updateMenuItem, deleteMenuItem } from '../../../../backend/services/menuService'
 
 const FILTER_TABS = [
   { id: 'all',         label: 'All' },

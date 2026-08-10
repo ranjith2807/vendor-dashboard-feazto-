@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, StatusBar } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter'
 import { BarlowCondensed_700Bold } from '@expo-google-fonts/barlow-condensed'
 import AppShell from './src/components/AppShell'
 import { VendorProvider } from './src/context/VendorContext'
-import { FezuProvider } from './src/context/FezuContext'
+import { FezuProvider, useFezuStore } from './src/context/FezuContext'
 import type { Screen, NavParams, SetScreen } from './src/types'
 import { DEFAULT_MENU_ITEMS, DEFAULT_ORDERS, type MenuItem, type VendorOrder } from './src/data/menuStore'
 
@@ -17,6 +17,7 @@ import {
   ResetOtpScreen,
   NewPasswordScreen,
   RegisterStep1Screen,
+  RegisterEmailOtpScreen,
   RegisterStep2Screen,
   RegisterStep3Screen,
   RegisterStep4Screen,
@@ -79,7 +80,7 @@ import {
 
 const NO_NAV: Screen[] = [
   'auth', 'splash', 'onboarding',
-  'register_1', 'register_2', 'register_3', 'register_4',
+  'register_1', 'register_email_otp', 'register_2', 'register_3', 'register_4',
   'register_success', 'app_review', 'app_rejected', 'app_approved',
   'forgot_password', 'reset_otp', 'new_password',
 ]
@@ -110,6 +111,7 @@ function ScreenContent({
     case 'reset_otp':          return <ResetOtpScreen {...p} />
     case 'new_password':       return <NewPasswordScreen {...p} />
     case 'register_1':         return <RegisterStep1Screen {...p} />
+    case 'register_email_otp': return <RegisterEmailOtpScreen {...p} />
     case 'register_2':         return <RegisterStep2Screen {...p} />
     case 'register_3':         return <RegisterStep3Screen {...p} />
     case 'register_4':         return <RegisterStep4Screen {...p} />
@@ -147,6 +149,15 @@ function ScreenContent({
   }
 }
 
+/** Keeps FezuContext's vendorOrdersRef in sync with the latest orders state */
+function OrdersSyncBridge({ vendorOrders }: { vendorOrders: VendorOrder[] }) {
+  const { setVendorOrdersRef } = useFezuStore()
+  useEffect(() => {
+    setVendorOrdersRef(vendorOrders)
+  }, [vendorOrders])
+  return null
+}
+
 export default function App() {
   const [screen, setScreenState] = useState<Screen>('splash')
   const [navParams, setNavParams] = useState<NavParams>({})
@@ -172,6 +183,7 @@ export default function App() {
     <SafeAreaProvider>
       <VendorProvider>
         <FezuProvider>
+          <OrdersSyncBridge vendorOrders={vendorOrders} />
           <View style={styles.root}>
             <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
             <AppShell screen={screen} setScreen={setScreen} showNav={showNav}>

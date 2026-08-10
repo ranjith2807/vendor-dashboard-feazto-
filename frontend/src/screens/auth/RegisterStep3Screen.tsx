@@ -146,12 +146,12 @@ export default function RegisterStep3Screen({
           <Text style={styles.back}>←</Text>
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Register — Step 3 of 4</Text>
+          <Text style={styles.title}>Register — Step 4 of 5</Text>
           <Text style={styles.sub}>Upload Documents</Text>
         </View>
         <View style={styles.steps}>
-          {[1, 2, 3, 4].map(i => (
-            <View key={i} style={[styles.step, i <= 3 && styles.stepActive]} />
+          {[1, 2, 3, 4, 5].map(i => (
+            <View key={i} style={[styles.step, i <= 4 && styles.stepActive]} />
           ))}
         </View>
       </View>

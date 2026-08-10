@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { SetScreen, NavParams } from '../App'
+import type { SetScreen, NavParams } from '../types'
 
 export default function NewPasswordScreen({ setScreen, navParams }: { setScreen: SetScreen; navParams: NavParams }) {
   const _phone = navParams.phone  // available if needed for a real password-reset API call

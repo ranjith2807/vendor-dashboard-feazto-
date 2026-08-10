@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
+import Toggle from '../../components/Toggle'
 import type { SetScreen } from '../../types'
 import { C, F, shadow } from '../../theme'
 
@@ -64,9 +65,7 @@ export default function SettingsKitchenScreen({ setScreen }: { setScreen: SetScr
             <View key={item.id} style={[s.toggleRow, idx < 2 && s.toggleRowBorder]}>
               <Text style={{ fontSize: 20 }}>{item.icon}</Text>
               <Text style={s.toggleLabel}>{item.label}</Text>
-              <TouchableOpacity onPress={() => item.set(!item.val)} style={[s.toggle, { backgroundColor: item.val ? C.green : '#ddd' }]}>
-                <View style={[s.toggleThumb, { left: item.val ? 18 : 2 }]} />
-              </TouchableOpacity>
+              <Toggle value={item.val} onToggle={() => item.set(!item.val)} />
             </View>
           ))}
         </View>
@@ -110,8 +109,8 @@ const s = StyleSheet.create({
   toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 13, paddingHorizontal: 14 },
   toggleRowBorder: { borderBottomWidth: 2, borderBottomColor: 'rgba(0,0,0,0.06)' },
   toggleLabel: { fontFamily: F.interBold, fontSize: 14, color: C.black, flex: 1 },
-  toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2, elevation: 1 },
-  toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
+  toggle: {},
+  toggleThumb: {},
   inputLabel: { fontFamily: F.interBold, fontSize: 11, letterSpacing: 1, color: C.black, opacity: 0.5, marginBottom: 5 },
   textInput: { fontFamily: F.inter, fontSize: 14, backgroundColor: '#F9FAFB', borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', borderRadius: 10, padding: 11, paddingHorizontal: 13, color: C.black },
 })

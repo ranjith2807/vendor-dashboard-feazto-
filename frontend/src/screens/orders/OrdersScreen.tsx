@@ -44,7 +44,7 @@ export default function OrdersScreen({
   const email = vendor?.email ?? ''
   const orders = vendorOrders
   const setOrders = setVendorOrders
-  const { getOrderDelivery } = useFezuStore()
+  const { getOrderDelivery, triggerAssignment } = useFezuStore()
 
   // Real-time Firestore listener
   useEffect(() => {
@@ -54,6 +54,16 @@ export default function OrdersScreen({
     })
     return unsub
   }, [email])
+
+  // Trigger auto-assignment for any orders that are READY_FOR_PICKUP
+  useEffect(() => {
+    orders.forEach(o => {
+      if (o.status === 'READY_FOR_PICKUP') {
+        triggerAssignment(o.id)
+      }
+    })
+  }, [orders, triggerAssignment])
+
   const [activeFilter, setActiveFilter] = useState<OrderStatus | 'ALL'>('ALL')
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
   const [rejectTarget, setRejectTarget] = useState<VendorOrder | null>(null)
@@ -83,14 +93,17 @@ export default function OrdersScreen({
       const timestamps: Partial<VendorOrder> = {}
       if (next === 'ACCEPTED')         timestamps.acceptedAt  = now
       if (next === 'PREPARING')        timestamps.preparingAt = now
-      if (next === 'READY_FOR_PICKUP') timestamps.readyAt     = now
+      if (next === 'READY_FOR_PICKUP') {
+        timestamps.readyAt = now
+        triggerAssignment(orderId)
+      }
       if (next === 'PICKED_UP')        timestamps.pickedUpAt  = now
       if (next === 'COMPLETED')        timestamps.completedAt = now
       // sync to Firestore
       if (email) updateOrderStatus(email, orderId, next, timestamps)
       return { ...o, status: next, ...timestamps }
     }))
-  }, [email])
+  }, [email, triggerAssignment])
 
   const confirmReject = () => {
     if (!rejectTarget) return

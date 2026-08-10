@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
+import Toggle from '../../components/Toggle'
 import type { SetScreen, Screen } from '../../types'
 import { settingsSections } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
 import { useVendor } from '../../context/VendorContext'
 
 const ITEM_NAV: Record<string, Screen> = {
-  set_001: 'settings_profile', set_002: 'settings_profile',
+  set_001: 'settings_profile',
   set_003: 'settings_security', set_004: 'settings_kitchen',
   set_005: 'settings_hours',   set_006: 'settings_kitchen',
   set_007: 'settings_kitchen', set_008: 'settings_documents',
@@ -21,8 +22,14 @@ export default function SettingsScreen({ setScreen }: { setScreen: SetScreen }) 
   const city        = vendor?.city ?? ''
   const initials    = kitchenName.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2)
 
-  const [toggles, setToggles] = useState<Record<string, boolean>>({
-    sett_notif_sound: true, sett_auto_accept: false, sett_auto_fezu: true,
+  const [toggles, setToggles] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {}
+    settingsSections.forEach(section =>
+      section.items.forEach(item => {
+        if ('toggle' in item) initial[item.id] = 'toggleOn' in item ? Boolean(item.toggleOn) : false
+      })
+    )
+    return initial
   })
   const [activeBtn, setActiveBtn] = useState<string | null>(null)
 
@@ -90,7 +97,7 @@ export default function SettingsScreen({ setScreen }: { setScreen: SetScreen }) 
       {/* Feature links */}
       <View style={s.featureRow}>
         {[
-          { id: 'fl_feat', icon: '✨', label: 'Feature Cards', screen: 'feature_cards' as Screen,       bg: C.yellow },
+          { id: 'fl_feat', icon: '✨', label: 'Feature Cards', screen: 'feature_cards' as Screen,       bg: C.white },
           { id: 'fl_sub',  icon: '⭐', label: 'Subscription',  screen: 'settings_subscription' as Screen, bg: C.white },
           { id: 'fl_rev',  icon: '⭐', label: 'Reviews',       screen: 'reviews' as Screen,              bg: C.white },
         ].map(f => (
@@ -130,12 +137,10 @@ export default function SettingsScreen({ setScreen }: { setScreen: SetScreen }) 
                     {!!item.sub && <Text style={s.rowSub}>{item.sub}</Text>}
                   </View>
                   {hasToggle ? (
-                    <TouchableOpacity
-                      onPress={() => toggle(item.id)}
-                      style={[s.toggle, { backgroundColor: toggles[item.id] ? C.green : '#ddd' }]}
-                    >
-                      <View style={[s.toggleThumb, { left: toggles[item.id] ? 18 : 2 }]} />
-                    </TouchableOpacity>
+                    <Toggle
+                      value={toggles[item.id] ?? ('toggleOn' in item ? item.toggleOn : false)}
+                      onToggle={() => toggle(item.id)}
+                    />
                   ) : (
                     <Text style={s.chevron}>›</Text>
                   )}
@@ -145,15 +150,6 @@ export default function SettingsScreen({ setScreen }: { setScreen: SetScreen }) 
           </View>
         </View>
       ))}
-
-      {/* Footer */}
-      <View style={s.footerCard}>
-        <Text style={{ fontSize: 40 }}>🍽️</Text>
-        <View>
-          <Text style={s.footerTitle}>FEAZTO Vendor v2.0</Text>
-          <Text style={s.footerSub}>Powered by FEZU · {city || 'India'}</Text>
-        </View>
-      </View>
 
       {/* Logout */}
       <TouchableOpacity
@@ -193,8 +189,8 @@ const s = StyleSheet.create({
   rowIcon: { width: 36, height: 36, borderRadius: 9, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center' },
   rowLabel: { fontFamily: F.interBold, fontSize: 13, color: C.black },
   rowSub: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.45 },
-  toggle: { width: 46, height: 26, borderRadius: 13, position: 'relative' },
-  toggleThumb: { position: 'absolute', top: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: C.white },
+  toggle: {},
+  toggleThumb: {},
   chevron: { fontFamily: F.inter, fontSize: 20, color: C.black, opacity: 0.3 },
   footerCard: { backgroundColor: '#F9FAFB', borderRadius: 14, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(4, 4), padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10 },
   footerTitle: { fontFamily: F.barlow, fontSize: 16, color: C.black },

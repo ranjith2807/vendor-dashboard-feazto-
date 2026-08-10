@@ -17,11 +17,6 @@ export default function SplashScreen({ setScreen }: { setScreen: SetScreen }) {
         <Text style={styles.brand}>FEAZTO</Text>
         <Text style={styles.sub}>VENDOR PARTNER</Text>
       </View>
-      <View style={styles.dots}>
-        {[0, 1, 2].map(i => (
-          <View key={i} style={[styles.dot, i === 0 && styles.dotActive]} />
-        ))}
-      </View>
     </View>
   )
 }

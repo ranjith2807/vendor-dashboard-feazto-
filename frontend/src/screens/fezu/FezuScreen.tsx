@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import TouchableOpacity from '../../components/TouchableOpacity'
 import type { SetScreen, NavParams } from '../../types'
-import { deliveryHistory } from '../../data/mockData'
 import { C, F, shadow } from '../../theme'
 import { useFezuStore, DELIVERY_STATUS_META } from '../../context/FezuContext'
 import type { MockRider } from '../../data/mockRiders'
@@ -28,7 +27,7 @@ export default function FezuScreen({
   setMenuItems: any
 }) {
   const [activeTab, setActiveTab] = useState('ftab_dashboard')
-  const { riders, allDeliveries } = useFezuStore()
+  const { riders, deliveryHistory, allDeliveries, simulateNoRiders, setSimulateNoRiders } = useFezuStore()
 
   const onlineCount = riders.filter(r => r.status === 'online').length
   const busyCount   = riders.filter(r => r.status === 'busy').length
@@ -93,12 +92,22 @@ export default function FezuScreen({
               ))}
             </View>
 
-            {/* Auto-assignment info banner */}
+            {/* Auto-assignment info banner + Simulation Toggle */}
             <View style={s.infoBanner}>
               <Text style={{ fontSize: 18, flexShrink: 0 }}>⚡</Text>
-              <Text style={s.infoText}>
-                FEZU automatically assigns the nearest available rider when an order is marked Ready. No manual action needed.
-              </Text>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={s.infoText}>
+                  FEZU automatically assigns the nearest available rider when an order is marked Ready. No manual action needed.
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setSimulateNoRiders(prev => !prev)}
+                  style={[s.demoToggleBtn, simulateNoRiders ? s.demoToggleBtnActive : {}]}
+                >
+                  <Text style={[s.demoToggleText, simulateNoRiders ? s.demoToggleTextActive : {}]}>
+                    {simulateNoRiders ? '⚠️ Testing Mode: All Riders Offline/Busy' : '⚙️ Test "No Rider Available" Fallback State'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/* Active deliveries */}
@@ -142,18 +151,26 @@ export default function FezuScreen({
         {activeTab === 'ftab_riders' && (
           <>
             <Text style={s.sectionTitle}>All Riders</Text>
-            {riders.map(rider => (
-              <RiderCard
-                key={rider.riderId}
-                rider={rider}
-                currentDelivery={
-                  rider.currentOrderId
-                    ? allDeliveries[rider.currentOrderId] ?? null
-                    : null
-                }
-                onPress={() => setScreen('fezu_rider_detail', { id: rider.riderId })}
-              />
-            ))}
+            {riders.length === 0 ? (
+              <View style={s.emptyCard}>
+                <Text style={{ fontSize: 36, marginBottom: 6 }}>🚴</Text>
+                <Text style={s.emptyText}>No riders yet</Text>
+                <Text style={s.emptyHint}>Riders will appear here once they join the network</Text>
+              </View>
+            ) : (
+              riders.map(rider => (
+                <RiderCard
+                  key={rider.riderId}
+                  rider={rider}
+                  currentDelivery={
+                    rider.currentOrderId
+                      ? allDeliveries[rider.currentOrderId] ?? null
+                      : null
+                  }
+                  onPress={() => setScreen('fezu_rider_detail', { id: rider.riderId })}
+                />
+              ))
+            )}
           </>
         )}
 
@@ -161,18 +178,25 @@ export default function FezuScreen({
         {activeTab === 'ftab_history' && (
           <>
             <Text style={s.sectionTitle}>Delivery History</Text>
-            {deliveryHistory.map(del => (
-              <View key={del.id} style={s.histCard}>
-                <View style={s.histHeader}>
-                  <Text style={s.histOrderId}>{del.orderId}</Text>
-                  <View style={[s.histBadge, { backgroundColor: del.status === 'delivered' ? C.green : C.red }]}>
-                    <Text style={s.histBadgeText}>{del.status.toUpperCase()}</Text>
-                  </View>
-                </View>
-                <Text style={s.histMeta}>Customer: {del.customerName} · ₹ {del.amount}</Text>
-                <Text style={s.histMeta}>Rider: {del.riderName} · {del.time} · {del.duration}</Text>
+            {deliveryHistory.length === 0 ? (
+              <View style={s.emptyCard}>
+                <Text style={{ fontSize: 32, marginBottom: 6 }}>📦</Text>
+                <Text style={s.emptyText}>No delivery history yet</Text>
               </View>
-            ))}
+            ) : (
+              deliveryHistory.map(del => (
+                <View key={del.id} style={s.histCard}>
+                  <View style={s.histHeader}>
+                    <Text style={s.histOrderId}>{del.orderId}</Text>
+                    <View style={[s.histBadge, { backgroundColor: del.status === 'delivered' ? C.green : C.red }]}>
+                      <Text style={s.histBadgeText}>{del.status.toUpperCase()}</Text>
+                    </View>
+                  </View>
+                  <Text style={s.histMeta}>Customer: {del.customerName} · ₹ {del.amount}</Text>
+                  <Text style={s.histMeta}>Rider: {del.riderName} · {del.time} · {del.duration}</Text>
+                </View>
+              ))
+            )}
           </>
         )}
 
@@ -278,12 +302,17 @@ const s = StyleSheet.create({
   statLabel: { fontFamily: F.inter, fontSize: 11, color: C.black, opacity: 0.5 },
 
   infoBanner: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: '#DBEAFE', borderRadius: 12, padding: 12 },
-  infoText: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.75, lineHeight: 18, flex: 1 },
+  infoText: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.75, lineHeight: 18 },
+  demoToggleBtn: { marginTop: 6, backgroundColor: C.white, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6, borderWidth: 1, borderColor: '#93C5FD', alignSelf: 'flex-start' },
+  demoToggleBtnActive: { backgroundColor: C.red, borderColor: C.red },
+  demoToggleText: { fontFamily: F.interBold, fontSize: 10, color: '#1E40AF' },
+  demoToggleTextActive: { color: C.white },
 
   sectionTitle: { fontFamily: F.barlow, fontSize: 18, color: C.black },
 
   emptyCard: { backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(3, 3), padding: 20, alignItems: 'center' },
   emptyText: { fontFamily: F.inter, fontSize: 13, color: C.black, opacity: 0.5 },
+  emptyHint: { fontFamily: F.inter, fontSize: 12, color: C.black, opacity: 0.35, textAlign: 'center', marginTop: 4, paddingHorizontal: 16 },
 
   deliveryCard: { backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)', ...shadow(3, 3), padding: 12 },
   deliveryHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },

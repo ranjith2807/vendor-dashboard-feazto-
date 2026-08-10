@@ -92,11 +92,11 @@ export default function RegisterStep4Screen({
           <Text style={styles.back}>←</Text>
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Register — Step 4 of 4</Text>
+          <Text style={styles.title}>Register — Step 5 of 5</Text>
           <Text style={styles.sub}>Bank Account Details</Text>
         </View>
         <View style={styles.steps}>
-          {[1, 2, 3, 4].map(i => (
+          {[1, 2, 3, 4, 5].map(i => (
             <View key={i} style={[styles.step, styles.stepActive]} />
           ))}
         </View>
